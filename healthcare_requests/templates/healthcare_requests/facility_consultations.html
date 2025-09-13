@@ -1,0 +1,414 @@
+{% extends 'base.html' %}
+
+{% block title %}Консультации - {{ facility_request.facility_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.content-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.content-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.consultation-card {
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.consultation-card:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.consultation-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.consultation-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-right: 1rem;
+}
+
+.consultation-info {
+    flex: 1;
+}
+
+.consultation-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.consultation-meta {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.consultation-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-in-progress {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.consultation-content {
+    margin-bottom: 1rem;
+}
+
+.consultation-description {
+    color: #495057;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+.consultation-attachments {
+    margin-top: 0.5rem;
+}
+
+.attachment-item {
+    display: inline-block;
+    background: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    color: #667eea;
+    margin-right: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.consultation-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #adb5bd;
+}
+
+.filter-section {
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-row {
+    display: flex;
+    gap: 1rem;
+    align-items: end;
+}
+
+.filter-group {
+    flex: 1;
+}
+
+.filter-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    background: white;
+}
+
+.btn-filter {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-filter:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.page-link {
+    color: #667eea;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem 0.75rem;
+    margin: 0 0.25rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.page-link:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.page-item.active .page-link {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+@media (max-width: 768px) {
+    .consultation-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .consultation-avatar {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .filter-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .consultation-actions {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="page-title">
+                    <i class="bi bi-chat-dots me-3"></i>Консультации
+                </h1>
+                <p class="page-subtitle">
+                    {{ facility_request.facility_name }} • Просматривайте и отвечайте на консультации пациентов
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'healthcare_requests:facility_dashboard' %}" class="btn btn-light">
+                    <i class="bi bi-arrow-left me-2"></i>Назад к дашборду
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Filters -->
+    <div class="filter-section">
+        <form method="get" class="filter-row">
+            <div class="filter-group">
+                <label class="filter-label">Статус</label>
+                <select name="status" class="filter-select">
+                    <option value="">Все статусы</option>
+                    <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Ожидает</option>
+                    <option value="in_progress" {% if status_filter == 'in_progress' %}selected{% endif %}>В процессе</option>
+                    <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Завершена</option>
+                    <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Отменена</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Врач</label>
+                <select name="doctor" class="filter-select">
+                    <option value="">Все врачи</option>
+                    <!-- Здесь можно добавить список врачей -->
+                </select>
+            </div>
+            <div class="filter-group">
+                <button type="submit" class="btn btn-filter">
+                    <i class="bi bi-funnel me-2"></i>Фильтровать
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Consultations List -->
+    <div class="content-card">
+        <h5 class="content-title">
+            <i class="bi bi-chat-dots me-2"></i>Консультации ({{ page_obj.paginator.count }})
+        </h5>
+        
+        {% if page_obj %}
+            {% for consultation in page_obj %}
+            <div class="consultation-card">
+                <div class="consultation-header">
+                    <div class="consultation-avatar">
+                        {{ consultation.parent.first_name|first|default:consultation.parent.username|first|upper }}
+                    </div>
+                    
+                    <div class="consultation-info">
+                        <div class="consultation-title">{{ consultation.title }}</div>
+                        <div class="consultation-meta">
+                            <strong>{{ consultation.parent.get_full_name|default:consultation.parent.username }}</strong> • 
+                            Доктор: {{ consultation.doctor.full_name }} • 
+                            {{ consultation.created_at|timesince }} назад
+                        </div>
+                    </div>
+                    
+                    <div class="consultation-status status-{{ consultation.status }}">
+                        {{ consultation.get_status_display }}
+                    </div>
+                </div>
+                
+                <div class="consultation-content">
+                    <div class="consultation-description">
+                        {{ consultation.description|truncatewords:30 }}
+                    </div>
+                    
+                    {% if consultation.attachments %}
+                    <div class="consultation-attachments">
+                        <small class="text-muted">
+                            <i class="bi bi-paperclip me-1"></i>
+                            Прикреплено файлов: {{ consultation.attachments.count }}
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="consultation-actions">
+                    <a href="{% url 'consultant:consultation_detail' consultation.id %}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-eye me-1"></i>Просмотр
+                    </a>
+                    {% if consultation.status == 'pending' %}
+                    <a href="#" class="btn btn-outline-success btn-sm">
+                        <i class="bi bi-check-circle me-1"></i>Принять
+                    </a>
+                    {% elif consultation.status == 'in_progress' %}
+                    <a href="#" class="btn btn-outline-info btn-sm">
+                        <i class="bi bi-chat-dots me-1"></i>Ответить
+                    </a>
+                    {% endif %}
+                    <a href="#" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-person me-1"></i>Профиль пациента
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="page-link">&laquo; Первая</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Предыдущая</a>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="page-link active">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="page-link">Следующая</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">Последняя &raquo;</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <i class="bi bi-chat-dots"></i>
+                <h5>Консультации не найдены</h5>
+                <p>У вашего учреждения пока нет консультаций.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+

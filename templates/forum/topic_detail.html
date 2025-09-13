@@ -1,0 +1,772 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ topic.title }} - {% trans "Форум" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .topic-header {
+        background: linear-gradient(135deg, #ff6b9d, #4ecdc4);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 2rem 2rem;
+    }
+    
+    .post-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .post-card:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+    
+    .post-solution {
+        border-left: 4px solid #28a745;
+        background: linear-gradient(90deg, #d4edda, #ffffff);
+    }
+    
+    .post-author {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        text-align: center;
+    }
+    
+    .post-content {
+        padding: 1.5rem;
+        line-height: 1.6;
+    }
+    
+    .post-actions {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-top: 1px solid #e9ecef;
+        border-radius: 0 0 1rem 1rem;
+    }
+    
+    .like-btn {
+        background: none;
+        border: 1px solid #dee2e6;
+        color: #6c757d;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .like-btn:hover {
+        background: #ff6b9d;
+        border-color: #ff6b9d;
+        color: white;
+    }
+    
+    .like-btn.liked {
+        background: #ff6b9d;
+        border-color: #ff6b9d;
+        color: white;
+    }
+    
+    .solution-badge {
+        background: #28a745;
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 1rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .reply-form {
+        background: #f8f9fa;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .status-badge {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        font-weight: 600;
+    }
+    
+    .status-open {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .status-closed {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .status-pinned {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    /* Стили для ответов */
+    .post-reply {
+        margin-left: 0;
+        margin-top: 1.5rem;
+        position: relative;
+    }
+    
+    .post-reply .post-card {
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-left: 4px solid #007bff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .reply-indicator {
+        background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+        border: 1px solid #bbdefb;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        color: #1976d2;
+        position: relative;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .reply-indicator i {
+        margin-right: 0.5rem;
+    }
+    
+    .reply-indicator .reply-actions {
+        float: right;
+        margin-top: -0.25rem;
+    }
+    
+    .quote-block {
+        background: #f8f9fa;
+        border-left: 4px solid #6c757d;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 0 0.5rem 0.5rem 0;
+        font-style: italic;
+        color: #6c757d;
+        position: relative;
+    }
+    
+    .quote-block::before {
+        content: '"';
+        font-size: 2rem;
+        color: #dee2e6;
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        font-family: serif;
+    }
+    
+    .quote-author {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .quote-content {
+        margin-left: 1rem;
+        line-height: 1.5;
+    }
+    
+    .reply-thread {
+        border-left: 2px solid #e9ecef;
+        padding-left: 1.5rem;
+        margin-left: 1rem;
+        position: relative;
+    }
+    
+    .reply-thread::before {
+        content: '';
+        position: absolute;
+        left: -1px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, #007bff, #e9ecef);
+    }
+    
+    .reply-level-1 { margin-left: 0; }
+    .reply-level-2 { margin-left: 2rem; }
+    .reply-level-3 { margin-left: 4rem; }
+    .reply-level-4 { margin-left: 6rem; }
+    .reply-level-5 { margin-left: 8rem; }
+    
+    .reply-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+    
+    .reply-actions .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .post-meta {
+        background: #f8f9fa;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+    
+    .post-meta .meta-item {
+        margin-right: 1rem;
+    }
+    
+    .post-meta .meta-item i {
+        margin-right: 0.25rem;
+    }
+    
+    .mention-link {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 600;
+        background: #e3f2fd;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.9em;
+    }
+    
+    .mention-link:hover {
+        background: #bbdefb;
+        color: #0056b3;
+    }
+    
+    .reply-toggle {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        margin: 0.5rem 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    .reply-toggle:hover {
+        background: #e9ecef;
+        color: #495057;
+    }
+    
+    .reply-toggle i {
+        margin-right: 0.5rem;
+    }
+    
+    .reply-collapsed {
+        max-height: 100px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .reply-collapsed::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        background: linear-gradient(transparent, #ffffff);
+        pointer-events: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Topic Header -->
+<section class="topic-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center mb-3">
+                    {% if topic.is_pinned %}
+                    <i class="bi bi-pin-angle-fill text-warning me-3"></i>
+                    {% endif %}
+                    <span class="status-badge status-{{ topic.status }}">
+                        {% if topic.status == 'open' %}
+                            <i class="bi bi-unlock me-1"></i>{% trans "Открыта" %}
+                        {% elif topic.status == 'closed' %}
+                            <i class="bi bi-lock me-1"></i>{% trans "Закрыта" %}
+                        {% elif topic.status == 'pinned' %}
+                            <i class="bi bi-pin me-1"></i>{% trans "Закреплена" %}
+                        {% endif %}
+                    </span>
+                </div>
+                
+                <h1 class="display-5 fw-bold mb-3">{{ topic.title }}</h1>
+                
+                <div class="d-flex align-items-center text-white-50">
+                    <i class="bi bi-person me-2"></i>
+                    <span class="me-4">{{ topic.author.username }}</span>
+                    <i class="bi bi-calendar me-2"></i>
+                    <span class="me-4">{{ topic.created_at|date:"d.m.Y H:i" }}</span>
+                    <i class="bi bi-eye me-2"></i>
+                    <span>{{ topic.views_count }} {% trans "просмотров" %}</span>
+                </div>
+            </div>
+            <div class="col-lg-4 text-end">
+                <div class="d-flex flex-column gap-2">
+                    <a href="{% url 'forum:category_detail' topic.category.pk %}" class="btn btn-outline-light">
+                        <i class="bi bi-arrow-left me-2"></i>{% trans "К категории" %}
+                    </a>
+                    {% if user.is_authenticated and user == topic.author %}
+                    <a href="{% url 'forum:topic_edit' topic.pk %}" class="btn btn-outline-light">
+                        <i class="bi bi-pencil me-2"></i>{% trans "Редактировать" %}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <!-- Posts -->
+            {% for post in posts %}
+            <div class="card post-card {% if post.is_solution %}post-solution{% endif %} {% if post.parent_post %}post-reply{% endif %}" id="post-{{ post.pk }}">
+                {% if post.parent_post %}
+                <div class="reply-indicator">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-reply"></i>
+                            {% trans "Ответ на сообщение от" %} <strong>@{{ post.parent_post.author.username }}</strong>
+                            <span class="text-muted ms-2">
+                                {{ post.parent_post.created_at|date:"d.m.Y H:i" }}
+                            </span>
+                        </div>
+                        <div class="reply-actions">
+                            <a href="#post-{{ post.parent_post.pk }}" class="btn btn-sm btn-outline-primary" title="{% trans 'Перейти к сообщению' %}">
+                                <i class="bi bi-arrow-up"></i>
+                            </a>
+                            <button class="btn btn-sm btn-outline-info" 
+                                    data-post-id="{{ post.parent_post.pk }}" 
+                                    data-username="{{ post.parent_post.author.username }}"
+                                    data-content="{{ post.parent_post.content|truncatewords:20|escapejs }}"
+                                    onclick="quotePost(this.dataset.postId, this.dataset.username, this.dataset.content)" 
+                                    title="{% trans 'Цитировать' %}">
+                                <i class="bi bi-quote"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="row g-0">
+                    <div class="col-md-3">
+                        <div class="post-author">
+                            <div class="mb-3">
+                                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                     style="width: 60px; height: 60px; font-size: 1.5rem;">
+                                    {{ post.author.username|first|upper }}
+                                </div>
+                            </div>
+                            <h6 class="fw-bold mb-1">{{ post.author.username }}</h6>
+                            <small class="text-muted">
+                                {{ post.created_at|date:"d.m.Y" }}<br>
+                                {{ post.created_at|time:"H:i" }}
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-9">
+                        <div class="post-content">
+                            {% if post.is_solution %}
+                            <div class="mb-3">
+                                <span class="solution-badge">
+                                    <i class="bi bi-check-circle me-1"></i>{% trans "Решение" %}
+                                </span>
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Post Meta Information -->
+                            <div class="post-meta">
+                                <span class="meta-item">
+                                    <i class="bi bi-person"></i>
+                                    <strong>@{{ post.author.username }}</strong>
+                                </span>
+                                <span class="meta-item">
+                                    <i class="bi bi-calendar"></i>
+                                    {{ post.created_at|date:"d.m.Y H:i" }}
+                                </span>
+                                {% if post.updated_at != post.created_at %}
+                                <span class="meta-item">
+                                    <i class="bi bi-pencil"></i>
+                                    {% trans "Изменено" %} {{ post.updated_at|date:"d.m.Y H:i" }}
+                                </span>
+                                {% endif %}
+                                <span class="meta-item">
+                                    <i class="bi bi-heart"></i>
+                                    {{ post.likes_count }} {% trans "лайков" %}
+                                </span>
+                                {% if post.parent_post %}
+                                <span class="meta-item">
+                                    <i class="bi bi-reply"></i>
+                                    {% trans "Ответ" %}
+                                </span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="post-text">
+                                {{ post.content|linebreaks }}
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex gap-2">
+                                    {% if user.is_authenticated %}
+                                    <button class="like-btn" 
+                                            data-post-id="{{ post.pk }}"
+                                            onclick="likePost(this.dataset.postId)">
+                                        <i class="bi bi-heart me-1"></i>
+                                        <span id="post-likes-{{ post.pk }}">{{ post.likes_count }}</span>
+                                    </button>
+                                    
+                                    <button class="btn btn-outline-info btn-sm" 
+                                            data-post-id="{{ post.pk }}" 
+                                            data-username="{{ post.author.username }}"
+                                            data-content="{{ post.content|truncatewords:20|escapejs }}"
+                                            onclick="quotePost(this.dataset.postId, this.dataset.username, this.dataset.content)">
+                                        <i class="bi bi-quote me-1"></i>{% trans "Цитировать" %}
+                                    </button>
+                                    
+                                    {% if user == topic.author and not post.is_solution %}
+                                    <button class="btn btn-outline-success btn-sm" 
+                                            data-post-id="{{ post.pk }}"
+                                            onclick="markSolution(this.dataset.postId)">
+                                        <i class="bi bi-check-circle me-1"></i>{% trans "Решение" %}
+                                    </button>
+                                    {% endif %}
+                                    {% endif %}
+                                    
+                                    {% if user.is_authenticated and user == post.author %}
+                                    <a href="{% url 'forum:post_edit' post.pk %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-pencil me-1"></i>{% trans "Редактировать" %}
+                                    </a>
+                                    <a href="{% url 'forum:post_delete' post.pk %}" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-trash me-1"></i>{% trans "Удалить" %}
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                
+                                <small class="text-muted">
+                                    {% if post.updated_at != post.created_at %}
+                                        <i class="bi bi-pencil me-1"></i>{% trans "Изменено" %} {{ post.updated_at|date:"d.m.Y H:i" }}
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- Pagination for posts -->
+            {% if posts.has_other_pages %}
+            <nav aria-label="{% trans 'Навигация по сообщениям' %}" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if posts.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link border-0 rounded-pill me-2" 
+                               href="?page={{ posts.previous_page_number }}"
+                               style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white;">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link border-0 rounded-pill px-4" 
+                              style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white; font-weight: 600;">
+                            {% trans "Страница" %} {{ posts.number }} {% trans "из" %} {{ posts.paginator.num_pages }}
+                        </span>
+                    </li>
+                    
+                    {% if posts.has_next %}
+                        <li class="page-item">
+                            <a class="page-link border-0 rounded-pill ms-2" 
+                               href="?page={{ posts.next_page_number }}"
+                               style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white;">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            
+            <!-- Reply Form -->
+            {% if user.is_authenticated and topic.status == 'open' %}
+            <div class="reply-form" id="reply-form">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-chat me-2"></i><span id="reply-title">{% trans "Написать сообщение" %}</span>
+                </h5>
+                
+                <!-- Reply to specific post indicator -->
+                <div id="reply-to-indicator" class="alert alert-info d-none">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-reply me-2"></i>
+                            <span id="reply-to-text"></span>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="cancelReply()">
+                            <i class="bi bi-x"></i> {% trans "Отменить" %}
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quote preview -->
+                <div id="quote-preview" class="d-none">
+                    <div class="quote-block">
+                        <div class="quote-author" id="quote-author"></div>
+                        <div class="quote-content" id="quote-content"></div>
+                    </div>
+                </div>
+                
+                <form method="post" id="post-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="parent_post" id="parent_post_id" value="">
+                    <div class="mb-3">
+                        {{ post_form.content }}
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send me-2"></i>{% trans "Отправить сообщение" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% elif not user.is_authenticated %}
+            <div class="text-center py-4">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <a href="{% url 'accounts:login' %}" class="alert-link">{% trans "Войдите в систему" %}</a>, 
+                    {% trans "чтобы участвовать в обсуждении" %}.
+                </div>
+            </div>
+            {% elif topic.status == 'closed' %}
+            <div class="text-center py-4">
+                <div class="alert alert-warning">
+                    <i class="bi bi-lock me-2"></i>
+                    {% trans "Эта тема закрыта для новых сообщений" %}.
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function likePost(postId) {
+    fetch(`/forum/post/${postId}/like/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const btn = document.querySelector(`button[onclick="likePost(${postId})"]`);
+        const countSpan = document.getElementById(`post-likes-${postId}`);
+        
+        if (data.status === 'liked') {
+            btn.classList.add('liked');
+            countSpan.textContent = data.count;
+        } else {
+            btn.classList.remove('liked');
+            countSpan.textContent = data.count;
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function markSolution(postId) {
+    if (confirm('{% trans "Отметить это сообщение как решение?" %}')) {
+        fetch(`/forum/post/${postId}/solution/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                location.reload();
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
+
+
+function quotePost(postId, username, content) {
+    // НЕ устанавливаем ID родительского сообщения для цитаты
+    // Цитата - это обычное сообщение в теме, а не ответ на конкретное сообщение
+    document.getElementById('parent_post_id').value = '';
+    
+    // Обновляем заголовок и индикатор
+    document.getElementById('reply-title').textContent = 'Цитировать @' + username;
+    document.getElementById('reply-to-text').textContent = 'Цитирование сообщения от @' + username;
+    document.getElementById('reply-to-indicator').classList.remove('d-none');
+    
+    // Показываем превью цитаты
+    document.getElementById('quote-author').textContent = '@' + username;
+    document.getElementById('quote-content').textContent = content;
+    document.getElementById('quote-preview').classList.remove('d-none');
+    
+    // Прокручиваем к форме
+    document.getElementById('reply-form').scrollIntoView({ behavior: 'smooth' });
+    
+    // Фокусируемся на поле ввода
+    const contentField = document.querySelector('textarea[name="content"]');
+    if (contentField) {
+        contentField.focus();
+        // Добавляем цитату
+        const currentValue = contentField.value;
+        const quote = '[quote=' + username + ']' + content + '[/quote]\n\n';
+        if (!currentValue.includes(quote)) {
+            contentField.value = quote + currentValue;
+        }
+    }
+}
+
+function cancelReply() {
+    // Очищаем ID родительского сообщения
+    document.getElementById('parent_post_id').value = '';
+    
+    // Возвращаем заголовок
+    document.getElementById('reply-title').textContent = 'Написать сообщение';
+    document.getElementById('reply-to-indicator').classList.add('d-none');
+    
+    // Скрываем превью цитаты
+    document.getElementById('quote-preview').classList.add('d-none');
+    
+    // Очищаем поле ввода
+    const contentField = document.querySelector('textarea[name="content"]');
+    if (contentField) {
+        contentField.value = '';
+    }
+}
+
+// Обработка отправки формы
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('post-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const parentPostId = document.getElementById('parent_post_id').value;
+            if (parentPostId) {
+                // Добавляем скрытое поле для parent_post
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'parent_post';
+                hiddenInput.value = parentPostId;
+                form.appendChild(hiddenInput);
+            }
+        });
+    }
+    
+    // Инициализация кнопок сворачивания ответов
+    initReplyToggles();
+});
+
+function initReplyToggles() {
+    const replyCards = document.querySelectorAll('.post-reply');
+    replyCards.forEach(card => {
+        const level = card.classList.contains('reply-level-3') || card.classList.contains('reply-level-4') || card.classList.contains('reply-level-5');
+        if (level) {
+            // Добавляем кнопку сворачивания для глубоких ответов
+            const toggleBtn = document.createElement('div');
+            toggleBtn.className = 'reply-toggle';
+            toggleBtn.innerHTML = '<i class="bi bi-chevron-down"></i> Свернуть ответ';
+            toggleBtn.onclick = function() {
+                toggleReply(card, toggleBtn);
+            };
+            card.parentNode.insertBefore(toggleBtn, card);
+        }
+    });
+}
+
+function toggleReply(card, toggleBtn) {
+    if (card.classList.contains('reply-collapsed')) {
+        card.classList.remove('reply-collapsed');
+        toggleBtn.innerHTML = '<i class="bi bi-chevron-down"></i> Свернуть ответ';
+    } else {
+        card.classList.add('reply-collapsed');
+        toggleBtn.innerHTML = '<i class="bi bi-chevron-right"></i> Развернуть ответ';
+    }
+}
+
+// Функция для обработки BBCode
+function processBBCode(element) {
+    if (!element) return;
+    
+    let content = element.innerHTML;
+    
+    // Обработка цитат [quote=username]content[/quote]
+    content = content.replace(/\[quote=([^\]]*)\](.*?)\[\/quote\]/gs, function(match, username, quoteContent) {
+        const user = username || 'Anonymous';
+        return `
+            <div class="quote-block">
+                <div class="quote-author">@${user}</div>
+                <div class="quote-content">${quoteContent}</div>
+            </div>
+        `;
+    });
+    
+    // Обработка упоминаний @username
+    content = content.replace(/@(\w+)/g, '<a href="#" class="mention-link">@$1</a>');
+    
+    element.innerHTML = content;
+}
+
+// Обработка всех сообщений при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    const postTexts = document.querySelectorAll('.post-text');
+    postTexts.forEach(processBBCode);
+    
+    // Добавляем уровни вложенности для ответов
+    const replyCards = document.querySelectorAll('.post-reply');
+    replyCards.forEach(card => {
+        const level = getReplyLevel(card);
+        if (level > 0) {
+            card.classList.add(`reply-level-${level}`);
+        }
+    });
+});
+
+// Функция для определения уровня ответа
+function getReplyLevel(card) {
+    let level = 0;
+    let currentCard = card;
+    
+    // Подсчитываем количество родительских ответов
+    while (currentCard.previousElementSibling && 
+           currentCard.previousElementSibling.classList.contains('post-reply')) {
+        level++;
+        currentCard = currentCard.previousElementSibling;
+        if (level >= 5) break; // Максимум 5 уровней
+    }
+    
+    return level;
+}
+</script>
+{% endblock %}
+

@@ -1,0 +1,442 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Подача заявки - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0;
+    margin-bottom: 3rem;
+}
+
+.hero-content {
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.benefits {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.form-container {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.form-control, .form-select {
+    border-radius: 0.75rem;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.file-upload-area {
+    position: relative;
+    border: 2px dashed #e9ecef;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.file-upload-area:hover {
+    border-color: #667eea;
+    background: #f0f2ff;
+}
+
+.file-upload-info {
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+.file-upload-info i {
+    font-size: 1.5rem;
+    color: #667eea;
+}
+
+.help-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
+}
+
+.required-field {
+    color: #dc3545;
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .benefits {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .benefit-item {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <i class="bi bi-hospital me-3"></i>Подача заявки
+                    </h1>
+                    <p class="hero-subtitle">
+                        Добавьте ваше медицинское учреждение в наш каталог и получите доступ к дашборду для управления врачами и консультациями
+                    </p>
+                    
+                    <div class="benefits">
+                        <div class="benefit-item">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Безопасная платформа</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="bi bi-people"></i>
+                            <span>Управление врачами</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="bi bi-graph-up"></i>
+                            <span>Аналитика и статистика</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-container">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Основная информация -->
+                    <div class="mb-4">
+                        <h5 class="section-title">
+                            <i class="bi bi-building me-2"></i>Информация об учреждении
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.facility_name.id_for_label }}" class="form-label fw-semibold">
+                                    Название учреждения <span class="required-field">*</span>
+                                </label>
+                                {{ form.facility_name }}
+                                {% if form.facility_name.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.facility_name.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.facility_type.id_for_label }}" class="form-label fw-semibold">
+                                    Тип учреждения <span class="required-field">*</span>
+                                </label>
+                                {{ form.facility_type }}
+                                {% if form.facility_type.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.facility_type.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label fw-semibold">
+                                Описание учреждения <span class="required-field">*</span>
+                            </label>
+                            {{ form.description }}
+                            <div class="help-text">Опишите специализацию и услуги вашего учреждения</div>
+                            {% if form.description.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.description.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Контактная информация -->
+                    <div class="mb-4">
+                        <h5 class="section-title">
+                            <i class="bi bi-person-lines-fill me-2"></i>Контактная информация
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.contact_person.id_for_label }}" class="form-label fw-semibold">
+                                    Контактное лицо <span class="required-field">*</span>
+                                </label>
+                                {{ form.contact_person }}
+                                {% if form.contact_person.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.contact_person.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label fw-semibold">
+                                    Email <span class="required-field">*</span>
+                                </label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.email.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.phone.id_for_label }}" class="form-label fw-semibold">
+                                Телефон <span class="required-field">*</span>
+                            </label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.phone.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Адрес -->
+                    <div class="mb-4">
+                        <h5 class="section-title">
+                            <i class="bi bi-geo-alt me-2"></i>Адрес
+                        </h5>
+                        <div class="mb-3">
+                            <label for="{{ form.address.id_for_label }}" class="form-label fw-semibold">
+                                Адрес <span class="required-field">*</span>
+                            </label>
+                            {{ form.address }}
+                            {% if form.address.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.address.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.city.id_for_label }}" class="form-label fw-semibold">
+                                Город <span class="required-field">*</span>
+                            </label>
+                            {{ form.city }}
+                            {% if form.city.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.city.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Учетные данные -->
+                    <div class="mb-4">
+                        <h5 class="section-title">
+                            <i class="bi bi-key me-2"></i>Учетные данные для входа
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.username.id_for_label }}" class="form-label fw-semibold">
+                                    Логин <span class="required-field">*</span>
+                                </label>
+                                {{ form.username }}
+                                <div class="help-text">Будет использоваться для входа в дашборд</div>
+                                {% if form.username.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.username.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.password.id_for_label }}" class="form-label fw-semibold">
+                                    Пароль <span class="required-field">*</span>
+                                </label>
+                                {{ form.password }}
+                                {% if form.password.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.password.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.password_confirm.id_for_label }}" class="form-label fw-semibold">
+                                Подтвердите пароль <span class="required-field">*</span>
+                            </label>
+                            {{ form.password_confirm }}
+                            {% if form.password_confirm.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.password_confirm.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Документы -->
+                    <div class="mb-4">
+                        <h5 class="section-title">
+                            <i class="bi bi-file-earmark-text me-2"></i>Документы
+                        </h5>
+                        <div class="mb-3">
+                            <label for="{{ form.license_document.id_for_label }}" class="form-label fw-semibold">
+                                Лицензия <span class="required-field">*</span>
+                            </label>
+                            <div class="file-upload-area">
+                                {{ form.license_document }}
+                                <div class="file-upload-info">
+                                    <i class="bi bi-cloud-upload me-2"></i>
+                                    <span>Загрузите копию лицензии на медицинскую деятельность</span>
+                                    <small class="d-block text-muted mt-1">Форматы: PDF, JPG, PNG. Максимум: 5MB</small>
+                                </div>
+                            </div>
+                            {% if form.license_document.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.license_document.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.additional_documents.id_for_label }}" class="form-label fw-semibold">
+                                Дополнительные документы
+                            </label>
+                            <div class="file-upload-area">
+                                {{ form.additional_documents }}
+                                <div class="file-upload-info">
+                                    <i class="bi bi-cloud-upload me-2"></i>
+                                    <span>Загрузите дополнительные документы (необязательно)</span>
+                                    <small class="d-block text-muted mt-1">Форматы: PDF, JPG, PNG. Максимум: 5MB</small>
+                                </div>
+                            </div>
+                            {% if form.additional_documents.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.additional_documents.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Кнопки -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Назад
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send me-2"></i>Подать заявку
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Информация -->
+            <div class="form-container">
+                <h6 class="fw-bold text-info mb-3">
+                    <i class="bi bi-info-circle me-2"></i>Информация о процессе
+                </h6>
+                <ul class="mb-0 small text-muted">
+                    <li>Заявка будет рассмотрена в течение 1-3 рабочих дней</li>
+                    <li>После одобрения на указанный email придет уведомление</li>
+                    <li>Вы сможете войти в дашборд учреждения используя указанные логин и пароль</li>
+                    <li>В дашборде вы сможете управлять врачами и просматривать статистику</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

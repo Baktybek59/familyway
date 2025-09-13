@@ -1,0 +1,563 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ru\n"
+
+msgid "Главная"
+msgstr "Главная"
+
+msgid "Блог"
+msgstr "Блог"
+
+msgid "Консультации"
+msgstr "Консультации"
+
+msgid "Форум"
+msgstr "Форум"
+
+msgid "Медицинские учреждения"
+msgstr "Медицинские учреждения"
+
+msgid "Трекер"
+msgstr "Трекер"
+
+msgid "Дашборд писателя"
+msgstr "Дашборд писателя"
+
+msgid "Техподдержка"
+msgstr "Техподдержка"
+
+msgid "Вход"
+msgstr "Вход"
+
+msgid "Регистрация"
+msgstr "Регистрация"
+
+msgid "Выход"
+msgstr "Выход"
+
+msgid "Профиль"
+msgstr "Профиль"
+
+msgid "Настройки"
+msgstr "Настройки"
+
+msgid "familyway +"
+msgstr "familyway +"
+
+msgid "Платформа для семей с детьми"
+msgstr "Платформа для семей с детьми"
+
+msgid "Отслеживайте развитие ребенка"
+msgstr "Отслеживайте развитие ребенка"
+
+msgid "Общайтесь с другими родителями"
+msgstr "Общайтесь с другими родителями"
+
+msgid "Получайте консультации специалистов"
+msgstr "Получайте консультации специалистов"
+
+msgid "Делитесь опытом"
+msgstr "Делитесь опытом"
+
+msgid "В нашем сообществе"
+msgstr "В нашем сообществе"
+
+msgid "Сохранить"
+msgstr "Сохранить"
+
+msgid "Отмена"
+msgstr "Отмена"
+
+msgid "Удалить"
+msgstr "Удалить"
+
+msgid "Редактировать"
+msgstr "Редактировать"
+
+msgid "Создать"
+msgstr "Создать"
+
+msgid "Добавить"
+msgstr "Добавить"
+
+msgid "Поиск"
+msgstr "Поиск"
+
+msgid "Фильтр"
+msgstr "Фильтр"
+
+msgid "Сортировка"
+msgstr "Сортировка"
+
+msgid "Далее"
+msgstr "Далее"
+
+msgid "Назад"
+msgstr "Назад"
+
+msgid "Подробнее"
+msgstr "Подробнее"
+
+msgid "Скрыть"
+msgstr "Скрыть"
+
+msgid "Показать"
+msgstr "Показать"
+
+msgid "Родитель"
+msgstr "Родитель"
+
+msgid "Писатель"
+msgstr "Писатель"
+
+msgid "Консультант"
+msgstr "Консультант"
+
+msgid "Врач"
+msgstr "Врач"
+
+msgid "Медицинское учреждение"
+msgstr "Медицинское учреждение"
+
+msgid "Одобрено"
+msgstr "Одобрено"
+
+msgid "Отклонено"
+msgstr "Отклонено"
+
+msgid "Ожидает"
+msgstr "Ожидает"
+
+msgid "Активно"
+msgstr "Активно"
+
+msgid "Неактивно"
+msgstr "Неактивно"
+
+msgid "Темы"
+msgstr "Темы"
+
+msgid "Сообщения"
+msgstr "Сообщения"
+
+msgid "Ответить"
+msgstr "Ответить"
+
+msgid "Новая тема"
+msgstr "Новая тема"
+
+msgid "Последнее сообщение"
+msgstr "Последнее сообщение"
+
+msgid "Автор"
+msgstr "Автор"
+
+msgid "Дата"
+msgstr "Дата"
+
+msgid "Просмотры"
+msgstr "Просмотры"
+
+msgid "Лайки"
+msgstr "Лайки"
+
+msgid "Дизлайки"
+msgstr "Дизлайки"
+
+msgid "Статьи"
+msgstr "Статьи"
+
+msgid "Комментарии"
+msgstr "Комментарии"
+
+msgid "Оставить комментарий"
+msgstr "Оставить комментарий"
+
+msgid "Новая статья"
+msgstr "Новая статья"
+
+msgid "Редактировать статью"
+msgstr "Редактировать статью"
+
+msgid "Удалить статью"
+msgstr "Удалить статью"
+
+msgid "Развитие ребенка"
+msgstr "Развитие ребенка"
+
+msgid "Прививки"
+msgstr "Прививки"
+
+msgid "Рост"
+msgstr "Рост"
+
+msgid "Вес"
+msgstr "Вес"
+
+msgid "Рост в см"
+msgstr "Рост в см"
+
+msgid "Вес в кг"
+msgstr "Вес в кг"
+
+msgid "Дата рождения"
+msgstr "Дата рождения"
+
+msgid "Возраст"
+msgstr "Возраст"
+
+msgid "Месяцев"
+msgstr "Месяцев"
+
+msgid "Лет"
+msgstr "Лет"
+
+msgid "Записаться на консультацию"
+msgstr "Записаться на консультацию"
+
+msgid "Отправить сообщение"
+msgstr "Отправить сообщение"
+
+msgid "Оставить отзыв"
+msgstr "Оставить отзыв"
+
+msgid "Рейтинг"
+msgstr "Рейтинг"
+
+msgid "Специализация"
+msgstr "Специализация"
+
+msgid "Опыт работы"
+msgstr "Опыт работы"
+
+msgid "Образование"
+msgstr "Образование"
+
+msgid "Адрес"
+msgstr "Адрес"
+
+msgid "Телефон"
+msgstr "Телефон"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Веб-сайт"
+msgstr "Веб-сайт"
+
+msgid "Часы работы"
+msgstr "Часы работы"
+
+msgid "Услуги"
+msgstr "Услуги"
+
+msgid "Записаться на прием"
+msgstr "Записаться на прием"
+
+msgid "Уведомления"
+msgstr "Уведомления"
+
+msgid "Новое уведомление"
+msgstr "Новое уведомление"
+
+msgid "Прочитано"
+msgstr "Прочитано"
+
+msgid "Не прочитано"
+msgstr "Не прочитано"
+
+msgid "Все уведомления"
+msgstr "Все уведомления"
+
+msgid "Отметить как прочитанное"
+msgstr "Отметить как прочитанное"
+
+msgid "Ошибка"
+msgstr "Ошибка"
+
+msgid "Успешно"
+msgstr "Успешно"
+
+msgid "Предупреждение"
+msgstr "Предупреждение"
+
+msgid "Информация"
+msgstr "Информация"
+
+msgid "Поле обязательно для заполнения"
+msgstr "Поле обязательно для заполнения"
+
+msgid "Неверный формат"
+msgstr "Неверный формат"
+
+msgid "Пользователь не найден"
+msgstr "Пользователь не найден"
+
+msgid "Доступ запрещен"
+msgstr "Доступ запрещен"
+
+msgid "Страница не найдена"
+msgstr "Страница не найдена"
+
+msgid "Внутренняя ошибка сервера"
+msgstr "Внутренняя ошибка сервера"
+
+msgid "Сегодня"
+msgstr "Сегодня"
+
+msgid "Вчера"
+msgstr "Вчера"
+
+msgid "Завтра"
+msgstr "Завтра"
+
+msgid "Неделя"
+msgstr "Неделя"
+
+msgid "Месяц"
+msgstr "Месяц"
+
+msgid "Год"
+msgstr "Год"
+
+msgid "Час"
+msgstr "Час"
+
+msgid "Минута"
+msgstr "Минута"
+
+msgid "Секунда"
+msgstr "Секунда"
+
+msgid "Ребенок"
+msgstr "Ребенок"
+
+msgid "Дети"
+msgstr "Дети"
+
+msgid "Сын"
+msgstr "Сын"
+
+msgid "Дочь"
+msgstr "Дочь"
+
+msgid "Мать"
+msgstr "Мать"
+
+msgid "Отец"
+msgstr "Отец"
+
+msgid "Родители"
+msgstr "Родители"
+
+msgid "Семья"
+msgstr "Семья"
+
+msgid "Бабушка"
+msgstr "Бабушка"
+
+msgid "Дедушка"
+msgstr "Дедушка"
+
+msgid "Бабушка и дедушка"
+msgstr "Бабушка и дедушка"
+
+msgid "Дядя"
+msgstr "Дядя"
+
+msgid "Тетя"
+msgstr "Тетя"
+
+msgid "Кузен"
+msgstr "Кузен"
+
+msgid "Кузина"
+msgstr "Кузина"
+
+msgid "Первые шаги"
+msgstr "Первые шаги"
+
+msgid "Первые слова"
+msgstr "Первые слова"
+
+msgid "Зубы"
+msgstr "Зубы"
+
+msgid "Речь"
+msgstr "Речь"
+
+msgid "Ходьба"
+msgstr "Ходьба"
+
+msgid "Бег"
+msgstr "Бег"
+
+msgid "Прыжки"
+msgstr "Прыжки"
+
+msgid "Рисование"
+msgstr "Рисование"
+
+msgid "Чтение"
+msgstr "Чтение"
+
+msgid "Письмо"
+msgstr "Письмо"
+
+msgid "Счет"
+msgstr "Счет"
+
+msgid "Цвета"
+msgstr "Цвета"
+
+msgid "Формы"
+msgstr "Формы"
+
+msgid "Животные"
+msgstr "Животные"
+
+msgid "Игрушки"
+msgstr "Игрушки"
+
+msgid "Игры"
+msgstr "Игры"
+
+msgid "Здоровье"
+msgstr "Здоровье"
+
+msgid "Болезнь"
+msgstr "Болезнь"
+
+msgid "Лечение"
+msgstr "Лечение"
+
+msgid "Лекарства"
+msgstr "Лекарства"
+
+msgid "Больница"
+msgstr "Больница"
+
+msgid "Поликлиника"
+msgstr "Поликлиника"
+
+msgid "Стоматолог"
+msgstr "Стоматолог"
+
+msgid "Педиатр"
+msgstr "Педиатр"
+
+msgid "Терапевт"
+msgstr "Терапевт"
+
+msgid "Хирург"
+msgstr "Хирург"
+
+msgid "Окулист"
+msgstr "Окулист"
+
+msgid "ЛОР"
+msgstr "ЛОР"
+
+msgid "Невролог"
+msgstr "Невролог"
+
+msgid "Психолог"
+msgstr "Психолог"
+
+msgid "Школа"
+msgstr "Школа"
+
+msgid "Детский сад"
+msgstr "Детский сад"
+
+msgid "Учитель"
+msgstr "Учитель"
+
+msgid "Воспитатель"
+msgstr "Воспитатель"
+
+msgid "Урок"
+msgstr "Урок"
+
+msgid "Домашнее задание"
+msgstr "Домашнее задание"
+
+msgid "Оценка"
+msgstr "Оценка"
+
+msgid "Экзамен"
+msgstr "Экзамен"
+
+msgid "Тест"
+msgstr "Тест"
+
+msgid "Учебник"
+msgstr "Учебник"
+
+msgid "Тетрадь"
+msgstr "Тетрадь"
+
+msgid "Ручка"
+msgstr "Ручка"
+
+msgid "Карандаш"
+msgstr "Карандаш"
+
+msgid "Книга"
+msgstr "Книга"
+
+msgid "Добро пожаловать"
+msgstr "Добро пожаловать"
+
+msgid "Спасибо"
+msgstr "Спасибо"
+
+msgid "Пожалуйста"
+msgstr "Пожалуйста"
+
+msgid "Извините"
+msgstr "Извините"
+
+msgid "Понятно"
+msgstr "Понятно"
+
+msgid "Не понятно"
+msgstr "Не понятно"
+
+msgid "Помощь"
+msgstr "Помощь"
+
+msgid "Поддержка"
+msgstr "Поддержка"
+
+msgid "Контакты"
+msgstr "Контакты"
+
+msgid "О нас"
+msgstr "О нас"
+
+msgid "Условия использования"
+msgstr "Условия использования"
+
+msgid "Политика конфиденциальности"
+msgstr "Политика конфиденциальности"
+
+msgid "Помощь и поддержка"
+msgstr "Помощь и поддержка"
+
+msgid "Часто задаваемые вопросы"
+msgstr "Часто задаваемые вопросы"
+
+msgid "Связаться с нами"
+msgstr "Связаться с нами"
+
+msgid "Обратная связь"
+msgstr "Обратная связь"
+
+msgid "Сообщить об ошибке"
+msgstr "Сообщить об ошибке"
+
+msgid "Предложить улучшение"
+msgstr "Предложить улучшение"
+

@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'Мои посты' %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Боковая панель -->
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans 'Меню писателя' %}</h5>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'writer:dashboard' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-tachometer-alt me-2"></i>{% trans 'Дашборд' %}
+                        </a>
+                        <a href="{% url 'writer:profile_edit' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user-edit me-2"></i>{% trans 'Редактировать профиль' %}
+                        </a>
+                        <a href="{% url 'writer:post_list' %}" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-list me-2"></i>{% trans 'Мои посты' %}
+                        </a>
+                        <a href="{% url 'writer:post_create' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus me-2"></i>{% trans 'Создать пост' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="col-md-9">
+            <!-- Заголовок и фильтры -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">{% trans 'Мои посты' %}</h1>
+                <a href="{% url 'writer:post_create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>{% trans 'Создать пост' %}
+                </a>
+            </div>
+
+            <!-- Фильтры и поиск -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <input type="text" name="search" class="form-control" placeholder="{% trans 'Поиск по заголовку или содержанию' %}" value="{{ search_query }}">
+                        </div>
+                        <div class="col-md-3">
+                            <select name="status" class="form-select">
+                                <option value="">{% trans 'Все статусы' %}</option>
+                                <option value="published" {% if status_filter == 'published' %}selected{% endif %}>{% trans 'Опубликованные' %}</option>
+                                <option value="draft" {% if status_filter == 'draft' %}selected{% endif %}>{% trans 'Черновики' %}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-search me-2"></i>{% trans 'Поиск' %}
+                            </button>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="{% url 'writer:post_list' %}" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-times me-2"></i>{% trans 'Сбросить' %}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Список постов -->
+            {% if page_obj %}
+                <div class="row">
+                    {% for post in page_obj %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title">{{ post.title }}</h5>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="{% url 'writer:post_edit' post.pk %}">
+                                                    <i class="fas fa-edit me-2"></i>{% trans 'Редактировать' %}
+                                                </a></li>
+                                                <li><a class="dropdown-item" href="{% url 'blog:post_detail' post.pk %}">
+                                                    <i class="fas fa-eye me-2"></i>{% trans 'Просмотреть' %}
+                                                </a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item text-danger" href="{% url 'writer:post_delete' post.pk %}">
+                                                    <i class="fas fa-trash me-2"></i>{% trans 'Удалить' %}
+                                                </a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p class="card-text text-muted">{{ post.content|truncatewords:20 }}</p>
+                                    <div class="row text-muted small mb-3">
+                                        <div class="col-6">
+                                            <i class="fas fa-calendar me-1"></i>{{ post.created_at|date:"d.m.Y" }}
+                                        </div>
+                                        <div class="col-6">
+                                            <i class="fas fa-eye me-1"></i>{{ post.views }} {% trans 'просмотров' %}
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="badge bg-secondary me-1">{{ post.get_category_display }}</span>
+                                            <span class="badge bg-info">{{ post.get_language_display }}</span>
+                                        </div>
+                                        <div>
+                                            {% if post.is_published %}
+                                                <span class="badge bg-success">{% trans 'Опубликован' %}</span>
+                                            {% else %}
+                                                <span class="badge bg-warning">{% trans 'Черновик' %}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Пагинация -->
+                {% if page_obj.has_other_pages %}
+                    <nav aria-label="{% trans 'Навигация по страницам' %}">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">
+                                        <i class="fas fa-angle-double-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">
+                                        <i class="fas fa-angle-left"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">
+                                        <i class="fas fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">
+                                        <i class="fas fa-angle-double-right"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">{% trans 'У вас пока нет постов' %}</h4>
+                    <p class="text-muted">{% trans 'Создайте свой первый пост и начните делиться знаниями!' %}</p>
+                    <a href="{% url 'writer:post_create' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>{% trans 'Создать пост' %}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

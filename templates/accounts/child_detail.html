@@ -1,0 +1,488 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ child.name }} - Детальная информация{% endblock %}
+
+{% block extra_css %}
+<style>
+    .child-hero {
+        background: linear-gradient(135deg, #ff6b9d, #4ecdc4);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .child-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .child-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 2;
+    }
+    
+    .child-avatar.male {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+    }
+    
+    .child-avatar.female {
+        background: linear-gradient(45deg, #ff6b9d, #ff8fab);
+    }
+    
+    .stats-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        border: 1px solid #f1f3f4;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stat-item:hover {
+        background: #f8f9fa;
+        transform: translateY(-2px);
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ff6b9d;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    .info-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        border: 1px solid #f1f3f4;
+    }
+    
+    .info-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f3f4;
+    }
+    
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    
+    .info-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .info-content {
+        flex: 1;
+    }
+    
+    .info-label {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+    
+    .info-value {
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+    }
+    
+    .record-item {
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        border-left: 4px solid #ff6b9d;
+    }
+    
+    .record-date {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+    
+    .record-value {
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #6c757d;
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    .btn-add-record {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        border: none;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .btn-add-record:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Messages -->
+{% if messages %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="bi bi-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Child Hero -->
+<section class="child-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center">
+                    <div class="child-avatar {% if child.gender == 'male' %}male{% else %}female{% endif %} me-4">
+                        <div class="d-flex align-items-center justify-content-center h-100 text-white" style="font-size: 3rem;">
+                            <i class="bi bi-{% if child.gender == 'male' %}gender-male{% else %}gender-female{% endif %}"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="display-5 fw-bold mb-2">{{ child.name }}</h1>
+                        <p class="lead mb-3">
+                            {{ child.get_gender_display }} • {{ child.age_years }} лет, {{ child.age_months }} месяцев
+                        </p>
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-light text-dark me-3">
+                                <i class="bi bi-calendar me-1"></i>
+                                Родился {{ child.birth_date|date:"d.m.Y" }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-end">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'accounts:profile' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-arrow-left me-2"></i>Назад к профилю
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Stats -->
+            <div class="stats-card">
+                <h4 class="fw-bold mb-4">
+                    <i class="bi bi-graph-up me-2"></i>Статистика
+                </h4>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ total_growth_records }}</div>
+                            <div class="stat-label">Записей роста</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ total_sleep_records }}</div>
+                            <div class="stat-label">Записей сна</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ total_cry_records }}</div>
+                            <div class="stat-label">Записей плача</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ total_feeding_records }}</div>
+                            <div class="stat-label">Записей кормления</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ total_vaccination_records }}</div>
+                            <div class="stat-label">Записей прививок</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Records -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <h5 class="fw-bold mb-3">
+                            <i class="bi bi-arrow-up-circle me-2"></i>Последние записи роста
+                        </h5>
+                        {% if growth_records %}
+                            {% for record in growth_records %}
+                            <div class="record-item">
+                                <div class="record-date">{{ record.date|date:"d.m.Y" }}</div>
+                                <div class="record-value">{{ record.height }}см, {{ record.weight }}кг</div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <i class="bi bi-arrow-up-circle"></i>
+                                <p>Нет записей роста</p>
+                                <a href="{% url 'tracker:growth_create' %}" class="btn-add-record">
+                                    <i class="bi bi-plus me-2"></i>Добавить запись
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <h5 class="fw-bold mb-3">
+                            <i class="bi bi-moon me-2"></i>Последние записи сна
+                        </h5>
+                        {% if sleep_records %}
+                            {% for record in sleep_records %}
+                            <div class="record-item">
+                                <div class="record-date">{{ record.date|date:"d.m.Y" }}</div>
+                                <div class="record-value">{{ record.hours_slept }}ч ({{ record.get_sleep_quality_display }})</div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <i class="bi bi-moon"></i>
+                                <p>Нет записей сна</p>
+                                <a href="{% url 'tracker:sleep_create' %}" class="btn-add-record">
+                                    <i class="bi bi-plus me-2"></i>Добавить запись
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <h5 class="fw-bold mb-3">
+                            <i class="bi bi-emoji-frown me-2"></i>Последние записи плача
+                        </h5>
+                        {% if cry_records %}
+                            {% for record in cry_records %}
+                            <div class="record-item">
+                                <div class="record-date">{{ record.date|date:"d.m.Y" }}</div>
+                                <div class="record-value">{{ record.minutes_cried }}мин ({{ record.get_reason_display }})</div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <i class="bi bi-emoji-frown"></i>
+                                <p>Нет записей плача</p>
+                                <a href="{% url 'tracker:cry_create' %}" class="btn-add-record">
+                                    <i class="bi bi-plus me-2"></i>Добавить запись
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <h5 class="fw-bold mb-3">
+                            <i class="bi bi-cup-hot me-2"></i>Последние записи кормления
+                        </h5>
+                        {% if feeding_records %}
+                            {% for record in feeding_records %}
+                            <div class="record-item">
+                                <div class="record-date">{{ record.date|date:"d.m.Y" }} {{ record.time|time:"H:i" }}</div>
+                                <div class="record-value">{{ record.get_feeding_type_display }}{% if record.amount %} ({{ record.amount }}){% endif %}</div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <i class="bi bi-cup-hot"></i>
+                                <p>Нет записей кормления</p>
+                                <a href="{% url 'tracker:feeding_create' %}" class="btn-add-record">
+                                    <i class="bi bi-plus me-2"></i>Добавить запись
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Child Info -->
+            <div class="info-card">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-heart me-2"></i>Информация о ребенке
+                </h5>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Имя</div>
+                        <div class="info-value">{{ child.name }}</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-{% if child.gender == 'male' %}gender-male{% else %}gender-female{% endif %}"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Пол</div>
+                        <div class="info-value">{{ child.get_gender_display }}</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-calendar"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Дата рождения</div>
+                        <div class="info-value">{{ child.birth_date|date:"d.m.Y" }}</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-clock"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Возраст</div>
+                        <div class="info-value">{{ child.age_years }} лет, {{ child.age_months }} месяцев</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="info-card">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-lightning me-2"></i>Быстрые действия
+                </h5>
+                
+                <div class="d-grid gap-2">
+                    <a href="{% url 'tracker:growth_create' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-up-circle me-2"></i>Добавить рост/вес
+                    </a>
+                    <a href="{% url 'tracker:sleep_create' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-moon me-2"></i>Добавить сон
+                    </a>
+                    <a href="{% url 'tracker:cry_create' %}" class="btn btn-outline-warning">
+                        <i class="bi bi-emoji-frown me-2"></i>Добавить плач
+                    </a>
+                    <a href="{% url 'tracker:feeding_create' %}" class="btn btn-outline-success">
+                        <i class="bi bi-cup-hot me-2"></i>Добавить кормление
+                    </a>
+                    <a href="{% url 'tracker:vaccination_create' %}" class="btn btn-outline-warning">
+                        <i class="bi bi-shield-check me-2"></i>Добавить прививку
+                    </a>
+                    <a href="{% url 'accounts:edit_child' child.id %}" class="btn btn-outline-info">
+                        <i class="bi bi-pencil me-2"></i>Редактировать ребенка
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vaccination Records -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="info-card">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-shield-check me-2"></i>Последние прививки
+                    </h5>
+                    {% if vaccination_records %}
+                        {% for record in vaccination_records %}
+                        <div class="record-item">
+                            <div class="record-date">{{ record.date_given|date:"d.m.Y" }}</div>
+                            <div class="record-value">{{ record.vaccine_name }}{% if record.doctor_name %} ({{ record.doctor_name }}){% endif %}</div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="bi bi-shield-check"></i>
+                            <p>Нет записей прививок</p>
+                            <a href="{% url 'tracker:vaccination_create' %}" class="btn-add-record">
+                                <i class="bi bi-plus me-2"></i>Добавить запись
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

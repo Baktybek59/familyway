@@ -1,0 +1,950 @@
+{% extends 'base.html' %}
+{% load support_tags %}
+
+{% block title %}{{ topic.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .topic-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 1rem 1rem 0 0;
+    }
+    
+    .topic-meta {
+        background: #f8f9fa;
+        padding: 1rem 2rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .topic-content {
+        padding: 2rem;
+        line-height: 1.8;
+    }
+    
+    .post-item {
+        background: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+    }
+    
+    .post-header {
+        background: #f8f9fa;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .post-body {
+        padding: 1.5rem;
+    }
+    
+    .post-footer {
+        background: #f8f9fa;
+        padding: 0.75rem 1.5rem;
+        border-top: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .auth-required {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffffff 100%);
+        border: 2px solid #ffc107;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        text-align: center;
+        margin: 2rem 0;
+    }
+    
+    .btn-modern {
+        border-radius: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .like-btn, .dislike-btn {
+        border: none;
+        background: none;
+        color: #6c757d;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .like-btn:hover {
+        transform: scale(1.1);
+        color: #dc3545;
+        background: rgba(220, 53, 69, 0.1);
+    }
+    
+    .dislike-btn:hover {
+        transform: scale(1.1);
+        color: #6c757d;
+        background: rgba(108, 117, 125, 0.1);
+    }
+    
+    .like-btn.liked {
+        color: #dc3545;
+        background: rgba(220, 53, 69, 0.1);
+    }
+    
+    .dislike-btn.disliked {
+        color: #6c757d;
+        background: rgba(108, 117, 125, 0.1);
+    }
+    
+    .like-btn:disabled, .dislike-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .like-btn:disabled:hover, .dislike-btn:disabled:hover {
+        transform: none;
+        background: none;
+    }
+    
+    .reply-btn {
+        border: none;
+        background: none;
+        color: #007bff;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .reply-btn:hover {
+        transform: scale(1.1);
+        color: #0056b3;
+        background: rgba(0, 123, 255, 0.1);
+    }
+    
+    .reply-info {
+        background: rgba(0, 123, 255, 0.1);
+        border-left: 3px solid #007bff;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        margin-top: 0.5rem;
+    }
+    
+    .topic-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.5rem;
+        margin-left: 0.5rem;
+    }
+    
+    .badge-pinned {
+        background: #ffc107;
+        color: #000;
+    }
+    
+    .badge-locked {
+        background: #dc3545;
+        color: #fff;
+    }
+    
+    .badge-announcement {
+        background: #17a2b8;
+        color: #fff;
+    }
+    
+    .badge-closed {
+        background: #6c757d;
+        color: #fff;
+    }
+    
+    .reputation-badge {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.5rem;
+        margin-left: 0.5rem;
+    }
+    
+    .tags-container {
+        margin-top: 1rem;
+    }
+    
+    .tag {
+        display: inline-block;
+        background: #e9ecef;
+        color: #495057;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        margin-right: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .poll-container {
+        background: #f8f9fa;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border: 1px solid #e9ecef;
+    }
+    
+    .poll-question {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #495057;
+    }
+    
+    .poll-option {
+        margin-bottom: 0.75rem;
+    }
+    
+    .poll-results {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .poll-bar {
+        background: #e9ecef;
+        border-radius: 0.25rem;
+        height: 0.5rem;
+        margin-top: 0.25rem;
+    }
+    
+    .poll-fill {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        height: 100%;
+        border-radius: 0.25rem;
+        transition: width 0.3s ease;
+    }
+    
+    .support-badge {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .support-badge i {
+        font-size: 0.7rem;
+    }
+    
+    .post-author-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    
+    .author-avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .author-avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    .topic-header .author-avatar {
+        width: 32px;
+        height: 32px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Современный заголовок темы -->
+    <div class="topic-header">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h1 class="display-5 mb-0">{{ topic.title }}</h1>
+            <div class="d-flex gap-2">
+                {% if topic.is_pinned %}
+                <span class="topic-badge badge-pinned">
+                    <i class="bi bi-pin-angle"></i> Закреплена
+                </span>
+                {% endif %}
+                {% if topic.is_locked %}
+                <span class="topic-badge badge-locked">
+                    <i class="bi bi-lock"></i> Заблокирована
+                </span>
+                {% endif %}
+                {% if topic.is_announcement %}
+                <span class="topic-badge badge-announcement">
+                    <i class="bi bi-megaphone"></i> Объявление
+                </span>
+                {% endif %}
+                {% if topic.status == 'closed' %}
+                <span class="topic-badge badge-closed">
+                    <i class="bi bi-x-circle"></i> Закрыта
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center">
+                <div class="author-avatar me-2">
+                    {% if topic.author.parent_profile and topic.author.parent_profile.photo %}
+                        <img src="{{ topic.author.parent_profile.photo.url }}" alt="Фото профиля" class="author-avatar-img">
+                    {% else %}
+                        <div class="author-avatar-placeholder">
+                            {{ topic.author.username|first|upper }}
+                        </div>
+                    {% endif %}
+                </div>
+                <span class="badge bg-light text-dark px-3 py-2">
+                    <i class="bi bi-person me-1"></i>{{ topic.author.get_full_name }}
+                    {% if topic.author|is_support_staff %}
+                    <span class="support-badge">
+                        <i class="bi bi-headset"></i>Техподдержка
+                    </span>
+                    {% endif %}
+                    {% if user_reputation %}
+                    <span class="reputation-badge">
+                        <i class="bi bi-star"></i> {{ user_reputation.points }} очков
+                    </span>
+                    {% endif %}
+                </span>
+            </div>
+            <span class="badge bg-light text-dark px-3 py-2">
+                <i class="bi bi-calendar me-1"></i>{{ topic.created_at|date:"d.m.Y H:i" }}
+            </span>
+            <span class="badge bg-light text-dark px-3 py-2">
+                <i class="bi bi-eye me-1"></i>{{ topic.views_count }} просмотров
+            </span>
+            <span class="badge bg-light text-dark px-3 py-2">
+                <i class="bi bi-chat-dots me-1"></i>{{ topic.posts_count }} сообщений
+            </span>
+        </div>
+        
+        <!-- Теги -->
+        {% if topic_tags %}
+        <div class="tags-container">
+            {% for tag in topic_tags %}
+            <span class="tag">
+                <i class="bi bi-tag me-1"></i>{{ tag }}
+            </span>
+            {% endfor %}
+        </div>
+        {% endif %}
+            {% if topic.is_pinned %}
+            <span class="badge bg-warning text-dark px-3 py-2">
+                <i class="bi bi-pin-angle me-1"></i>Закреплено
+            </span>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="topic-meta">
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Категория:</strong> {{ topic.category.name }}<br>
+                <strong>Статус:</strong> {{ topic.get_status_display }}
+            </div>
+            <div class="col-md-6">
+                <strong>Сообщений:</strong> {{ posts.paginator.count }}<br>
+                <strong>Последняя активность:</strong> {{ topic.last_activity|date:"d.m.Y H:i" }}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Опрос, если есть -->
+    {% if poll %}
+    <div class="poll-container">
+        <div class="poll-question">
+            <i class="bi bi-bar-chart me-2"></i>{{ poll.question }}
+        </div>
+        
+        {% if user.is_authenticated and not user_voted and not poll.is_expired %}
+        <form method="post" action="{% url 'forum:poll_vote' topic.id %}">
+            {% csrf_token %}
+            {% for option in poll.options.all %}
+            <div class="poll-option">
+                <div class="form-check">
+                    <input class="form-check-input" type="{% if poll.is_multiple_choice %}checkbox{% else %}radio{% endif %}" 
+                           name="option" value="{{ option.id }}" id="option_{{ option.id }}">
+                    <label class="form-check-label" for="option_{{ option.id }}">
+                        {{ option.text }}
+                    </label>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle me-2"></i>Голосовать
+                </button>
+            </div>
+        </form>
+        {% else %}
+        <div class="poll-results">
+            {% for option in poll.options.all %}
+            <div class="poll-option">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>{{ option.text }}</span>
+                    <span class="fw-bold">{{ option.votes_count }} голосов</span>
+                </div>
+                <div class="poll-bar">
+                    <div class="poll-fill" style="width: {% if poll.votes.count > 0 %}{{ option.votes_count|floatformat:0|div:poll.votes.count|mul:100 }}{% else %}0{% endif %}%"></div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="mt-3 text-muted">
+                <small>Всего голосов: {{ poll.votes.count }}</small>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <div class="topic-content">
+        {{ topic.content|linebreaks }}
+    </div>
+    
+    <!-- Действия с темой -->
+    <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-light rounded">
+        <div class="d-flex align-items-center gap-3">
+            {% if user.is_authenticated %}
+            <button class="like-btn {% if is_topic_liked %}liked{% endif %}" 
+                    onclick="likeTopic({{ topic.id }})" 
+                    id="like-topic-btn"
+                    title="{% if is_topic_liked %}Убрать лайк{% else %}Поставить лайк{% endif %}">
+                <i class="bi bi-heart{% if is_topic_liked %}-fill{% endif %}"></i>
+                <span id="topic-likes-count">{{ topic_likes_count }}</span>
+            </button>
+            <button class="dislike-btn {% if is_topic_disliked %}disliked{% endif %}" 
+                    onclick="dislikeTopic({{ topic.id }})" 
+                    id="dislike-topic-btn"
+                    title="{% if is_topic_disliked %}Убрать дизлайк{% else %}Поставить дизлайк{% endif %}">
+                <i class="bi bi-heartbreak{% if is_topic_disliked %}-fill{% endif %}"></i>
+                <span id="topic-dislikes-count">{{ topic_dislikes_count }}</span>
+            </button>
+            {% else %}
+            <button class="like-btn" disabled title="Войдите в систему, чтобы поставить лайк">
+                <i class="bi bi-heart"></i>
+                <span>{{ topic_likes_count }}</span>
+            </button>
+            <button class="dislike-btn" disabled title="Войдите в систему, чтобы поставить дизлайк">
+                <i class="bi bi-heartbreak"></i>
+                <span>{{ topic_dislikes_count }}</span>
+            </button>
+            {% endif %}
+            
+            {% if user.is_authenticated %}
+            <button class="btn btn-outline-info btn-sm" onclick="toggleSubscription({{ topic.id }}, 'topic')" id="subscription-btn">
+                <i class="bi bi-bell" id="subscription-icon"></i>
+                <span id="subscription-text">Подписаться</span>
+            </button>
+            {% endif %}
+        </div>
+        
+        <div class="d-flex gap-2">
+            <a href="{% url 'forum:category_detail' topic.category.id %}" class="btn btn-outline-secondary btn-modern">
+                <i class="bi bi-arrow-left me-1"></i>Назад к категории
+            </a>
+            {% if user.is_authenticated and user == topic.author %}
+            <a href="{% url 'forum:topic_edit' topic.id %}" class="btn btn-outline-primary btn-modern">
+                <i class="bi bi-pencil me-1"></i>Редактировать
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Сообщения -->
+    <div class="mb-4">
+        <h4 class="mb-3">
+            <i class="bi bi-chat-dots me-2"></i>Сообщения ({{ posts.paginator.count }})
+        </h4>
+        
+        {% for post in posts %}
+        <div class="post-item" id="post-{{ post.id }}">
+            <div class="post-header">
+                <div class="d-flex align-items-center">
+                    <div class="post-author-avatar me-3">
+                        {% if post.author.parent_profile and post.author.parent_profile.photo %}
+                            <img src="{{ post.author.parent_profile.photo.url }}" alt="Фото профиля" class="author-avatar-img">
+                        {% else %}
+                            <div class="author-avatar-placeholder">
+                                {{ post.author.username|first|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <strong class="d-block">
+                            {{ post.author.get_full_name }}
+                            {% if post.author|is_support_staff %}
+                            <span class="support-badge">
+                                <i class="bi bi-headset"></i>Техподдержка
+                            </span>
+                            {% endif %}
+                        </strong>
+                        <small class="text-muted">{{ post.created_at|date:"d.m.Y H:i" }}</small>
+                        {% if post.parent_post %}
+                        <div class="reply-info mt-1">
+                            <small class="text-info">
+                                <i class="bi bi-reply"></i> Ответ на сообщение от {{ post.parent_post.author.get_full_name }}
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if user.is_authenticated and user == post.author %}
+                <div class="post-actions">
+                    <button class="btn btn-outline-danger btn-sm" onclick="deletePost({{ post.id }})">
+                        <i class="bi bi-trash me-1"></i>Удалить
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="post-body">
+                {{ post.content|linebreaks }}
+            </div>
+            
+            <div class="post-footer">
+                <div class="d-flex align-items-center gap-3">
+                    {% if user.is_authenticated %}
+                    <button class="like-btn" 
+                            onclick="likePost({{ post.id }})" 
+                            id="like-post-btn-{{ post.id }}"
+                            title="Поставить лайк">
+                        <i class="bi bi-heart"></i>
+                        <span id="post-likes-count-{{ post.id }}">{{ post.likes.count }}</span>
+                    </button>
+                    <button class="dislike-btn" 
+                            onclick="dislikePost({{ post.id }})" 
+                            id="dislike-post-btn-{{ post.id }}"
+                            title="Поставить дизлайк">
+                        <i class="bi bi-heartbreak"></i>
+                        <span id="post-dislikes-count-{{ post.id }}">{{ post.dislikes.count }}</span>
+                    </button>
+                    <button class="reply-btn" 
+                            onclick="replyToPost({{ post.id }}, '{{ post.author.get_full_name }}')" 
+                            title="Ответить на сообщение">
+                        <i class="bi bi-reply"></i>
+                        <span>Ответить</span>
+                    </button>
+                    {% else %}
+                    <button class="like-btn" disabled title="Войдите в систему, чтобы поставить лайк">
+                        <i class="bi bi-heart"></i>
+                        <span>{{ post.likes.count }}</span>
+                    </button>
+                    <button class="dislike-btn" disabled title="Войдите в систему, чтобы поставить дизлайк">
+                        <i class="bi bi-heartbreak"></i>
+                        <span>{{ post.dislikes.count }}</span>
+                    </button>
+                    {% endif %}
+                </div>
+                <small class="text-muted">
+                    {% if post.updated_at != post.created_at %}
+                    Изменено: {{ post.updated_at|date:"d.m.Y H:i" }}
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Пагинация сообщений -->
+    {% if posts.has_other_pages %}
+    <nav aria-label="Page navigation" class="mb-4">
+        <ul class="pagination justify-content-center">
+            {% if posts.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">Первая</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.previous_page_number }}">Предыдущая</a>
+            </li>
+            {% endif %}
+            
+            <li class="page-item active">
+                <span class="page-link">{{ posts.number }} из {{ posts.paginator.num_pages }}</span>
+            </li>
+            
+            {% if posts.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.next_page_number }}">Следующая</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.paginator.num_pages }}">Последняя</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+    
+    <!-- Форма добавления сообщения -->
+    {% if can_post and post_form %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="bi bi-reply me-2"></i>Добавить сообщение
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ post_form.content }}
+                </div>
+                <button type="submit" class="btn btn-primary btn-modern">
+                    <i class="bi bi-send me-1"></i>Отправить сообщение
+                </button>
+            </form>
+        </div>
+    </div>
+    {% elif not user.is_authenticated %}
+    <div class="auth-required">
+        <i class="bi bi-lock-fill me-2" style="font-size: 2rem;"></i>
+        <h5 class="mb-3">Для участия в обсуждении необходимо войти в систему</h5>
+        <p class="mb-4">Войдите в систему, чтобы добавлять сообщения и ставить лайки</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'accounts:login' %}" class="btn btn-warning btn-modern">
+                <i class="bi bi-box-arrow-in-right me-1"></i>Войти
+            </a>
+            <a href="{% url 'accounts:register' %}" class="btn btn-outline-primary btn-modern">
+                <i class="bi bi-person-plus me-1"></i>Регистрация
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function likeTopic(topicId) {
+    fetch(`/forum/topic/${topicId}/like/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const likeBtn = document.getElementById('like-topic-btn');
+        const dislikeBtn = document.getElementById('dislike-topic-btn');
+        const likesCount = document.getElementById('topic-likes-count');
+        const dislikesCount = document.getElementById('topic-dislikes-count');
+        
+        // Обновляем лайк
+        if (data.status === 'liked') {
+            likeBtn.classList.add('liked');
+            likeBtn.innerHTML = '<i class="bi bi-heart-fill"></i><span>' + data.likes_count + '</span>';
+        } else {
+            likeBtn.classList.remove('liked');
+            likeBtn.innerHTML = '<i class="bi bi-heart"></i><span>' + data.likes_count + '</span>';
+        }
+        
+        // Обновляем дизлайк
+        dislikeBtn.classList.remove('disliked');
+        dislikeBtn.innerHTML = '<i class="bi bi-heartbreak"></i><span>' + data.dislikes_count + '</span>';
+        
+        likesCount.textContent = data.likes_count;
+        dislikesCount.textContent = data.dislikes_count;
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+}
+
+function likePost(postId) {
+    fetch(`/forum/post/${postId}/like/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const likeBtn = document.getElementById(`like-post-btn-${postId}`);
+        const dislikeBtn = document.getElementById(`dislike-post-btn-${postId}`);
+        const likesCount = document.getElementById(`post-likes-count-${postId}`);
+        const dislikesCount = document.getElementById(`post-dislikes-count-${postId}`);
+        
+        // Обновляем лайк
+        if (data.status === 'liked') {
+            likeBtn.classList.add('liked');
+            likeBtn.innerHTML = '<i class="bi bi-heart-fill"></i><span>' + data.likes_count + '</span>';
+        } else {
+            likeBtn.classList.remove('liked');
+            likeBtn.innerHTML = '<i class="bi bi-heart"></i><span>' + data.likes_count + '</span>';
+        }
+        
+        // Обновляем дизлайк
+        dislikeBtn.classList.remove('disliked');
+        dislikeBtn.innerHTML = '<i class="bi bi-heartbreak"></i><span>' + data.dislikes_count + '</span>';
+        
+        likesCount.textContent = data.likes_count;
+        dislikesCount.textContent = data.dislikes_count;
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+}
+
+function dislikeTopic(topicId) {
+    fetch(`/forum/topic/${topicId}/dislike/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const likeBtn = document.getElementById('like-topic-btn');
+        const dislikeBtn = document.getElementById('dislike-topic-btn');
+        const likesCount = document.getElementById('topic-likes-count');
+        const dislikesCount = document.getElementById('topic-dislikes-count');
+        
+        // Обновляем лайк
+        likeBtn.classList.remove('liked');
+        likeBtn.innerHTML = '<i class="bi bi-heart"></i><span>' + data.likes_count + '</span>';
+        
+        // Обновляем дизлайк
+        if (data.status === 'disliked') {
+            dislikeBtn.classList.add('disliked');
+            dislikeBtn.innerHTML = '<i class="bi bi-heartbreak-fill"></i><span>' + data.dislikes_count + '</span>';
+        } else {
+            dislikeBtn.classList.remove('disliked');
+            dislikeBtn.innerHTML = '<i class="bi bi-heartbreak"></i><span>' + data.dislikes_count + '</span>';
+        }
+        
+        likesCount.textContent = data.likes_count;
+        dislikesCount.textContent = data.dislikes_count;
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+}
+
+function dislikePost(postId) {
+    fetch(`/forum/post/${postId}/dislike/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const likeBtn = document.getElementById(`like-post-btn-${postId}`);
+        const dislikeBtn = document.getElementById(`dislike-post-btn-${postId}`);
+        const likesCount = document.getElementById(`post-likes-count-${postId}`);
+        const dislikesCount = document.getElementById(`post-dislikes-count-${postId}`);
+        
+        // Обновляем лайк
+        likeBtn.classList.remove('liked');
+        likeBtn.innerHTML = '<i class="bi bi-heart"></i><span>' + data.likes_count + '</span>';
+        
+        // Обновляем дизлайк
+        if (data.status === 'disliked') {
+            dislikeBtn.classList.add('disliked');
+            dislikeBtn.innerHTML = '<i class="bi bi-heartbreak-fill"></i><span>' + data.dislikes_count + '</span>';
+        } else {
+            dislikeBtn.classList.remove('disliked');
+            dislikeBtn.innerHTML = '<i class="bi bi-heartbreak"></i><span>' + data.dislikes_count + '</span>';
+        }
+        
+        likesCount.textContent = data.likes_count;
+        dislikesCount.textContent = data.dislikes_count;
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+}
+
+function deletePost(postId) {
+    if (confirm('Вы уверены, что хотите удалить это сообщение?')) {
+        fetch(`/forum/post/${postId}/delete/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`post-${postId}`).remove();
+            } else {
+                alert('Ошибка при удалении сообщения');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+        });
+    }
+}
+
+// Управление ответами
+function replyToPost(postId, authorName) {
+    // Находим форму для создания сообщения
+    const form = document.querySelector('form[method="post"]');
+    if (!form) {
+        alert('Форма для создания сообщения не найдена');
+        return;
+    }
+    
+    // Находим поле для ввода сообщения
+    const contentField = form.querySelector('textarea[name="content"]');
+    if (!contentField) {
+        alert('Поле для ввода сообщения не найдено');
+        return;
+    }
+    
+    // Находим скрытое поле для родительского поста
+    let parentPostField = form.querySelector('input[name="parent_post"]');
+    if (!parentPostField) {
+        // Создаем скрытое поле, если его нет
+        parentPostField = document.createElement('input');
+        parentPostField.type = 'hidden';
+        parentPostField.name = 'parent_post';
+        form.appendChild(parentPostField);
+    }
+    
+    // Устанавливаем ID родительского поста
+    parentPostField.value = postId;
+    
+    // Добавляем цитату в поле ввода
+    const quote = `@${authorName}, `;
+    contentField.value = quote;
+    contentField.focus();
+    
+    // Прокручиваем к форме
+    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    // Выделяем текст после цитаты
+    contentField.setSelectionRange(quote.length, quote.length);
+}
+
+// Управление подписками
+function toggleSubscription(id, type) {
+    const subscriptionBtn = document.getElementById('subscription-btn');
+    const subscriptionIcon = document.getElementById('subscription-icon');
+    const subscriptionText = document.getElementById('subscription-text');
+    
+    // Определяем URL в зависимости от типа
+    let url;
+    if (type === 'topic') {
+        url = `/forum/topic/${id}/subscribe/`;
+    } else if (type === 'category') {
+        url = `/forum/category/${id}/subscribe/`;
+    }
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'subscribed') {
+            subscriptionIcon.className = 'bi bi-bell-fill';
+            subscriptionText.textContent = 'Отписаться';
+            subscriptionBtn.className = 'btn btn-info btn-sm';
+        } else if (data.status === 'unsubscribed') {
+            subscriptionIcon.className = 'bi bi-bell';
+            subscriptionText.textContent = 'Подписаться';
+            subscriptionBtn.className = 'btn btn-outline-info btn-sm';
+        }
+        
+        // Показываем сообщение пользователю
+        if (data.message) {
+            // Создаем временное уведомление
+            const notification = document.createElement('div');
+            notification.className = 'alert alert-success alert-dismissible fade show position-fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '9999';
+            notification.innerHTML = `
+                ${data.message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(notification);
+            
+            // Автоматически скрываем через 3 секунды
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+}
+
+// Проверяем статус подписки при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    {% if user.is_authenticated %}
+    checkSubscriptionStatus({{ topic.id }}, 'topic');
+    {% endif %}
+});
+
+function checkSubscriptionStatus(id, type) {
+    fetch(`/forum/subscription/${id}/${type}/status/`)
+    .then(response => response.json())
+    .then(data => {
+        const subscriptionBtn = document.getElementById('subscription-btn');
+        const subscriptionIcon = document.getElementById('subscription-icon');
+        const subscriptionText = document.getElementById('subscription-text');
+        
+        if (data.status === 'subscribed' && data.is_active) {
+            subscriptionIcon.className = 'bi bi-bell-fill';
+            subscriptionText.textContent = 'Отписаться';
+            subscriptionBtn.className = 'btn btn-info btn-sm';
+        } else {
+            subscriptionIcon.className = 'bi bi-bell';
+            subscriptionText.textContent = 'Подписаться';
+            subscriptionBtn.className = 'btn btn-outline-info btn-sm';
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка при проверке статуса подписки:', error);
+    });
+}
+</script>
+{% endblock %}

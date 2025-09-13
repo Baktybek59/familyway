@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+
+{% block title %}Удалить сообщение - Форум{% endblock %}
+
+{% block extra_css %}
+<style>
+    .delete-hero {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .delete-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .warning-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(220, 53, 69, 0.15);
+        overflow: hidden;
+        background: white;
+        border-top: 4px solid #dc3545;
+    }
+    
+    .warning-header {
+        background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+        padding: 2rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .warning-body {
+        padding: 2rem;
+    }
+    
+    .message-preview {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border-left: 4px solid #ffc107;
+    }
+    
+    .message-content {
+        font-style: italic;
+        color: #6c757d;
+        line-height: 1.6;
+    }
+    
+    .message-meta {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e9ecef;
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+    
+    .delete-btn {
+        background: linear-gradient(45deg, #dc3545, #c82333);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .delete-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
+        color: white;
+    }
+    
+    .cancel-btn {
+        background: #6c757d;
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .cancel-btn:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+    
+    .topic-info {
+        background: #e3f2fd;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-left: 4px solid #2196f3;
+    }
+    
+    .topic-title {
+        font-weight: 600;
+        color: #1976d2;
+        margin-bottom: 0.5rem;
+    }
+    
+    .topic-meta {
+        color: #1565c0;
+        font-size: 0.9rem;
+    }
+    
+    .warning-icon {
+        font-size: 3rem;
+        color: #ffc107;
+        margin-bottom: 1rem;
+    }
+    
+    .consequences {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+    }
+    
+    .consequences h6 {
+        color: #856404;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .consequences ul {
+        margin-bottom: 0;
+        color: #856404;
+    }
+    
+    .consequences li {
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Современный заголовок -->
+    <div class="delete-hero">
+        <div class="hero-content text-center">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="bi bi-exclamation-triangle me-3"></i>Удаление сообщения
+            </h1>
+            <p class="lead mb-0">
+                Подтвердите удаление сообщения из форума
+            </p>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Информация о теме -->
+            <div class="topic-info">
+                <div class="topic-title">
+                    <i class="bi bi-chat-square-text me-2"></i>{{ object.topic.title }}
+                </div>
+                <div class="topic-meta">
+                    <i class="bi bi-person me-1"></i>{{ object.author.get_full_name }} • 
+                    <i class="bi bi-calendar me-1"></i>{{ object.created_at|date:"d.m.Y H:i" }}
+                </div>
+            </div>
+            
+            <!-- Карточка предупреждения -->
+            <div class="warning-card">
+                <div class="warning-header text-center">
+                    <div class="warning-icon">
+                        <i class="bi bi-exclamation-triangle"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2 text-danger">Внимание!</h4>
+                    <p class="lead mb-0">Вы собираетесь удалить сообщение из форума</p>
+                </div>
+                
+                <div class="warning-body">
+                    <!-- Предварительный просмотр сообщения -->
+                    <div class="message-preview">
+                        <div class="message-content">
+                            {{ object.content|truncatewords:30|linebreaks }}
+                        </div>
+                        <div class="message-meta">
+                            <i class="bi bi-person me-1"></i>{{ object.author.get_full_name }} • 
+                            <i class="bi bi-calendar me-1"></i>{{ object.created_at|date:"d.m.Y H:i" }}
+                        </div>
+                    </div>
+                    
+                    <!-- Последствия удаления -->
+                    <div class="consequences">
+                        <h6>
+                            <i class="bi bi-info-circle me-2"></i>Последствия удаления:
+                        </h6>
+                        <ul>
+                            <li>Сообщение будет полностью удалено из базы данных</li>
+                            <li>Все ответы на это сообщение также будут удалены</li>
+                            <li>Это действие нельзя отменить</li>
+                            <li>Счетчик сообщений в теме будет обновлен</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Форма удаления -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'forum:topic_detail' object.topic.pk %}" class="cancel-btn">
+                                <i class="bi bi-arrow-left me-2"></i>Отмена
+                            </a>
+                            <button type="submit" class="delete-btn">
+                                <i class="bi bi-trash me-2"></i>Удалить сообщение
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль - Техподдержка{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 1rem 1rem 0 0;
+        padding: 2rem;
+    }
+    
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        margin: -60px auto 1rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .profile-info {
+        background: white;
+        border-radius: 0 0 1rem 1rem;
+        padding: 2rem;
+        margin-top: -1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: #495057;
+        min-width: 150px;
+    }
+    
+    .info-value {
+        color: #6c757d;
+        text-align: right;
+        flex: 1;
+    }
+    
+    .badge-custom {
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        font-weight: 600;
+    }
+    
+    .badge-team-lead {
+        background: linear-gradient(135deg, #ffc107, #ff8c00);
+        color: white;
+    }
+    
+    .badge-active {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+    }
+    
+    .skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .skill-tag {
+        background: #e9ecef;
+        color: #495057;
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-size: 0.85rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="profile-header text-center">
+                    <h2 class="mb-2">Профиль сотрудника техподдержки</h2>
+                    <p class="mb-0 opacity-75">Информация о сотруднике</p>
+                </div>
+                
+                <div class="profile-info">
+                    <!-- Avatar -->
+                    <div class="text-center mb-4">
+                        <div class="profile-avatar mx-auto">
+                            {% if profile.avatar %}
+                                <img src="{{ profile.avatar.url }}" alt="{{ profile.get_full_name }}" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
+                            {% else %}
+                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-primary text-white rounded-circle" style="font-size: 3rem;">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <h4 class="mb-1">{{ profile.get_full_name }}</h4>
+                        <p class="text-muted mb-2">{{ profile.position|default:"Сотрудник техподдержки" }}</p>
+                        <div class="d-flex justify-content-center gap-2">
+                            {% if profile.is_team_lead %}
+                            <span class="badge-custom badge-team-lead">
+                                <i class="bi bi-star me-1"></i>Руководитель команды
+                            </span>
+                            {% endif %}
+                            {% if profile.is_active %}
+                            <span class="badge-custom badge-active">
+                                <i class="bi bi-check-circle me-1"></i>Активен
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Basic Info -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <span class="info-label">ID сотрудника:</span>
+                                <span class="info-value">{{ profile.employee_id }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Отдел:</span>
+                                <span class="info-value">{{ profile.department }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Телефон:</span>
+                                <span class="info-value">{{ profile.phone|default:"Не указан" }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Email:</span>
+                                <span class="info-value">{{ profile.email|default:"Не указан" }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <span class="info-label">Дата рождения:</span>
+                                <span class="info-value">{{ profile.birth_date|date:"d.m.Y"|default:"Не указана" }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Языки:</span>
+                                <span class="info-value">{{ profile.languages|default:"Не указаны" }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Создан:</span>
+                                <span class="info-value">{{ profile.created_at|date:"d.m.Y H:i" }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Обновлен:</span>
+                                <span class="info-value">{{ profile.updated_at|date:"d.m.Y H:i" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bio -->
+                    {% if profile.bio %}
+                    <div class="mb-4">
+                        <h6>О себе</h6>
+                        <div class="bg-light p-3 rounded">
+                            {{ profile.bio|linebreaks }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Skills -->
+                    {% if profile.skills %}
+                    <div class="mb-4">
+                        <h6>Навыки и компетенции</h6>
+                        <div class="bg-light p-3 rounded">
+                            {{ profile.skills|linebreaks }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Address -->
+                    {% if profile.address %}
+                    <div class="mb-4">
+                        <h6>Адрес</h6>
+                        <div class="bg-light p-3 rounded">
+                            {{ profile.address|linebreaks }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Emergency Contact -->
+                    {% if profile.emergency_contact %}
+                    <div class="mb-4">
+                        <h6>Контакт для экстренных случаев</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <span class="info-label">Контакт:</span>
+                                    <span class="info-value">{{ profile.emergency_contact }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <span class="info-label">Телефон:</span>
+                                    <span class="info-value">{{ profile.emergency_phone|default:"Не указан" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Actions -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'support:dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Назад к дашборду
+                        </a>
+                        <a href="{% url 'support:profile_edit' %}" class="btn btn-primary">
+                            <i class="bi bi-pencil-square me-1"></i>Редактировать профиль
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

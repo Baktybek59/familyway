@@ -1,0 +1,517 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактировать статью - {{ article.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 0 0 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.content-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    border: 1px solid #f1f3f4;
+}
+
+.content-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    outline: none;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.btn-outline-primary {
+    border: 2px solid #667eea;
+    color: #667eea;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background: transparent;
+}
+
+.btn-outline-primary:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.alert {
+    border-radius: 0.75rem;
+    border: none;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.status-options {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.status-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.status-option:hover {
+    border-color: #667eea;
+    background: #f8f9fa;
+}
+
+.status-option input[type="radio"] {
+    margin: 0;
+}
+
+.status-option.selected {
+    border-color: #667eea;
+    background: #f0f4ff;
+}
+
+.status-option.selected .status-icon {
+    color: #667eea;
+}
+
+.status-icon {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.status-text {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.status-description {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.article-info {
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.info-value {
+    color: #2c3e50;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-published {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-draft {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+    
+    .status-options {
+        flex-direction: column;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        margin-bottom: 0.5rem;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<section class="dashboard-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="dashboard-title">
+                    <i class="bi bi-pencil me-3"></i>Редактировать статью
+                </h1>
+                <p class="dashboard-subtitle">
+                    {{ article.title|truncatewords:10 }}
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'accounts:writer_articles' %}" class="btn btn-light">
+                    <i class="bi bi-arrow-left me-2"></i>Назад к статьям
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="bi bi-{% if message.tags == 'success' %}check-circle{% else %}exclamation-triangle{% endif %} me-2"></i>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Article Info -->
+    <div class="content-card">
+        <h5 class="content-title">
+            <i class="bi bi-info-circle me-2"></i>Информация о статье
+        </h5>
+        
+        <div class="article-info">
+            <div class="info-row">
+                <div class="info-label">Создана:</div>
+                <div class="info-value">{{ article.created_at|date:"d.m.Y H:i" }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Обновлена:</div>
+                <div class="info-value">{{ article.updated_at|date:"d.m.Y H:i" }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Статус:</div>
+                <div class="info-value">
+                    <span class="status-badge status-{{ article.status }}">
+                        {% if article.status == 'published' %}Опубликовано
+                        {% elif article.status == 'pending' %}На одобрении
+                        {% elif article.status == 'draft' %}Черновик
+                        {% elif article.status == 'rejected' %}Отклонено
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Просмотры:</div>
+                <div class="info-value">{{ article.views_count }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Время чтения:</div>
+                <div class="info-value">{{ article.read_time }} мин</div>
+            </div>
+        </div>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Article Content -->
+        <div class="content-card">
+            <h5 class="content-title">
+                <i class="bi bi-file-text me-2"></i>Содержание статьи
+            </h5>
+            
+            <div class="form-group">
+                <label for="title" class="form-label">Заголовок статьи *</label>
+                <input type="text" name="title" id="title" class="form-control" 
+                       value="{{ article.title }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="content" class="form-label">Содержание статьи *</label>
+                <textarea name="content" id="content" class="form-control" rows="15" 
+                          required>{{ article.content }}</textarea>
+            </div>
+        </div>
+        
+        <!-- Article Settings -->
+        <div class="content-card">
+            <h5 class="content-title">
+                <i class="bi bi-gear me-2"></i>Настройки статьи
+            </h5>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="category" class="form-label">Категория *</label>
+                        <select name="category" id="category" class="form-control" required>
+                            <option value="mom" {% if article.category == 'mom' %}selected{% endif %}>Для мамы</option>
+                            <option value="dad" {% if article.category == 'dad' %}selected{% endif %}>Для папы</option>
+                            <option value="general" {% if article.category == 'general' %}selected{% endif %}>Общие</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="language" class="form-label">Язык *</label>
+                        <select name="language" id="language" class="form-control" required>
+                            <option value="ru" {% if article.language == 'ru' %}selected{% endif %}>Русский</option>
+                            <option value="ky" {% if article.language == 'ky' %}selected{% endif %}>Кыргызча</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Publication Status -->
+        <div class="content-card">
+            <h5 class="content-title">
+                <i class="bi bi-send me-2"></i>Статус публикации
+            </h5>
+            
+            <div class="status-options">
+                <label class="status-option {% if article.status == 'draft' %}selected{% endif %}" for="status_draft">
+                    <input type="radio" name="status" value="draft" id="status_draft" 
+                           {% if article.status == 'draft' %}checked{% endif %}>
+                    <div>
+                        <div class="status-icon">
+                            <i class="bi bi-file-earmark"></i>
+                        </div>
+                        <div class="status-text">Черновик</div>
+                        <div class="status-description">Сохранить как черновик для дальнейшего редактирования</div>
+                    </div>
+                </label>
+                
+                <label class="status-option {% if article.status == 'pending' %}selected{% endif %}" for="status_pending">
+                    <input type="radio" name="status" value="pending" id="status_pending"
+                           {% if article.status == 'pending' %}checked{% endif %}>
+                    <div>
+                        <div class="status-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <div class="status-text">Отправить на одобрение</div>
+                        <div class="status-description">Отправить статью на модерацию для публикации</div>
+                    </div>
+                </label>
+                
+                {% if article.status == 'published' %}
+                <label class="status-option selected" for="status_published">
+                    <input type="radio" name="status" value="published" id="status_published" checked disabled>
+                    <div>
+                        <div class="status-icon">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div class="status-text">Опубликовано</div>
+                        <div class="status-description">Статья уже опубликована</div>
+                    </div>
+                </label>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="content-card">
+            <div class="text-end">
+                <div class="btn-group">
+                    <a href="{% url 'accounts:writer_articles' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-x-circle me-2"></i>Отмена
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-2"></i>Сохранить изменения
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Status option selection
+    const statusOptions = document.querySelectorAll('.status-option');
+    statusOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // Skip if disabled
+            if (this.querySelector('input[type="radio"]').disabled) return;
+            
+            // Remove selected class from all options
+            statusOptions.forEach(opt => opt.classList.remove('selected'));
+            // Add selected class to clicked option
+            this.classList.add('selected');
+            // Check the radio button
+            this.querySelector('input[type="radio"]').checked = true;
+        });
+    });
+    
+    // Auto-save functionality
+    const titleInput = document.getElementById('title');
+    const contentInput = document.getElementById('content');
+    
+    function autoSave() {
+        const data = {
+            title: titleInput.value,
+            content: contentInput.value,
+            timestamp: new Date().toISOString()
+        };
+        localStorage.setItem('article_edit_draft', JSON.stringify(data));
+    }
+    
+    // Auto-save every 30 seconds
+    setInterval(autoSave, 30000);
+    
+    // Load draft on page load
+    const savedDraft = localStorage.getItem('article_edit_draft');
+    if (savedDraft) {
+        const data = JSON.parse(savedDraft);
+        if (data.title && data.title !== titleInput.value) {
+            if (confirm('Найдены несохраненные изменения. Загрузить их?')) {
+                titleInput.value = data.title;
+                contentInput.value = data.content;
+            }
+        }
+    }
+    
+    // Clear draft on successful submit
+    document.querySelector('form').addEventListener('submit', function() {
+        localStorage.removeItem('article_edit_draft');
+    });
+});
+</script>
+{% endblock %}
+
+
+
+

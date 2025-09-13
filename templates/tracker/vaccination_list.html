@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+
+{% block title %}Прививки - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .vaccination-hero {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+    }
+    
+    .vaccination-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        border: 1px solid #f1f3f4;
+        transition: all 0.3s ease;
+    }
+    
+    .vaccination-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .vaccine-name {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #28a745;
+        margin-bottom: 0.5rem;
+    }
+    
+    .vaccine-date {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .vaccine-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .info-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+    }
+    
+    .info-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #28a745;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .info-content {
+        flex: 1;
+    }
+    
+    .info-label {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+    
+    .info-value {
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+    }
+    
+    .reaction-section {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #fff3cd;
+        border-radius: 0.5rem;
+        border-left: 4px solid #ffc107;
+    }
+    
+    .reaction-title {
+        font-weight: 600;
+        color: #856404;
+        margin-bottom: 0.5rem;
+    }
+    
+    .reaction-text {
+        color: #856404;
+        margin: 0;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #6c757d;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    .btn-add-vaccination {
+        background: linear-gradient(45deg, #28a745, #20c997);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .btn-add-vaccination:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Messages -->
+{% if messages %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="bi bi-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Vaccination Hero -->
+<section class="vaccination-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="bi bi-shield-check me-3"></i>Прививки
+                </h1>
+                <p class="lead mb-0">
+                    Отслеживайте вакцинацию ваших детей
+                </p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'tracker:vaccination_create' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i>Добавить прививку
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    {% if records %}
+        <div class="row">
+            {% for record in records %}
+            <div class="col-lg-6">
+                <div class="vaccination-card">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <div class="vaccine-name">{{ record.vaccine_name }}</div>
+                            <div class="vaccine-date">
+                                <i class="bi bi-calendar me-1"></i>
+                                {{ record.date_given|date:"d.m.Y" }}
+                                {% if record.child %}
+                                    • {{ record.child.name }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-three-dots"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'tracker:vaccination_update' record.pk %}">
+                                    <i class="bi bi-pencil me-2"></i>Редактировать
+                                </a></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'tracker:vaccination_delete' record.pk %}">
+                                    <i class="bi bi-trash me-2"></i>Удалить
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="vaccine-info">
+                        {% if record.next_due_date %}
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Следующая вакцинация</div>
+                                <div class="info-value">{{ record.next_due_date|date:"d.m.Y" }}</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if record.doctor_name %}
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Врач</div>
+                                <div class="info-value">{{ record.doctor_name }}</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if record.clinic_name %}
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-hospital"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Клиника</div>
+                                <div class="info-value">{{ record.clinic_name }}</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if record.batch_number %}
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-upc-scan"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Номер партии</div>
+                                <div class="info-value">{{ record.batch_number }}</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if record.reaction %}
+                    <div class="reaction-section">
+                        <div class="reaction-title">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Реакция на вакцину
+                        </div>
+                        <div class="reaction-text">{{ record.reaction }}</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if record.notes %}
+                    <div class="mt-3">
+                        <div class="info-label mb-2">
+                            <i class="bi bi-sticky me-1"></i>Заметки
+                        </div>
+                        <div class="text-muted">{{ record.notes }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; Первая</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                        </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">
+                                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-shield-check"></i>
+                    <h4>Нет записей о прививках</h4>
+                    <p class="mb-4">Добавьте первую прививку, чтобы начать отслеживать вакцинацию</p>
+                    <a href="{% url 'tracker:vaccination_create' %}" class="btn-add-vaccination">
+                        <i class="bi bi-plus-circle me-2"></i>Добавить прививку
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+

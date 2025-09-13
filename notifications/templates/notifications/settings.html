@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+
+{% block title %}Настройки уведомлений{% endblock %}
+
+{% block extra_css %}
+<style>
+    .settings-card {
+        border-radius: 1rem;
+        border: none;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .settings-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border: none;
+    }
+    
+    .settings-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .section-title i {
+        margin-right: 0.75rem;
+        color: #007bff;
+    }
+    
+    .form-check-modern {
+        background: white;
+        border-radius: 0.75rem;
+        padding: 1rem 1.5rem;
+        margin-bottom: 0.75rem;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+    
+    .form-check-modern:hover {
+        border-color: #007bff;
+        box-shadow: 0 4px 15px rgba(0,123,255,0.1);
+        transform: translateY(-2px);
+    }
+    
+    .form-check-modern .form-check-input {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-right: 1rem;
+    }
+    
+    .form-check-modern .form-check-label {
+        font-weight: 600;
+        color: #2c3e50;
+        cursor: pointer;
+    }
+    
+    .form-check-modern .form-check-input:checked + .form-check-label {
+        color: #007bff;
+    }
+    
+    .form-select-modern {
+        border-radius: 0.75rem;
+        border: 2px solid #e9ecef;
+        padding: 0.75rem 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .form-select-modern:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+    }
+    
+    .btn-modern {
+        border-radius: 0.75rem;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .alert-modern {
+        border-radius: 0.75rem;
+        border: none;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    
+    .settings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .frequency-section {
+        background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+        border-left: 4px solid #2196f3;
+    }
+    
+    .email-section {
+        background: linear-gradient(135deg, #f3e5f5 0%, #ffffff 100%);
+        border-left: 4px solid #9c27b0;
+    }
+    
+    .push-section {
+        background: linear-gradient(135deg, #e8f5e8 0%, #ffffff 100%);
+        border-left: 4px solid #4caf50;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card settings-card">
+                <div class="settings-header">
+                    <h3 class="mb-0">
+                        <i class="bi bi-gear me-2"></i>Настройки уведомлений
+                    </h3>
+                    <p class="mb-0 mt-2 opacity-75">Персонализируйте получение уведомлений под ваши потребности</p>
+                </div>
+                <div class="card-body p-4">
+                    <form id="notification-settings-form">
+                        {% csrf_token %}
+                        
+                        <!-- Email уведомления -->
+                        <div class="settings-section email-section">
+                            <h5 class="section-title">
+                                <i class="bi bi-envelope"></i>Email уведомления
+                            </h5>
+                            
+                            <div class="form-check-modern">
+                                <input class="form-check-input" type="checkbox" id="email_enabled" name="email_enabled" 
+                                       {% if settings.email_enabled %}checked{% endif %}>
+                                <label class="form-check-label" for="email_enabled">
+                                    <strong>Включить email уведомления</strong>
+                                    <small class="d-block text-muted">Получать уведомления на электронную почту</small>
+                                </label>
+                            </div>
+                            
+                            <div class="settings-grid">
+                                <div>
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="email_consultations" name="email_consultations" 
+                                               {% if settings.email_consultations %}checked{% endif %}>
+                                        <label class="form-check-label" for="email_consultations">
+                                            Консультации с врачами
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="email_forum" name="email_forum" 
+                                               {% if settings.email_forum %}checked{% endif %}>
+                                        <label class="form-check-label" for="email_forum">
+                                            Форум и обсуждения
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="email_reviews" name="email_reviews" 
+                                               {% if settings.email_reviews %}checked{% endif %}>
+                                        <label class="form-check-label" for="email_reviews">
+                                            Отзывы и рейтинги
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="email_blog" name="email_blog" 
+                                               {% if settings.email_blog %}checked{% endif %}>
+                                        <label class="form-check-label" for="email_blog">
+                                            Статьи блога
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="email_system" name="email_system" 
+                                               {% if settings.email_system %}checked{% endif %}>
+                                        <label class="form-check-label" for="email_system">
+                                            Системные уведомления
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="email_tracker" name="email_tracker" 
+                                               {% if settings.email_tracker %}checked{% endif %}>
+                                        <label class="form-check-label" for="email_tracker">
+                                            Трекер развития ребенка
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Push уведомления -->
+                        <div class="settings-section push-section">
+                            <h5 class="section-title">
+                                <i class="bi bi-phone"></i>Push уведомления
+                            </h5>
+                            
+                            <div class="form-check-modern">
+                                <input class="form-check-input" type="checkbox" id="push_enabled" name="push_enabled" 
+                                       {% if settings.push_enabled %}checked{% endif %}>
+                                <label class="form-check-label" for="push_enabled">
+                                    <strong>Включить push уведомления</strong>
+                                    <small class="d-block text-muted">Получать уведомления в браузере</small>
+                                </label>
+                            </div>
+                            
+                            <div class="settings-grid">
+                                <div>
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="push_consultations" name="push_consultations" 
+                                               {% if settings.push_consultations %}checked{% endif %}>
+                                        <label class="form-check-label" for="push_consultations">
+                                            Консультации с врачами
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="push_forum" name="push_forum" 
+                                               {% if settings.push_forum %}checked{% endif %}>
+                                        <label class="form-check-label" for="push_forum">
+                                            Форум и обсуждения
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="push_reviews" name="push_reviews" 
+                                               {% if settings.push_reviews %}checked{% endif %}>
+                                        <label class="form-check-label" for="push_reviews">
+                                            Отзывы и рейтинги
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="push_blog" name="push_blog" 
+                                               {% if settings.push_blog %}checked{% endif %}>
+                                        <label class="form-check-label" for="push_blog">
+                                            Статьи блога
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="push_system" name="push_system" 
+                                               {% if settings.push_system %}checked{% endif %}>
+                                        <label class="form-check-label" for="push_system">
+                                            Системные уведомления
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check-modern">
+                                        <input class="form-check-input" type="checkbox" id="push_tracker" name="push_tracker" 
+                                               {% if settings.push_tracker %}checked{% endif %}>
+                                        <label class="form-check-label" for="push_tracker">
+                                            Трекер развития ребенка
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Частота уведомлений -->
+                        <div class="settings-section frequency-section">
+                            <h5 class="section-title">
+                                <i class="bi bi-clock"></i>Частота уведомлений
+                            </h5>
+                            
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label class="form-label fw-semibold mb-3">Как часто получать уведомления?</label>
+                                    <select class="form-select form-select-modern" id="digest_frequency" name="digest_frequency">
+                                        <option value="immediate" {% if settings.digest_frequency == 'immediate' %}selected{% endif %}>
+                                            ⚡ Немедленно - получать уведомления сразу
+                                        </option>
+                                        <option value="hourly" {% if settings.digest_frequency == 'hourly' %}selected{% endif %}>
+                                            🕐 Каждый час - сводка уведомлений каждый час
+                                        </option>
+                                        <option value="daily" {% if settings.digest_frequency == 'daily' %}selected{% endif %}>
+                                            📅 Ежедневно - сводка уведомлений раз в день
+                                        </option>
+                                        <option value="weekly" {% if settings.digest_frequency == 'weekly' %}selected{% endif %}>
+                                            📆 Еженедельно - сводка уведомлений раз в неделю
+                                        </option>
+                                        <option value="never" {% if settings.digest_frequency == 'never' %}selected{% endif %}>
+                                            🚫 Никогда - не получать уведомления
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-info alert-modern mt-3">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <strong>Совет:</strong> Настройка влияет на то, как часто вы будете получать уведомления. 
+                                При выборе "Немедленно" вы будете получать каждое уведомление отдельно.
+                            </div>
+                        </div>
+                        
+                        <!-- Кнопки -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'notifications:list' %}" class="btn btn-secondary btn-modern">
+                                <i class="bi bi-arrow-left me-2"></i>Назад к уведомлениям
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-modern">
+                                <i class="bi bi-check-circle me-2"></i>Сохранить настройки
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('notification-settings-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('{% url "notifications:settings" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Показываем уведомление об успехе
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-success alert-dismissible fade show position-fixed';
+            alert.style.top = '20px';
+            alert.style.right = '20px';
+            alert.style.zIndex = '9999';
+            alert.innerHTML = `
+                <i class="bi bi-check-circle me-2"></i>${data.message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alert);
+            
+            // Убираем уведомление через 3 секунды
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Управление авторами блога - Техподдержка{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h2 mb-0">
+                    <i class="bi bi-people me-2"></i>Управление авторами блога
+                </h1>
+                <a href="{% url 'support:dashboard' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Назад к дашборду
+                </a>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Информация
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>Здесь можно управлять авторами блога. Функционал будет добавлен в следующих версиях.</p>
+                    
+                    <div class="alert alert-info">
+                        <h6><i class="bi bi-lightbulb me-2"></i>Планируемый функционал:</h6>
+                        <ul class="mb-0">
+                            <li>Добавление новых авторов блога</li>
+                            <li>Управление правами доступа</li>
+                            <li>Просмотр статистики авторов</li>
+                            <li>Модерация контента авторов</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

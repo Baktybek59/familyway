@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Оценить консультацию - familyway +{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="fw-bold text-primary">
+                        <i class="bi bi-star"></i> Оценить консультацию
+                    </h1>
+                    <p class="text-muted">Поделитесь своим мнением о качестве консультации</p>
+                </div>
+            </div>
+            
+            <!-- Consultation Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-chat-text"></i> Информация о консультации
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <strong>Тема:</strong> {{ consultation.title }}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Консультант:</strong> {{ consultation.consultant.full_name }}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Специализация:</strong> {{ consultation.consultant.get_specialization_display }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <strong>Создана:</strong> {{ consultation.created_at|date:"d.m.Y H:i" }}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Завершена:</strong> {{ consultation.completed_at|date:"d.m.Y H:i" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Review Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-star-fill"></i> Ваша оценка
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Оценка консультации *</label>
+                            <div class="rating-input">
+                                {{ form.rating }}
+                            </div>
+                            <small class="text-muted">Выберите оценку от 1 до 5 звезд</small>
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.comment|as_crispy_field }}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'consultant:consultation_detail' consultation.pk %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Отмена
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-star"></i> Отправить отзыв
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Help -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h6 class="fw-bold text-info">
+                        <i class="bi bi-info-circle"></i> Как оценить консультацию
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-success">5 звезд - Отлично</h6>
+                            <ul class="small text-muted">
+                                <li>Консультант ответил быстро и подробно</li>
+                                <li>Советы были полезными и практичными</li>
+                                <li>Проблема была решена полностью</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-warning">3 звезды - Удовлетворительно</h6>
+                            <ul class="small text-muted">
+                                <li>Консультант ответил, но не очень подробно</li>
+                                <li>Советы были частично полезными</li>
+                                <li>Проблема была решена частично</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.rating-input input[type="radio"] {
+    display: none;
+}
+
+.rating-input label {
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.rating-input label:hover,
+.rating-input label:hover ~ label,
+.rating-input input[type="radio"]:checked ~ label {
+    color: #ffc107;
+}
+
+.rating-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.rating-input label {
+    margin-right: 5px;
+}
+</style>
+{% endblock %}
+
+
+
+

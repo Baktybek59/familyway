@@ -1,0 +1,600 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Заявка на роль писателя - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .application-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .application-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .application-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .application-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 2rem;
+        padding: 3rem;
+        box-shadow: 
+            0 20px 40px rgba(0, 0, 0, 0.1),
+            0 8px 16px rgba(0, 0, 0, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .application-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+        pointer-events: none;
+    }
+
+    .application-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .application-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    .application-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .application-subtitle {
+        font-size: 1.2rem;
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+
+    .form-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f1f3f4;
+        position: relative;
+        z-index: 1;
+    }
+
+    .section-title {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #667eea;
+        display: flex;
+        align-items: center;
+    }
+
+    .section-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #fafbfc;
+    }
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        background: white;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 1rem;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+
+    .benefits-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border: 1px solid #dee2e6;
+    }
+
+    .benefit-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .benefit-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .benefit-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+
+    .benefit-desc {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .required-field {
+        color: #dc3545;
+    }
+
+    .help-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+
+    @media (max-width: 768px) {
+        .application-container {
+            padding: 0 1rem;
+        }
+        
+        .application-card {
+            padding: 2rem;
+        }
+        
+        .application-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="application-hero">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h1 class="display-4 fw-bold mb-3">Станьте писателем</h1>
+                <p class="lead mb-0">Поделитесь своим опытом и знаниями с другими родителями</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="application-container">
+                <div class="application-card">
+                    <div class="application-header">
+                        <div class="application-icon">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <h2 class="application-title">Заявка на роль писателя</h2>
+                        <p class="application-subtitle">Заполните форму ниже, и мы рассмотрим вашу заявку</p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Личная информация -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <div class="section-icon">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                Личная информация
+                            </h4>
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.first_name.id_for_label }}">
+                                            <i class="bi bi-person me-2"></i>{{ form.first_name.label }}
+                                            <span class="required-field">*</span>
+                                        </label>
+                                        {{ form.first_name }}
+                                        {% if form.first_name.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.first_name.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.last_name.id_for_label }}">
+                                            <i class="bi bi-person me-2"></i>{{ form.last_name.label }}
+                                            <span class="required-field">*</span>
+                                        </label>
+                                        {{ form.last_name }}
+                                        {% if form.last_name.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.last_name.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.middle_name.id_for_label }}">
+                                            <i class="bi bi-person me-2"></i>{{ form.middle_name.label }}
+                                        </label>
+                                        {{ form.middle_name }}
+                                        {% if form.middle_name.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.middle_name.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.email.id_for_label }}">
+                                            <i class="bi bi-envelope me-2"></i>{{ form.email.label }}
+                                            <span class="required-field">*</span>
+                                        </label>
+                                        {{ form.email }}
+                                        {% if form.email.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.email.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.phone.id_for_label }}">
+                                            <i class="bi bi-telephone me-2"></i>{{ form.phone.label }}
+                                        </label>
+                                        {{ form.phone }}
+                                        {% if form.phone.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.phone.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Учетные данные -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <div class="section-icon">
+                                    <i class="bi bi-key"></i>
+                                </div>
+                                Учетные данные
+                            </h4>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.username.id_for_label }}">
+                                            <i class="bi bi-person-badge me-2"></i>{{ form.username.label }}
+                                            <span class="required-field">*</span>
+                                        </label>
+                                        {{ form.username }}
+                                        {% if form.username.help_text %}
+                                            <div class="help-text">{{ form.username.help_text }}</div>
+                                        {% endif %}
+                                        {% if form.username.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.username.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.password.id_for_label }}">
+                                            <i class="bi bi-lock me-2"></i>{{ form.password.label }}
+                                            <span class="required-field">*</span>
+                                        </label>
+                                        {{ form.password }}
+                                        {% if form.password.help_text %}
+                                            <div class="help-text">{{ form.password.help_text }}</div>
+                                        {% endif %}
+                                        {% if form.password.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.password.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.password_confirm.id_for_label }}">
+                                            <i class="bi bi-lock-fill me-2"></i>{{ form.password_confirm.label }}
+                                            <span class="required-field">*</span>
+                                        </label>
+                                        {{ form.password_confirm }}
+                                        {% if form.password_confirm.help_text %}
+                                            <div class="help-text">{{ form.password_confirm.help_text }}</div>
+                                        {% endif %}
+                                        {% if form.password_confirm.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.password_confirm.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Писательская информация -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <div class="section-icon">
+                                    <i class="bi bi-pencil-square"></i>
+                                </div>
+                                Писательская информация
+                            </h4>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.writing_motivation.id_for_label }}">
+                                    <i class="bi bi-heart me-2"></i>{{ form.writing_motivation.label }}
+                                    <span class="required-field">*</span>
+                                </label>
+                                {{ form.writing_motivation }}
+                                <div class="help-text">Расскажите, почему вы хотите стать писателем на нашем сервисе</div>
+                                {% if form.writing_motivation.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.writing_motivation.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.journalism_experience.id_for_label }}">
+                                    <i class="bi bi-journal-text me-2"></i>{{ form.journalism_experience.label }}
+                                    <span class="required-field">*</span>
+                                </label>
+                                {{ form.journalism_experience }}
+                                <div class="help-text">Опишите ваш опыт в журналистике или написании статей</div>
+                                {% if form.journalism_experience.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.journalism_experience.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.years_experience.id_for_label }}">
+                                            <i class="bi bi-calendar me-2"></i>{{ form.years_experience.label }}
+                                            <span class="required-field">*</span>
+                                        </label>
+                                        {{ form.years_experience }}
+                                        {% if form.years_experience.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.years_experience.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.specialization.id_for_label }}">
+                                            <i class="bi bi-tags me-2"></i>{{ form.specialization.label }}
+                                        </label>
+                                        {{ form.specialization }}
+                                        <div class="help-text">Например: детская психология, педиатрия, воспитание</div>
+                                        {% if form.specialization.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.specialization.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.languages.id_for_label }}">
+                                    <i class="bi bi-translate me-2"></i>{{ form.languages.label }}
+                                </label>
+                                {{ form.languages }}
+                                <div class="help-text">Языки, на которых вы можете писать (через запятую)</div>
+                                {% if form.languages.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.languages.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-submit">
+                                <i class="bi bi-send me-2"></i>Отправить заявку
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <!-- Benefits Card -->
+            <div class="benefits-card">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-star me-2"></i>Преимущества писателя
+                </h5>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Помощь родителям</div>
+                        <div class="benefit-desc">Делитесь опытом и помогайте другим родителям</div>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Аналитика</div>
+                        <div class="benefit-desc">Отслеживайте статистику ваших статей</div>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="bi bi-award"></i>
+                    </div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Признание</div>
+                        <div class="benefit-desc">Получайте отзывы и рейтинги от читателей</div>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="bi bi-chat-dots"></i>
+                    </div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Сообщество</div>
+                        <div class="benefit-desc">Общайтесь с другими писателями и экспертами</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

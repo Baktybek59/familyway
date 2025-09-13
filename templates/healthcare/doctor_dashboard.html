@@ -1,0 +1,441 @@
+{% extends 'base.html' %}
+
+{% block title %}Дашборд врача - {{ doctor.full_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 0 0 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.stats-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid #f1f3f4;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.stats-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.stats-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.stats-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.stats-change {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.stats-change.positive {
+    color: #28a745;
+}
+
+.stats-change.negative {
+    color: #dc3545;
+}
+
+.content-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    border: 1px solid #f1f3f4;
+}
+
+.content-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.doctor-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 1rem;
+}
+
+.doctor-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1.5rem;
+    border: 3px solid #667eea;
+}
+
+.doctor-avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-right: 1.5rem;
+}
+
+.doctor-details h4 {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.doctor-specialization {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.doctor-rating {
+    color: #ffc107;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-outline-primary {
+    border: 2px solid #667eea;
+    color: #667eea;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #adb5bd;
+}
+
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+    
+    .stats-card {
+        margin-bottom: 1rem;
+    }
+    
+    .doctor-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .doctor-avatar,
+    .doctor-avatar-placeholder {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<section class="dashboard-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="dashboard-title">
+                    <i class="bi bi-person-badge me-3"></i>Дашборд врача
+                </h1>
+                <p class="dashboard-subtitle">
+                    Добро пожаловать, {{ doctor.full_name }} • {{ doctor.specialization }}
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'healthcare:doctor_login' %}" class="btn btn-light">
+                    <i class="bi bi-box-arrow-right me-2"></i>Выйти
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Doctor Info -->
+    <div class="content-card">
+        <div class="doctor-info">
+            {% if doctor.photo %}
+            <img src="{{ doctor.photo.url }}" alt="{{ doctor.full_name }}" class="doctor-avatar">
+            {% else %}
+            <div class="doctor-avatar-placeholder">
+                {{ doctor.first_name|first|upper }}{{ doctor.last_name|first|upper }}
+            </div>
+            {% endif %}
+            
+            <div class="doctor-details">
+                <h4>{{ doctor.full_name }}</h4>
+                <p class="doctor-specialization">{{ doctor.specialization }}</p>
+                <div class="doctor-rating">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= doctor.rating %}
+                            <i class="bi bi-star-fill"></i>
+                        {% else %}
+                            <i class="bi bi-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                    {{ doctor.rating|floatformat:1 }} ({{ doctor.reviews_count }} отзывов)
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-primary">
+                    <i class="bi bi-chat-dots"></i>
+                </div>
+                <div class="stats-number">{{ consultations_count }}</div>
+                <div class="stats-label">Консультаций</div>
+                <div class="stats-change positive">
+                    <i class="bi bi-arrow-up"></i> +5 за неделю
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-success">
+                    <i class="bi bi-star"></i>
+                </div>
+                <div class="stats-number">{{ average_rating|floatformat:1 }}</div>
+                <div class="stats-label">Средний рейтинг</div>
+                <div class="stats-change positive">
+                    <i class="bi bi-arrow-up"></i> +0.2 за месяц
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-warning">
+                    <i class="bi bi-chat-square-text"></i>
+                </div>
+                <div class="stats-number">{{ reviews_count }}</div>
+                <div class="stats-label">Отзывов</div>
+                <div class="stats-change positive">
+                    <i class="bi bi-arrow-up"></i> +3 за неделю
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-info">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <div class="stats-number">{{ doctor.experience_years }}</div>
+                <div class="stats-label">Лет опыта</div>
+                <div class="stats-change">
+                    <i class="bi bi-info-circle"></i> Опыт работы
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-lightning me-2"></i>Быстрые действия
+                </h5>
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'healthcare:doctor_consultations' %}" class="btn btn-primary w-100">
+                            <i class="bi bi-chat-dots me-2"></i>Мои консультации
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'healthcare:doctor_profile_edit' %}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-person-gear me-2"></i>Редактировать профиль
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'healthcare:doctor_password_change' %}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-key me-2"></i>Сменить пароль
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'forum:index' %}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-chat-square-text me-2"></i>Форум
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Consultation Settings -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-currency-dollar me-2"></i>Настройки консультаций
+                </h5>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-primary">{{ doctor.consultation_price|floatformat:0 }} сом</h4>
+                            <small class="text-muted">Цена консультации</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-success">{{ doctor.consultation_duration }} мин</h4>
+                            <small class="text-muted">Длительность</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <span class="badge {% if doctor.is_available_for_consultation %}bg-success{% else %}bg-danger{% endif %}">
+                        {% if doctor.is_available_for_consultation %}Доступен для консультаций{% else %}Недоступен{% endif %}
+                    </span>
+                </div>
+                <div class="mt-3">
+                    <a href="{% url 'healthcare:doctor_profile_edit' %}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-gear me-1"></i>Изменить настройки
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-graph-up me-2"></i>Статистика за месяц
+                </h5>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-info">{{ recent_consultations_count }}</h4>
+                            <small class="text-muted">Консультаций за 30 дней</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-warning">{{ recent_reviews_count }}</h4>
+                            <small class="text-muted">Отзывов за 30 дней</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-clock me-2"></i>Последние консультации
+                </h5>
+                <div class="empty-state">
+                    <i class="bi bi-chat-dots"></i>
+                    <h6>Нет консультаций</h6>
+                    <p>У вас пока нет консультаций.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-star me-2"></i>Последние отзывы
+                </h5>
+                <div class="empty-state">
+                    <i class="bi bi-star"></i>
+                    <h6>Нет отзывов</h6>
+                    <p>У вас пока нет отзывов от пациентов.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

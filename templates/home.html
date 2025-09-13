@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "familyway + - Главная" %}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="bi bi-heart-fill"></i> familyway +
+                </h1>
+                <p class="lead mb-4">
+                    {% trans "Платформа для семей с детьми. Отслеживайте развитие ребенка, общайтесь с другими родителями и получайте консультации специалистов." %}
+                </p>
+                {% if not user.is_authenticated %}
+                <div class="d-flex gap-3">
+                    <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg">
+                        <i class="bi bi-person-plus"></i> {% trans "Начать" %}
+                    </a>
+                    <a href="{% url 'blog:blog_list' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-journal-text"></i> {% trans "Читать блог" %}
+                    </a>
+                </div>
+                {% else %}
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'tracker:dashboard' %}" class="btn btn-light btn-lg">
+                        <i class="bi bi-graph-up"></i> {% trans "Мой трекер" %}
+                    </a>
+                    <a href="{% url 'healthcare:index' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-hospital"></i> {% trans "Медицинские учреждения" %}
+                    </a>
+                    <a href="{% url 'blog:blog_list' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-journal-text"></i> {% trans "Читать блог" %}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="bi bi-heart-fill" style="font-size: 15rem; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="container mb-5">
+    <div class="row">
+        <div class="col-12 text-center mb-5">
+            <h2 class="fw-bold">{% trans "Возможности приложения" %}</h2>
+            <p class="text-muted">{% trans "Все, что нужно для заботы о вашем ребенке" %}</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="bi bi-graph-up text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">{% trans "Отслеживание развития" %}</h5>
+                    <p class="card-text">
+                        {% trans "Ведите дневник роста, веса, сна, кормления и других важных показателей развития вашего ребенка." %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="bi bi-journal-text text-secondary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">{% trans "Полезные статьи" %}</h5>
+                    <p class="card-text">
+                        {% trans "Читайте статьи и советы от экспертов по воспитанию детей, разделенные по категориям для мам и пап." %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="bi bi-people text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">{% trans "Персональный профиль" %}</h5>
+                    <p class="card-text">
+                        {% trans "Создайте профиль родителя с информацией о вашем ребенке и получайте персонализированные рекомендации." %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-4 mt-2">
+        <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="bi bi-stethoscope text-info" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Консультации с врачами</h5>
+                    <p class="card-text">
+                        Получите профессиональную консультацию от опытных врачей 
+                        по вопросам здоровья и развития вашего ребенка.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="bi bi-chat-dots text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Форум для родителей</h5>
+                    <p class="card-text">
+                        Общайтесь с другими родителями, делитесь опытом, 
+                        задавайте вопросы и получайте поддержку сообщества.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="bi bi-hospital text-info" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Медицинские учреждения</h5>
+                    <p class="card-text">
+                        Найдите лучшие клиники, аптеки и больницы в вашем городе, 
+                        читайте отзывы и выбирайте врачей.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="bi bi-people-fill text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Семейная система</h5>
+                    <p class="card-text">
+                        Подключите партнера к одной семье и ведите общие записи 
+                        о развитии вашего ребенка вместе.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="bi bi-globe text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="card-title">Многоязычность</h5>
+                    <p class="card-text">
+                        Используйте приложение на русском или кыргызском языке 
+                        для максимального удобства.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+{% if not user.is_authenticated %}
+<section class="container mb-5">
+    <div class="card bg-primary text-white">
+        <div class="card-body text-center py-5">
+            <h3 class="card-title mb-3">Готовы начать?</h3>
+            <p class="card-text mb-4">
+                Присоединяйтесь к тысячам родителей, которые уже используют familyway + 
+                для отслеживания развития своих детей.
+            </p>
+            <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg">
+                <i class="bi bi-person-plus"></i> Зарегистрироваться
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Stats Section -->
+<section class="container mb-5">
+    <div class="row text-center">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="text-primary fw-bold">1000+</h3>
+                    <p class="text-muted">Родителей</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="text-secondary fw-bold">500+</h3>
+                    <p class="text-muted">Статей</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="text-success fw-bold">50K+</h3>
+                    <p class="text-muted">Записей</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="text-warning fw-bold">24/7</h3>
+                    <p class="text-muted">Поддержка</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

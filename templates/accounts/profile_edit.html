@@ -1,0 +1,870 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Редактировать профиль - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .edit-hero {
+        background: linear-gradient(135deg, #ff6b9d, #4ecdc4);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .edit-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .edit-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .edit-header {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        padding: 2rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .form-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+    }
+    
+    .section-title {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #ff6b9d;
+        display: flex;
+        align-items: center;
+    }
+    
+    .section-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #ff6b9d;
+        box-shadow: 0 0 0 0.2rem rgba(255, 107, 157, 0.25);
+    }
+    
+    /* Role Selection Styles */
+    .role-option {
+        margin-bottom: 1rem;
+    }
+    
+    .role-option .form-check-input {
+        display: none;
+    }
+    
+    .role-option .form-check-label {
+        cursor: pointer;
+        display: block;
+        padding: 0;
+    }
+    
+    .role-card {
+        background: #fff;
+        border: 2px solid #e9ecef;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        min-height: 100px;
+    }
+    
+    .role-card:hover {
+        border-color: #ff6b9d;
+        background: linear-gradient(135deg, #fff5f8, #f0fdfa);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.15);
+    }
+    
+    .role-option .form-check-input:checked + .form-check-label .role-card {
+        border-color: #ff6b9d;
+        background: linear-gradient(135deg, #fff5f8, #f0fdfa);
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.2);
+    }
+    
+    .role-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+    
+    .role-option .form-check-input:checked + .form-check-label .role-icon {
+        background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+        color: white;
+    }
+    
+    .role-option .form-check-input:not(:checked) + .form-check-label .role-icon {
+        background: #f8f9fa;
+        color: #6c757d;
+    }
+    
+    .role-content {
+        flex: 1;
+    }
+    
+    .role-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0 0 0.25rem 0;
+        color: #2c3e50;
+    }
+    
+    .role-description {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin: 0;
+    }
+    
+    .role-check {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.2rem;
+        color: #ff6b9d;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.3s ease;
+    }
+    
+    .role-option .form-check-input:checked + .form-check-label .role-check {
+        opacity: 1;
+        transform: scale(1);
+    }
+    
+    .role-option .form-check-input:not(:checked) + .form-check-label .role-check {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    
+    /* Hover effects for role cards */
+    .role-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 143, 171, 0.1));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .role-card:hover::before {
+        opacity: 1;
+    }
+    
+    .role-option .form-check-input:checked + .form-check-label .role-card::before {
+        opacity: 1;
+    }
+    
+    /* Active state for role cards */
+    .role-card.active {
+        border-color: #ff6b9d;
+        background: linear-gradient(135deg, #fff5f8, #f0fdfa);
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.2);
+    }
+    
+    .role-card.active .role-icon {
+        background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+        color: white;
+    }
+    
+    .role-card.active .role-check {
+        opacity: 1;
+        transform: scale(1);
+    }
+    
+    .role-card.active::before {
+        opacity: 1;
+    }
+    
+    .btn-save {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        font-size: 1rem;
+    }
+    
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+    
+    .btn-cancel {
+        background: #6c757d;
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        font-size: 1rem;
+        margin-right: 1rem;
+    }
+    
+    .btn-cancel:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    .help-text {
+        background: #f8f9fa;
+        border-left: 4px solid #4ecdc4;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+    }
+    
+    /* Photo Upload Styles */
+    .photo-upload-container {
+        position: relative;
+    }
+    
+    .current-photo {
+        text-align: center;
+    }
+    
+    .current-photo-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #ff6b9d;
+        box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
+    }
+    
+    .form-control[type="file"] {
+        padding: 0.5rem;
+        border: 2px dashed #e9ecef;
+        border-radius: 0.5rem;
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control[type="file"]:hover {
+        border-color: #ff6b9d;
+        background: #fff5f8;
+    }
+    
+    .form-control[type="file"]:focus {
+        border-color: #ff6b9d;
+        box-shadow: 0 0 0 0.2rem rgba(255, 107, 157, 0.25);
+        background: #fff5f8;
+    }
+    
+    .preview-avatar-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .help-text h6 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .help-text p {
+        color: #6c757d;
+        margin: 0;
+        font-size: 0.9rem;
+    }
+    
+    .profile-preview {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #dee2e6;
+    }
+    
+    .preview-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0 auto 1rem;
+    }
+    
+    .preview-info {
+        text-align: center;
+    }
+    
+    .preview-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .preview-role {
+        color: #6c757d;
+        font-size: 1rem;
+    }
+    
+    .breadcrumb-custom {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .breadcrumb-custom .breadcrumb-item {
+        font-size: 0.9rem;
+    }
+    
+    .breadcrumb-custom .breadcrumb-item a {
+        color: #ff6b9d;
+        text-decoration: none;
+    }
+    
+    .breadcrumb-custom .breadcrumb-item a:hover {
+        color: #4ecdc4;
+    }
+    
+    .breadcrumb-custom .breadcrumb-item.active {
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Edit Hero -->
+<section class="edit-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-2">
+                    <i class="bi bi-pencil-square me-3"></i>Редактировать профиль
+                </h1>
+                <p class="lead mb-0">
+                    Обновите информацию о себе и своем ребенке
+                </p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <a href="{% url 'accounts:profile' %}" class="btn btn-light btn-lg" style="z-index: 9999; position: relative; pointer-events: auto; cursor: pointer;" onclick="console.log('Back button clicked!'); return true;">
+                    <i class="bi bi-arrow-left me-2"></i>Назад к профилю
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="breadcrumb-custom">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'accounts:profile' %}">Профиль</a></li>
+            <li class="breadcrumb-item active">Редактировать</li>
+        </ol>
+        <div class="mt-2">
+            <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary btn-sm" onclick="console.log('Breadcrumb back clicked!'); return true;">
+                <i class="bi bi-arrow-left me-1"></i>Назад к профилю
+            </a>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="row mb-3">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="bi bi-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <!-- Main Form -->
+        <div class="col-lg-8">
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                
+                <!-- Form Errors -->
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <h6><i class="bi bi-exclamation-triangle me-2"></i>Ошибки формы:</h6>
+                    <ul class="mb-0">
+                        {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h4 class="section-title">
+                        <div class="section-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        Личная информация
+                    </h4>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label fw-bold mb-3">
+                                    <i class="bi bi-person-badge me-2"></i>Роль в семье
+                                </label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="role-option">
+                                            <input class="form-check-input" type="radio" name="role" value="mom" id="id_role_0" {% if form.role.value == 'mom' %}checked{% endif %}>
+                                            <label class="form-check-label" for="id_role_0">
+                                                <div class="role-card">
+                                                    <div class="role-icon">
+                                                        <i class="bi bi-gender-female"></i>
+                                                    </div>
+                                                    <div class="role-content">
+                                                        <h6 class="role-title">Мама</h6>
+                                                        <p class="role-description">Я мама и забочусь о детях</p>
+                                                    </div>
+                                                    <div class="role-check">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="role-option">
+                                            <input class="form-check-input" type="radio" name="role" value="dad" id="id_role_1" {% if form.role.value == 'dad' %}checked{% endif %}>
+                                            <label class="form-check-label" for="id_role_1">
+                                                <div class="role-card">
+                                                    <div class="role-icon">
+                                                        <i class="bi bi-gender-male"></i>
+                                                    </div>
+                                                    <div class="role-content">
+                                                        <h6 class="role-title">Папа</h6>
+                                                        <p class="role-description">Я папа и поддерживаю семью</p>
+                                                    </div>
+                                                    <div class="role-check">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if form.role.help_text %}
+                                    <small class="form-text text-muted">{{ form.role.help_text }}</small>
+                                {% endif %}
+                                {% if form.role.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.role.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Personal Information -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.phone_number.id_for_label }}">
+                                    <i class="bi bi-telephone me-2"></i>Номер телефона
+                                </label>
+                                {{ form.phone_number }}
+                                {% if form.phone_number.help_text %}
+                                    <small class="form-text text-muted">{{ form.phone_number.help_text }}</small>
+                                {% endif %}
+                                {% if form.phone_number.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.phone_number.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.birth_date.id_for_label }}">
+                                    <i class="bi bi-calendar me-2"></i>Дата рождения
+                                </label>
+                                {{ form.birth_date }}
+                                {% if form.birth_date.help_text %}
+                                    <small class="form-text text-muted">{{ form.birth_date.help_text }}</small>
+                                {% endif %}
+                                {% if form.birth_date.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.birth_date.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Location and Work -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.city.id_for_label }}">
+                                    <i class="bi bi-geo-alt me-2"></i>Город проживания
+                                </label>
+                                {{ form.city }}
+                                {% if form.city.help_text %}
+                                    <small class="form-text text-muted">{{ form.city.help_text }}</small>
+                                {% endif %}
+                                {% if form.city.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.city.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.workplace.id_for_label }}">
+                                    <i class="bi bi-briefcase me-2"></i>Место работы
+                                </label>
+                                {{ form.workplace }}
+                                {% if form.workplace.help_text %}
+                                    <small class="form-text text-muted">{{ form.workplace.help_text }}</small>
+                                {% endif %}
+                                {% if form.workplace.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.workplace.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Photo Upload -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label" for="{{ form.photo.id_for_label }}">
+                                    <i class="bi bi-camera me-2"></i>Фотография профиля
+                                </label>
+                                <div class="photo-upload-container">
+                                    {% if profile.photo %}
+                                    <div class="current-photo mb-3">
+                                        <img src="{{ profile.photo.url }}" alt="Текущее фото" class="current-photo-img">
+                                        <small class="text-muted d-block mt-2">Текущее фото</small>
+                                    </div>
+                                    {% endif %}
+                                    {{ form.photo }}
+                                    <small class="form-text text-muted">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        Поддерживаются форматы: JPEG, PNG, GIF, WebP. Максимальный размер: 5MB.
+                                    </small>
+                                </div>
+                                {% if form.photo.help_text %}
+                                    <small class="form-text text-muted">{{ form.photo.help_text }}</small>
+                                {% endif %}
+                                {% if form.photo.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.photo.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="help-text">
+                        <h6><i class="bi bi-info-circle me-2"></i>Почему эта информация важна?</h6>
+                        <p>
+                            Информация о вашей роли, контактах и местоположении помогает нам предоставлять 
+                            персонализированные рекомендации и подходящий контент для вашего региона.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{% url 'accounts:profile' %}" class="btn-cancel">
+                        <i class="bi bi-x-circle me-2"></i>Отмена
+                    </a>
+                    <button type="submit" class="btn-save">
+                        <i class="bi bi-check-circle me-2"></i>Сохранить изменения
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Profile Preview -->
+            <div class="profile-preview">
+                <h5 class="fw-bold mb-3 text-center">
+                    <i class="bi bi-eye me-2"></i>Предварительный просмотр
+                </h5>
+                
+                <div class="preview-avatar">
+                    {% if profile.photo %}
+                        <img src="{{ profile.photo.url }}" alt="Фото профиля" class="preview-avatar-img">
+                    {% else %}
+                        {{ user.username|first|upper }}
+                    {% endif %}
+                </div>
+                
+                <div class="preview-info">
+                    <div class="preview-name">{{ user.username }}</div>
+                    <div class="preview-role">
+                        {% if profile %}
+                            {{ profile.get_role_display }}
+                        {% else %}
+                            Родитель
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="form-section">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-question-circle me-2"></i>Нужна помощь?
+                </h5>
+                
+                <div class="mb-3">
+                    <h6 class="fw-bold text-primary">Роль в семье</h6>
+                    <p class="small text-muted mb-2">
+                        Выберите свою роль: мама или папа. Это поможет нам 
+                        предоставлять подходящие рекомендации.
+                    </p>
+                </div>
+                
+                <div class="mb-3">
+                    <h6 class="fw-bold text-primary">Роль в семье</h6>
+                    <p class="small text-muted mb-2">
+                        Выберите вашу роль в семье (мама или папа). Эта информация поможет 
+                        нам предоставлять подходящие рекомендации.
+                    </p>
+                </div>
+                
+                <div class="mb-3">
+                    <h6 class="fw-bold text-primary">Номер телефона</h6>
+                    <p class="small text-muted mb-2">
+                        Укажите ваш номер телефона для связи и уведомлений. 
+                        Формат: +996 XXX XXX XXX
+                    </p>
+                </div>
+                
+                <div class="mb-3">
+                    <h6 class="fw-bold text-primary">Дата рождения</h6>
+                    <p class="small text-muted mb-2">
+                        Укажите вашу дату рождения для расчета возраста 
+                        и предоставления возрастных рекомендаций.
+                    </p>
+                </div>
+                
+                <div class="mb-3">
+                    <h6 class="fw-bold text-primary">Город проживания</h6>
+                    <p class="small text-muted mb-2">
+                        Укажите ваш город для получения местных рекомендаций 
+                        и информации о событиях в вашем регионе.
+                    </p>
+                </div>
+                
+                <div class="mb-3">
+                    <h6 class="fw-bold text-primary">Место работы</h6>
+                    <p class="small text-muted mb-2">
+                        Укажите ваше место работы для персонализации контента 
+                        и подбора подходящих рекомендаций.
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <a href="{% url 'accounts:profile' %}" class="btn btn-outline-primary btn-sm" onclick="console.log('Sidebar back clicked!'); return true;">
+                        <i class="bi bi-arrow-left me-2"></i>Вернуться к профилю
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Profile edit page loaded');
+    
+    // Form validation
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            console.log('Form submitted!');
+            
+            // Get form data
+            const formData = new FormData(form);
+            console.log('Form data:');
+            for (let [key, value] of formData.entries()) {
+                console.log(key + ': ' + value);
+            }
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.btn-register');
+            if (submitBtn) {
+                submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Сохранение изменений...';
+                submitBtn.disabled = true;
+            }
+        });
+    }
+    
+    // Add focus effects to form controls
+    const formControls = document.querySelectorAll('.form-control');
+    formControls.forEach(control => {
+        control.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        
+        control.addEventListener('blur', function() {
+            this.parentElement.classList.remove('focused');
+        });
+    });
+    
+    // Add handlers for back buttons
+    const backButtons = document.querySelectorAll('a[href*="profile"]');
+    console.log('Found back buttons:', backButtons.length);
+    
+    backButtons.forEach((button, index) => {
+        if (button.textContent.includes('Назад') || button.textContent.includes('Вернуться')) {
+            console.log('Back button ' + (index + 1) + ':', button);
+            button.addEventListener('click', function(e) {
+                console.log('Back button clicked!');
+                console.log('Button href:', this.href);
+            });
+        }
+    });
+    
+    // Role selection handlers
+    const roleInputs = document.querySelectorAll('input[name="role"]');
+    console.log('Found role inputs:', roleInputs.length);
+    
+    roleInputs.forEach(function(input) {
+        input.addEventListener('change', function() {
+            console.log('Role changed to:', this.value);
+            
+            // Убираем активный класс со всех карточек
+            document.querySelectorAll('.role-card').forEach(function(card) {
+                card.classList.remove('active');
+            });
+            
+            // Добавляем активный класс к выбранной карточке
+            const selectedCard = this.closest('.role-option').querySelector('.role-card');
+            if (selectedCard) {
+                selectedCard.classList.add('active');
+            }
+        });
+        
+        // Инициализация активного состояния
+        if (input.checked) {
+            const selectedCard = input.closest('.role-option').querySelector('.role-card');
+            if (selectedCard) {
+                selectedCard.classList.add('active');
+            }
+        }
+    });
+    
+    // Добавляем эффект клика для карточек ролей
+    const roleCards = document.querySelectorAll('.role-card');
+    roleCards.forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            // Добавляем эффект пульсации
+            this.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактировать сообщение - Форум{% endblock %}
+
+{% block extra_css %}
+<style>
+    .edit-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .edit-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .form-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        background: white;
+    }
+    
+    .form-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        padding: 2rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .form-body {
+        padding: 2rem;
+    }
+    
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .submit-btn {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        color: white;
+    }
+    
+    .cancel-btn {
+        background: #6c757d;
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .cancel-btn:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+    
+    .help-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 0.5rem;
+    }
+    
+    .topic-info {
+        background: #f8f9fa;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-left: 4px solid #667eea;
+    }
+    
+    .topic-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .topic-meta {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Современный заголовок -->
+    <div class="edit-hero">
+        <div class="hero-content text-center">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="bi bi-pencil-square me-3"></i>Редактировать сообщение
+            </h1>
+            <p class="lead mb-0">
+                Внесите изменения в ваше сообщение
+            </p>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Информация о теме -->
+            <div class="topic-info">
+                <div class="topic-title">
+                    <i class="bi bi-chat-square-text me-2"></i>{{ object.topic.title }}
+                </div>
+                <div class="topic-meta">
+                    <i class="bi bi-person me-1"></i>{{ object.author.get_full_name }} • 
+                    <i class="bi bi-calendar me-1"></i>{{ object.created_at|date:"d.m.Y H:i" }}
+                </div>
+            </div>
+            
+            <!-- Форма редактирования -->
+            <div class="form-card">
+                <div class="form-header">
+                    <h4 class="fw-bold mb-0">
+                        <i class="bi bi-edit me-2"></i>Редактирование сообщения
+                    </h4>
+                    <p class="text-muted mb-0 mt-2">Внесите необходимые изменения в текст сообщения</p>
+                </div>
+                
+                <div class="form-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.content.id_for_label }}" class="form-label fw-bold">
+                                <i class="bi bi-chat-dots me-2"></i>Содержание сообщения *
+                            </label>
+                            {{ form.content }}
+                            {% if form.content.help_text %}
+                            <div class="help-text">{{ form.content.help_text }}</div>
+                            {% endif %}
+                            {% if form.content.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.content.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'forum:topic_detail' object.topic.pk %}" class="cancel-btn">
+                                <i class="bi bi-arrow-left me-2"></i>Отмена
+                            </a>
+                            <button type="submit" class="submit-btn">
+                                <i class="bi bi-check-circle me-2"></i>Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

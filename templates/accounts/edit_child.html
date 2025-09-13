@@ -1,0 +1,530 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Редактировать ребёнка - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .edit-child-hero {
+        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .edit-child-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .edit-child-card {
+        border: none;
+        border-radius: 1.5rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+        background: white;
+    }
+    
+    .edit-child-header {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        padding: 2rem;
+        border-bottom: 1px solid #dee2e6;
+        text-align: center;
+    }
+    
+    .edit-child-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1rem;
+        box-shadow: 0 8px 32px rgba(78, 205, 196, 0.3);
+    }
+    
+    .form-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #4ecdc4;
+        display: flex;
+        align-items: center;
+    }
+    
+    .section-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 0.75rem;
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+    
+    .form-control:focus {
+        border-color: #4ecdc4;
+        box-shadow: 0 0 0 0.2rem rgba(78, 205, 196, 0.25);
+        background: white;
+    }
+    
+    .form-check-input {
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid #dee2e6;
+        border-radius: 0.375rem;
+        margin-top: 0.125rem;
+    }
+    
+    .form-check-input:checked {
+        background-color: #4ecdc4;
+        border-color: #4ecdc4;
+    }
+    
+    .form-check-input:focus {
+        box-shadow: 0 0 0 0.2rem rgba(78, 205, 196, 0.25);
+    }
+    
+    .form-check-label {
+        font-weight: 500;
+        color: #2c3e50;
+        margin-left: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+    
+    .form-check {
+        padding: 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+    
+    .form-check:hover {
+        border-color: #4ecdc4;
+        background: #f0fdfa;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(78, 205, 196, 0.1);
+    }
+    
+    .form-check-input:checked + .form-check-label {
+        color: #4ecdc4;
+        font-weight: 600;
+    }
+    
+    .form-check:has(.form-check-input:checked) {
+        border-color: #4ecdc4;
+        background: linear-gradient(135deg, #f0fdfa, #e6fffa);
+        box-shadow: 0 4px 15px rgba(78, 205, 196, 0.2);
+    }
+    
+    .btn-edit-child {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        border: none;
+        color: white;
+        padding: 1rem 3rem;
+        border-radius: 2rem;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .btn-edit-child:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(78, 205, 196, 0.4);
+        color: white;
+    }
+    
+    .btn-cancel {
+        background: #6c757d;
+        border: none;
+        color: white;
+        padding: 1rem 3rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .btn-cancel:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    .help-text {
+        background: #f8f9fa;
+        border-left: 4px solid #4ecdc4;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+    }
+    
+    .help-text h6 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .help-text p {
+        color: #6c757d;
+        margin: 0;
+        font-size: 0.9rem;
+    }
+    
+    .breadcrumb-custom {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .breadcrumb-custom .breadcrumb-item {
+        font-size: 0.9rem;
+    }
+    
+    .breadcrumb-custom .breadcrumb-item a {
+        color: #4ecdc4;
+        text-decoration: none;
+    }
+    
+    .breadcrumb-custom .breadcrumb-item a:hover {
+        color: #44a08d;
+    }
+    
+    .breadcrumb-custom .breadcrumb-item.active {
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Edit Child Hero -->
+<section class="edit-child-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="bi bi-pencil-square me-3"></i>Редактировать ребёнка
+                </h1>
+                <p class="lead mb-0">
+                    Обновите информацию о {{ child.name }}
+                </p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="edit-child-icon">
+                    <i class="bi bi-pencil-square"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="breadcrumb-custom">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'accounts:profile' %}">Профиль</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'accounts:family_management' %}">Семья</a></li>
+            <li class="breadcrumb-item active">Редактировать {{ child.name }}</li>
+        </ol>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="row mb-3">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="bi bi-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <!-- Main Form -->
+        <div class="col-lg-8">
+            <div class="edit-child-card">
+                <div class="edit-child-header">
+                    <h2 class="fw-bold mb-2">Информация о {{ child.name }}</h2>
+                    <p class="text-muted mb-0">Обновите данные ребёнка</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="post" novalidate id="editChildForm">
+                        {% csrf_token %}
+                        
+                        <!-- Child Information -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <div class="section-icon">
+                                    <i class="bi bi-heart"></i>
+                                </div>
+                                Основная информация
+                            </h4>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.name.id_for_label }}">
+                                            <i class="bi bi-person me-2"></i>Имя ребёнка
+                                        </label>
+                                        {{ form.name }}
+                                        {% if form.name.help_text %}
+                                            <small class="form-text text-muted">{{ form.name.help_text }}</small>
+                                        {% endif %}
+                                        {% if form.name.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.name.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.birth_date.id_for_label }}">
+                                            <i class="bi bi-calendar me-2"></i>Дата рождения
+                                        </label>
+                                        {{ form.birth_date }}
+                                        {% if form.birth_date.help_text %}
+                                            <small class="form-text text-muted">{{ form.birth_date.help_text }}</small>
+                                        {% endif %}
+                                        {% if form.birth_date.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.birth_date.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label fw-bold">Пол ребёнка:</label>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="gender" value="male" id="id_gender_0" {% if child.gender == 'male' %}checked{% endif %}>
+                                                    <label class="form-check-label" for="id_gender_0">
+                                                        <i class="bi bi-gender-male me-2"></i>Мальчик
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="gender" value="female" id="id_gender_1" {% if child.gender == 'female' %}checked{% endif %}>
+                                                    <label class="form-check-label" for="id_gender_1">
+                                                        <i class="bi bi-gender-female me-2"></i>Девочка
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if form.gender.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.gender.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="help-text">
+                                <h6><i class="bi bi-info-circle me-2"></i>Текущая информация</h6>
+                                <p>
+                                    <strong>Возраст:</strong> {{ child.age_years }} лет, {{ child.age_months }} месяцев<br>
+                                    <strong>Пол:</strong> {{ child.get_gender_display|default:"Не указан" }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'accounts:family_management' %}" class="btn-cancel">
+                                <i class="bi bi-x-circle me-2"></i>Отмена
+                            </a>
+                            <button type="submit" class="btn-edit-child">
+                                <i class="bi bi-check-circle me-2"></i>Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Child Info -->
+            <div class="form-section">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-heart me-2"></i>Информация о {{ child.name }}
+                </h5>
+                
+                <div class="mb-3">
+                    <strong>Текущий возраст:</strong>
+                    <p class="mb-0">{{ child.age_years }} лет, {{ child.age_months }} месяцев</p>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Пол:</strong>
+                    <p class="mb-0">{{ child.get_gender_display|default:"Не указан" }}</p>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Дата рождения:</strong>
+                    <p class="mb-0">{{ child.birth_date|date:"d.m.Y" }}</p>
+                </div>
+                
+                <div class="text-center">
+                    <a href="{% url 'accounts:family_management' %}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-arrow-left me-2"></i>Вернуться к семье
+                    </a>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="form-section">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-question-circle me-2"></i>Нужна помощь?
+                </h5>
+                
+                <div class="mb-3">
+                    <h6 class="fw-bold text-primary">Имя ребёнка</h6>
+                    <p class="small text-muted mb-2">
+                        Введите полное имя ребёнка. Эта информация будет 
+                        использоваться для персонализации контента.
+                    </p>
+                </div>
+                
+                <div class="mb-3">
+                    <h6 class="fw-bold text-primary">Дата рождения</h6>
+                    <p class="small text-muted mb-2">
+                        Укажите точную дату рождения для расчета возраста 
+                        и предоставления возрастных рекомендаций.
+                    </p>
+                </div>
+                
+                <div class="mb-3">
+                    <h6 class="fw-bold text-primary">Пол ребёнка</h6>
+                    <p class="small text-muted mb-2">
+                        Выберите пол ребёнка для получения подходящих 
+                        рекомендаций по развитию.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Edit child page loaded');
+    
+    // Form validation
+    const form = document.getElementById('editChildForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            console.log('Form submitted!');
+            
+            // Get form data
+            const formData = new FormData(form);
+            console.log('Form data:');
+            for (let [key, value] of formData.entries()) {
+                console.log(key + ': ' + value);
+            }
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.btn-edit-child');
+            if (submitBtn) {
+                submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Сохранение изменений...';
+                submitBtn.disabled = true;
+            }
+        });
+    }
+    
+    // Add focus effects to form controls
+    const formControls = document.querySelectorAll('.form-control');
+    formControls.forEach(control => {
+        control.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        
+        control.addEventListener('blur', function() {
+            this.parentElement.classList.remove('focused');
+        });
+    });
+});
+</script>
+{% endblock %}
+
+
+
+

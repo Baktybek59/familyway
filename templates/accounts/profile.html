@@ -1,0 +1,698 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Профиль - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-hero {
+        background: linear-gradient(135deg, #ff6b9d, #4ecdc4);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .profile-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 2;
+    }
+    
+    .profile-avatar-large {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .profile-avatar-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .profile-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .profile-header {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        padding: 2rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .profile-stats {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stat-item:hover {
+        background: #f8f9fa;
+        transform: translateY(-2px);
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ff6b9d;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    .info-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        border: 1px solid #f1f3f4;
+    }
+    
+    .info-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f3f4;
+    }
+    
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    
+    .info-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .info-content {
+        flex: 1;
+    }
+    
+    .info-label {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+    
+    .info-value {
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+    }
+    
+    .badge-custom {
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+    
+    .badge-mom {
+        background: linear-gradient(45deg, #ff6b9d, #ff8fab);
+        color: white;
+    }
+    
+    .badge-dad {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+    }
+    
+    .edit-btn {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .edit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+    
+    .family-card {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        border-left: 4px solid #ff6b9d;
+        margin-bottom: 1.5rem;
+    }
+    
+    .partner-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-right: 1rem;
+    }
+    
+    .timeline-item {
+        position: relative;
+        padding-left: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #ff6b9d;
+        border: 3px solid white;
+        box-shadow: 0 0 0 3px #ff6b9d;
+    }
+    
+    .timeline-item::after {
+        content: '';
+        position: absolute;
+        left: 5px;
+        top: 12px;
+        width: 2px;
+        height: calc(100% + 1rem);
+        background: #e9ecef;
+    }
+    
+    .timeline-item:last-child::after {
+        display: none;
+    }
+    
+    /* Children cards */
+    .child-card {
+        background: linear-gradient(135deg, #fff5f8, #f0fdfa);
+        border: 2px solid #e9ecef;
+        border-radius: 1rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .child-card:hover {
+        border-color: #ff6b9d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 107, 157, 0.1);
+    }
+    
+    a .child-card {
+        color: inherit;
+        text-decoration: none;
+    }
+    
+    a .child-card:hover {
+        color: inherit;
+        text-decoration: none;
+    }
+    
+    .child-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
+    
+    .child-avatar.male {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+    }
+    
+    .child-avatar.female {
+        background: linear-gradient(45deg, #ff6b9d, #ff8fab);
+        color: white;
+    }
+    
+    .child-info h6 {
+        margin: 0;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .child-info small {
+        color: #6c757d;
+    }
+    
+    /* Empty state */
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #6c757d;
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Messages -->
+{% if messages %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="bi bi-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+<!-- Profile Hero -->
+<section class="profile-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center">
+                    <div class="profile-avatar me-4">
+                        {% if profile and profile.photo %}
+                            <img src="{{ profile.photo.url }}" alt="Фото профиля" class="profile-avatar-img">
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center h-100 bg-primary text-white rounded-circle" style="font-size: 3rem;">
+                                {{ user.username|first|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h1 class="display-5 fw-bold mb-2">{{ user.username }}</h1>
+                        <p class="lead mb-3">
+                            {% if profile %}
+                                {{ profile.get_role_display }} • {{ profile.city|default:"Город не указан" }}
+                            {% else %}
+                                Родитель
+                            {% endif %}
+                        </p>
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-custom badge-{{ profile.role|default:'mom' }} me-3">
+                                {% if profile %}
+                                    {{ profile.get_role_display }}
+                                {% else %}
+                                    Родитель
+                                {% endif %}
+                            </span>
+                            <small class="text-white-50">
+                                <i class="bi bi-calendar me-1"></i>
+                                На сайте с {{ user.date_joined|date:"d.m.Y" }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-end">
+                <div class="d-grid gap-2">
+                    <!-- Кнопка подключения к семье убрана -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Stats -->
+            <div class="profile-stats">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ children.count|default:0 }}</div>
+                            <div class="stat-label">Детей</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">0</div>
+                            <div class="stat-label">Темы</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">0</div>
+                            <div class="stat-label">Сообщения</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number">0</div>
+                            <div class="stat-label">Консультации</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Actions -->
+            <div class="profile-card">
+                <div class="profile-header">
+                    <h4 class="fw-bold mb-0">
+                        <i class="bi bi-gear me-2"></i>Управление профилем
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'accounts:profile_edit' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-pencil me-2"></i>Редактировать профиль
+                        </a>
+                        <a href="{% url 'accounts:family_management' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-people me-2"></i>Управление семьей
+                        </a>
+                    </div>
+                    
+                    {% if not profile %}
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Заполните профиль!</strong> Добавьте информацию о себе и своем ребенке для получения персонализированных рекомендаций.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Children Info -->
+            {% if children %}
+            <div class="info-card">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-heart me-2"></i>Мои дети
+                </h5>
+                
+                {% for child in children %}
+                <a href="{% url 'accounts:child_detail' child.id %}" class="text-decoration-none">
+                    <div class="child-card">
+                        <div class="d-flex align-items-center">
+                            <div class="child-avatar {% if child.gender == 'male' %}male{% else %}female{% endif %}">
+                                <i class="bi bi-{% if child.gender == 'male' %}gender-male{% else %}gender-female{% endif %}"></i>
+                            </div>
+                            <div class="child-info">
+                                <h6>{{ child.name }}</h6>
+                                <small>{{ child.get_gender_display }} • {{ child.age_years }} лет, {{ child.age_months }} месяцев</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+                
+                <div class="text-center mt-3">
+                    <a href="{% url 'accounts:family_management' %}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-people me-2"></i>Управление детьми
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <div class="info-card">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-heart me-2"></i>Мои дети
+                </h5>
+                
+                <div class="empty-state">
+                    <i class="bi bi-heart"></i>
+                    <h6>Пока нет детей</h6>
+                    <p class="mb-3">Добавьте первого ребёнка, чтобы начать отслеживать его развитие</p>
+                    <a href="{% url 'accounts:family_management' %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle me-2"></i>Добавить ребёнка
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Family Info -->
+            {% if profile and profile.family %}
+            <div class="family-card">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-people me-2"></i>Семья
+                </h5>
+                
+                <div class="d-flex align-items-center mb-3">
+                    <div class="partner-avatar">
+                        {{ profile.family.name|first|upper }}
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">{{ profile.family.name }}</h6>
+                        <small class="text-muted">Код: {{ profile.family_code }}</small>
+                    </div>
+                </div>
+                
+                {% if profile.partner %}
+                <div class="d-flex align-items-center">
+                    <div class="profile-avatar-large me-3">
+                        {% if profile.partner and profile.partner.photo %}
+                            <img src="{{ profile.partner.photo.url }}" alt="Фото партнера" class="profile-avatar-img">
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center h-100 bg-success text-white rounded-circle">
+                                {{ profile.partner.user.username|first|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">{{ profile.partner.user.username }}</h6>
+                        <span class="badge badge-custom badge-{{ profile.partner.role }}">
+                            {{ profile.partner.get_role_display }}
+                        </span>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center">
+                    <p class="text-muted mb-3">Партнер не подключен</p>
+                    <a href="{% url 'accounts:family_connect' %}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-people me-2"></i>Подключить партнера
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Personal Info -->
+            {% if profile %}
+            <div class="info-card">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-person me-2"></i>Личная информация
+                </h5>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Роль в семье</div>
+                        <div class="info-value">{{ profile.get_role_display }}</div>
+                    </div>
+                </div>
+                
+                {% if profile.phone_number %}
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-telephone"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Телефон</div>
+                        <div class="info-value">{{ profile.phone_number }}</div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if profile.birth_date %}
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-calendar"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Дата рождения</div>
+                        <div class="info-value">{{ profile.birth_date|date:"d.m.Y" }}</div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if profile.city %}
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Город</div>
+                        <div class="info-value">{{ profile.city }}</div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if profile.workplace %}
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Место работы</div>
+                        <div class="info-value">{{ profile.workplace }}</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Account Info -->
+            <div class="info-card">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-gear me-2"></i>Аккаунт
+                </h5>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Имя пользователя</div>
+                        <div class="info-value">{{ user.username }}</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-envelope"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">{{ user.email }}</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Регистрация</div>
+                        <div class="info-value">{{ user.date_joined|date:"d.m.Y" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="info-card">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-lightning me-2"></i>Быстрые действия
+                </h5>
+                
+                <div class="d-grid gap-2">
+                    <a href="{% url 'tracker:dashboard' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-graph-up me-2"></i>Мой трекер
+                    </a>
+                    <a href="{% url 'healthcare:index' %}" class="btn btn-outline-info">
+                        <i class="bi bi-hospital me-2"></i>Медицинские учреждения
+                    </a>
+                    <a href="{% url 'forum:index' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-chat-dots me-2"></i>Форум
+                    </a>
+                    <a href="{% url 'consultant:consultant_list' %}" class="btn btn-outline-success">
+                        <i class="bi bi-stethoscope me-2"></i>Консультации
+                    </a>
+                    {% if user.parent_profile.is_writer %}
+                    <a href="{% url 'writer:dashboard' %}" class="btn btn-outline-warning">
+                        <i class="bi bi-pencil-square me-2"></i>Дашборд писателя
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Profile page loaded');
+    
+    // Добавляем обработчик для кнопки редактирования
+    const editButton = document.querySelector('a[href*="profile/edit"]');
+    if (editButton) {
+        console.log('Found edit button:', editButton);
+        console.log('Button href:', editButton.href);
+        
+        editButton.addEventListener('click', function(e) {
+            console.log('Edit button clicked!');
+            console.log('Button href:', this.href);
+            
+            // Проверяем, что ссылка ведет на правильный URL
+            if (this.href.includes('/accounts/profile/edit/')) {
+                console.log('URL is correct, proceeding...');
+            } else {
+                console.error('URL is incorrect:', this.href);
+                e.preventDefault();
+            }
+        });
+    } else {
+        console.log('Edit button not found');
+    }
+});
+</script>
+{% endblock %}

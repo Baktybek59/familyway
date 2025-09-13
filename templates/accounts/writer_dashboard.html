@@ -1,0 +1,519 @@
+{% extends 'base.html' %}
+
+{% block title %}Дашборд писателя - {{ writer.full_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 0 0 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.stats-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid #f1f3f4;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.stats-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.stats-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.stats-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.stats-change {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.stats-change.positive {
+    color: #28a745;
+}
+
+.stats-change.negative {
+    color: #dc3545;
+}
+
+.content-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    border: 1px solid #f1f3f4;
+}
+
+.content-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.writer-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 1rem;
+}
+
+.writer-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1.5rem;
+    border: 3px solid #667eea;
+}
+
+.writer-avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-right: 1.5rem;
+}
+
+.writer-details h4 {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.writer-specialization {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.writer-rating {
+    color: #ffc107;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-outline-primary {
+    border: 2px solid #667eea;
+    color: #667eea;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.article-item {
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.article-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-color: #667eea;
+}
+
+.article-title {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.article-meta {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.article-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-published {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-draft {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #adb5bd;
+}
+
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+    
+    .stats-card {
+        margin-bottom: 1rem;
+    }
+    
+    .writer-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .writer-avatar,
+    .writer-avatar-placeholder {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .article-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<section class="dashboard-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="dashboard-title">
+                    <i class="bi bi-pen me-3"></i>Дашборд писателя
+                </h1>
+                <p class="dashboard-subtitle">
+                    Добро пожаловать, {{ writer.full_name }} • {{ writer.specialization|default:"Писатель" }}
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'accounts:writer_login' %}" class="btn btn-light">
+                    <i class="bi bi-box-arrow-right me-2"></i>Выйти
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Writer Info -->
+    <div class="content-card">
+        <div class="writer-info">
+            {% if writer.photo %}
+            <img src="{{ writer.photo.url }}" alt="{{ writer.full_name }}" class="writer-avatar">
+            {% else %}
+            <div class="writer-avatar-placeholder">
+                {{ writer.first_name|first|upper }}{{ writer.last_name|first|upper }}
+            </div>
+            {% endif %}
+            
+            <div class="writer-details">
+                <h4>{{ writer.full_name }}</h4>
+                <p class="writer-specialization">{{ writer.specialization|default:"Писатель" }}</p>
+                <div class="writer-rating">
+                    <i class="bi bi-star-fill"></i>
+                    {{ writer.average_rating|floatformat:1 }} ({{ writer.articles_count }} статей)
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-primary">
+                    <i class="bi bi-file-text"></i>
+                </div>
+                <div class="stats-number">{{ articles_count }}</div>
+                <div class="stats-label">Всего статей</div>
+                <div class="stats-change positive">
+                    <i class="bi bi-arrow-up"></i> +{{ recent_articles_count }} за месяц
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-success">
+                    <i class="bi bi-eye"></i>
+                </div>
+                <div class="stats-number">{{ total_views }}</div>
+                <div class="stats-label">Просмотров</div>
+                <div class="stats-change positive">
+                    <i class="bi bi-arrow-up"></i> +{{ recent_views }} за месяц
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-warning">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <div class="stats-number">{{ total_read_time }}</div>
+                <div class="stats-label">Минут чтения</div>
+                <div class="stats-change positive">
+                    <i class="bi bi-arrow-up"></i> +5% за неделю
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-info">
+                    <i class="bi bi-star"></i>
+                </div>
+                <div class="stats-number">{{ average_rating|floatformat:1 }}</div>
+                <div class="stats-label">Средний рейтинг</div>
+                <div class="stats-change positive">
+                    <i class="bi bi-arrow-up"></i> +0.2 за месяц
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Article Status -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="stats-card text-center">
+                <div class="stats-icon text-success">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="stats-number">{{ published_count }}</div>
+                <div class="stats-label">Опубликовано</div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="stats-card text-center">
+                <div class="stats-icon text-warning">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <div class="stats-number">{{ pending_count }}</div>
+                <div class="stats-label">На одобрении</div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="stats-card text-center">
+                <div class="stats-icon text-secondary">
+                    <i class="bi bi-file-earmark"></i>
+                </div>
+                <div class="stats-number">{{ draft_count }}</div>
+                <div class="stats-label">Черновики</div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="stats-card text-center">
+                <div class="stats-icon text-danger">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <div class="stats-number">0</div>
+                <div class="stats-label">Отклонено</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="content-card quick-actions">
+                <h5 class="content-title">
+                    <i class="bi bi-lightning me-2"></i>Быстрые действия
+                </h5>
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'accounts:writer_article_create' %}" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Создать статью
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'accounts:writer_articles' %}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-file-text me-2"></i>Мои статьи
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'accounts:writer_analytics' %}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-graph-up me-2"></i>Аналитика
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'accounts:writer_profile_edit' %}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-person-gear me-2"></i>Профиль
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Top Articles -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-trophy me-2"></i>Топ статей по просмотрам
+                </h5>
+                {% if top_articles %}
+                    {% for article in top_articles %}
+                        <div class="article-item">
+                            <div class="article-title">{{ article.title }}</div>
+                            <div class="article-meta">
+                                <i class="bi bi-calendar me-1"></i>{{ article.created_at|date:"d.m.Y" }}
+                                <span class="status-badge status-{{ article.status }}">
+                                    {% if article.status == 'published' %}Опубликовано
+                                    {% elif article.status == 'pending' %}На одобрении
+                                    {% elif article.status == 'draft' %}Черновик
+                                    {% elif article.status == 'rejected' %}Отклонено
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="article-stats">
+                                <span><i class="bi bi-eye me-1"></i>{{ article.views_count }} просмотров</span>
+                                <span><i class="bi bi-clock me-1"></i>{{ article.read_time }} мин</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-file-text"></i>
+                        <h6>Нет статей</h6>
+                        <p>У вас пока нет опубликованных статей.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-graph-up me-2"></i>Статистика за месяц
+                </h5>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-info">{{ recent_articles_count }}</h4>
+                            <small class="text-muted">Статей за 30 дней</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-warning">{{ recent_views }}</h4>
+                            <small class="text-muted">Просмотров за 30 дней</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

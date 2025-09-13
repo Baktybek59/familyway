@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+
+{% block title %}Заявка отправлена - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .success-hero {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .success-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .success-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .success-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 2rem;
+        padding: 3rem;
+        box-shadow: 
+            0 20px 40px rgba(0, 0, 0, 0.1),
+            0 8px 16px rgba(0, 0, 0, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .success-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(40, 167, 69, 0.05) 0%, rgba(32, 201, 151, 0.05) 100%);
+        pointer-events: none;
+    }
+
+    .success-icon {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #28a745, #20c997);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        margin: 0 auto 2rem;
+        box-shadow: 0 15px 35px rgba(40, 167, 69, 0.3);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .success-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .success-subtitle {
+        font-size: 1.2rem;
+        color: #6c757d;
+        margin-bottom: 2rem;
+    }
+
+    .application-info {
+        background: #f8f9fa;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin: 2rem 0;
+        border-left: 4px solid #28a745;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .info-value {
+        color: #6c757d;
+    }
+
+    .btn-home {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        border-radius: 1rem;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-home:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(40, 167, 69, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .next-steps {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 1.5rem;
+        padding: 2rem;
+        margin-top: 2rem;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border: 1px solid #dee2e6;
+    }
+
+    .step-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .step-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #28a745, #20c997);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .step-text {
+        flex: 1;
+    }
+
+    .step-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+
+    .step-desc {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+        .success-container {
+            padding: 0 1rem;
+        }
+        
+        .success-card {
+            padding: 2rem;
+        }
+        
+        .success-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="success-hero">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h1 class="display-4 fw-bold mb-3">Заявка отправлена!</h1>
+                <p class="lead mb-0">Спасибо за ваш интерес к роли писателя</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="success-container">
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            
+            <h2 class="success-title">Заявка успешно отправлена</h2>
+            <p class="success-subtitle">
+                Ваша заявка на роль писателя была отправлена и будет рассмотрена нашей командой в ближайшее время.
+            </p>
+
+            <div class="application-info">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-info-circle me-2"></i>Информация о заявке
+                </h5>
+                
+                <div class="info-item">
+                    <span class="info-label">Имя:</span>
+                    <span class="info-value">{{ application.full_name }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">{{ application.email }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Дата подачи:</span>
+                    <span class="info-value">{{ application.created_at|date:"d.m.Y H:i" }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Статус:</span>
+                    <span class="info-value">
+                        <span class="badge bg-warning text-dark">На рассмотрении</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-list-check me-2"></i>Что дальше?
+                </h5>
+                
+                <div class="step-item">
+                    <div class="step-icon">1</div>
+                    <div class="step-text">
+                        <div class="step-title">Рассмотрение заявки</div>
+                        <div class="step-desc">Наша команда рассмотрит вашу заявку в течение 3-5 рабочих дней</div>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-icon">2</div>
+                    <div class="step-text">
+                        <div class="step-title">Уведомление о решении</div>
+                        <div class="step-desc">Мы отправим вам email с результатом рассмотрения заявки</div>
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-icon">3</div>
+                    <div class="step-text">
+                        <div class="step-title">Начало работы</div>
+                        <div class="step-desc">При одобрении вы получите доступ к дашборду писателя</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'home' %}" class="btn-home">
+                    <i class="bi bi-house me-2"></i>Вернуться на главную
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,427 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои статьи - {{ writer.full_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 0 0 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.content-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    border: 1px solid #f1f3f4;
+}
+
+.content-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.filter-tab.active {
+    background: #667eea;
+    color: white;
+}
+
+.filter-tab:not(.active) {
+    background: #f8f9fa;
+    color: #6c757d;
+    border-color: #e9ecef;
+}
+
+.filter-tab:not(.active):hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.article-item {
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.article-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-color: #667eea;
+}
+
+.article-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.article-title {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    flex: 1;
+}
+
+.article-meta {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.article-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.article-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-published {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-draft {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #adb5bd;
+}
+
+.pagination {
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.page-link {
+    color: #667eea;
+    border-color: #e9ecef;
+    padding: 0.5rem 0.75rem;
+    margin: 0 0.25rem;
+    border-radius: 0.5rem;
+}
+
+.page-link:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.page-item.active .page-link {
+    background: #667eea;
+    border-color: #667eea;
+}
+
+.sort-dropdown {
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+    
+    .article-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .filter-tabs {
+        justify-content: center;
+    }
+    
+    .article-actions {
+        flex-direction: column;
+    }
+    
+    .article-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<section class="dashboard-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="dashboard-title">
+                    <i class="bi bi-file-text me-3"></i>Мои статьи
+                </h1>
+                <p class="dashboard-subtitle">
+                    Управление вашими статьями и черновиками
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'accounts:writer_dashboard' %}" class="btn btn-light me-2">
+                    <i class="bi bi-arrow-left me-2"></i>Назад к дашборду
+                </a>
+                <a href="{% url 'accounts:writer_article_create' %}" class="btn btn-light">
+                    <i class="bi bi-plus-circle me-2"></i>Создать статью
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Filters -->
+    <div class="content-card">
+        <div class="filter-tabs">
+            <a href="{% url 'accounts:writer_articles' %}" 
+               class="filter-tab {% if not status %}active{% endif %}">
+                <i class="bi bi-list me-1"></i>Все статьи
+            </a>
+            <a href="{% url 'accounts:writer_articles' %}?status=published" 
+               class="filter-tab {% if status == 'published' %}active{% endif %}">
+                <i class="bi bi-check-circle me-1"></i>Опубликованные
+            </a>
+            <a href="{% url 'accounts:writer_articles' %}?status=pending" 
+               class="filter-tab {% if status == 'pending' %}active{% endif %}">
+                <i class="bi bi-clock me-1"></i>На одобрении
+            </a>
+            <a href="{% url 'accounts:writer_articles' %}?status=draft" 
+               class="filter-tab {% if status == 'draft' %}active{% endif %}">
+                <i class="bi bi-file-earmark me-1"></i>Черновики
+            </a>
+            <a href="{% url 'accounts:writer_articles' %}?status=rejected" 
+               class="filter-tab {% if status == 'rejected' %}active{% endif %}">
+                <i class="bi bi-x-circle me-1"></i>Отклоненные
+            </a>
+        </div>
+        
+        <div class="sort-dropdown">
+            <select class="form-select" onchange="window.location.href=this.value">
+                <option value="{% url 'accounts:writer_articles' %}{% if status %}?status={{ status }}{% endif %}">Сортировка по дате (новые)</option>
+                <option value="{% url 'accounts:writer_articles' %}?sort=created_at{% if status %}&status={{ status }}{% endif %}">Сортировка по дате (старые)</option>
+                <option value="{% url 'accounts:writer_articles' %}?sort=-views_count{% if status %}&status={{ status }}{% endif %}">По просмотрам (убывание)</option>
+                <option value="{% url 'accounts:writer_articles' %}?sort=views_count{% if status %}&status={{ status }}{% endif %}">По просмотрам (возрастание)</option>
+                <option value="{% url 'accounts:writer_articles' %}?sort=-title{% if status %}&status={{ status }}{% endif %}">По названию (А-Я)</option>
+                <option value="{% url 'accounts:writer_articles' %}?sort=title{% if status %}&status={{ status }}{% endif %}">По названию (Я-А)</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Articles List -->
+    <div class="content-card">
+        <h5 class="content-title">
+            <i class="bi bi-file-text me-2"></i>
+            {% if status %}
+                {% if status == 'published' %}Опубликованные статьи
+                {% elif status == 'pending' %}Статьи на одобрении
+                {% elif status == 'draft' %}Черновики
+                {% elif status == 'rejected' %}Отклоненные статьи
+                {% endif %}
+            {% else %}
+                Все статьи
+            {% endif %}
+        </h5>
+        
+        {% if page_obj %}
+            {% for article in page_obj %}
+                <div class="article-item">
+                    <div class="article-header">
+                        <div class="flex-grow-1">
+                            <div class="article-title">{{ article.title }}</div>
+                            <div class="article-meta">
+                                <i class="bi bi-calendar me-1"></i>{{ article.created_at|date:"d.m.Y H:i" }}
+                                <span class="status-badge status-{{ article.status }}">
+                                    {% if article.status == 'published' %}Опубликовано
+                                    {% elif article.status == 'pending' %}На одобрении
+                                    {% elif article.status == 'draft' %}Черновик
+                                    {% elif article.status == 'rejected' %}Отклонено
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="article-stats">
+                        <span><i class="bi bi-eye me-1"></i>{{ article.views_count }} просмотров</span>
+                        <span><i class="bi bi-clock me-1"></i>{{ article.read_time }} мин чтения</span>
+                        <span><i class="bi bi-chat me-1"></i>{{ article.likes.count }} лайков</span>
+                        <span><i class="bi bi-tag me-1"></i>{{ article.get_category_display }}</span>
+                    </div>
+                    
+                    <div class="article-actions">
+                        <a href="{% url 'blog:post_detail' article.pk %}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-eye me-1"></i>Просмотреть
+                        </a>
+                        <a href="{% url 'accounts:writer_article_edit' article.id %}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-pencil me-1"></i>Редактировать
+                        </a>
+                        {% if article.status == 'draft' %}
+                            <a href="#" class="btn btn-success btn-sm">
+                                <i class="bi bi-send me-1"></i>Отправить на одобрение
+                            </a>
+                        {% endif %}
+                        <a href="#" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash me-1"></i>Удалить
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+            
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1{% if status %}&status={{ status }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                    <i class="bi bi-chevron-double-left"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if status %}&status={{ status }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if status %}&status={{ status }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if status %}&status={{ status }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if status %}&status={{ status }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+                                    <i class="bi bi-chevron-double-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <i class="bi bi-file-text"></i>
+                <h6>Нет статей</h6>
+                <p>
+                    {% if status %}
+                        У вас нет статей с таким статусом.
+                    {% else %}
+                        У вас пока нет статей. Создайте первую статью!
+                    {% endif %}
+                </p>
+                <a href="{% url 'accounts:writer_article_create' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>Создать статью
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+

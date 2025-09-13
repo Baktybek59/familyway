@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактирование поста - Техподдержка{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>Редактирование поста
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6>Информация о посте</h6>
+                        <div class="bg-light p-3 rounded">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Автор:</strong> {{ post.author.get_full_name }}<br>
+                                    <strong>Тема:</strong> {{ post.topic.title }}<br>
+                                    <strong>Категория:</strong> {{ post.topic.category.name }}
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Создан:</strong> {{ post.created_at|date:"d.m.Y H:i" }}<br>
+                                    <strong>Обновлен:</strong> {{ post.updated_at|date:"d.m.Y H:i" }}<br>
+                                    <strong>Решение:</strong> {% if post.is_solution %}Да{% else %}Нет{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Содержание поста *</label>
+                            <textarea name="content" id="content" class="form-control" rows="10" required>{{ post.content }}</textarea>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'support:forum_moderation' %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>Отмена
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-1"></i>Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

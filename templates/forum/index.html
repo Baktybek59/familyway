@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Форум" %} - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .forum-hero {
+        background: linear-gradient(135deg, #ff6b9d, #4ecdc4);
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 2rem 2rem;
+    }
+    
+    .category-card {
+        transition: all 0.3s ease;
+        border: none;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        height: 100%;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .category-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.8;
+    }
+    
+    .category-stats {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .stats-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .recent-topic {
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+    
+    .recent-topic:hover {
+        background: #e9ecef;
+        border-left-color: #ff6b9d;
+        transform: translateX(5px);
+    }
+    
+    .create-topic-btn {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .create-topic-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="forum-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="bi bi-chat-dots me-3"></i>{% trans "Форум для родителей" %}
+                </h1>
+                <p class="lead mb-4">
+                    {% trans "Общайтесь с другими родителями, делитесь опытом, задавайте вопросы и получайте поддержку" %}
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-people me-2"></i>{% trans "Сообщество" %}
+                    </span>
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-heart me-2"></i>{% trans "Поддержка" %}
+                    </span>
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-lightbulb me-2"></i>{% trans "Советы" %}
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="bi bi-chat-dots" style="font-size: 8rem; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Stats -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="stats-card">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <h3 class="text-primary fw-bold mb-1">{{ total_topics }}</h3>
+                        <p class="text-muted mb-0">{% trans "Тем обсуждения" %}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-secondary fw-bold mb-1">{{ total_posts }}</h3>
+                        <p class="text-muted mb-0">{% trans "Сообщений" %}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-success fw-bold mb-1">{{ categories|length }}</h3>
+                        <p class="text-muted mb-0">{% trans "Категорий" %}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-warning fw-bold mb-1">24/7</h3>
+                        <p class="text-muted mb-0">{% trans "Активность" %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    {% if user.is_authenticated %}
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <a href="{% url 'forum:topic_create' %}" class="create-topic-btn">
+                <i class="bi bi-plus-circle me-2"></i>{% trans "Создать новую тему" %}
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Categories -->
+    <div class="row">
+        {% for category in categories %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card category-card h-100">
+                <div class="card-body text-center p-4">
+                    <div class="category-icon" style="color: {{ category.color }};">
+                        <i class="bi {{ category.icon }}"></i>
+                    </div>
+                    
+                    <h4 class="fw-bold mb-3" style="color: {{ category.color }};">
+                        {{ category.name }}
+                    </h4>
+                    
+                    <p class="text-muted mb-3">
+                        {{ category.description|truncatewords:15 }}
+                    </p>
+                    
+                    <div class="category-stats">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h5 class="fw-bold mb-1">{{ category.get_topics_count }}</h5>
+                                <small class="text-white-50">{% trans "Тем" %}</small>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="fw-bold mb-1">{{ category.get_posts_count }}</h5>
+                                <small class="text-white-50">{% trans "Сообщений" %}</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="{{ category.get_absolute_url }}" class="btn btn-outline-primary mt-3 w-100">
+                        <i class="bi bi-arrow-right me-2"></i>{% trans "Перейти" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="bi bi-chat-dots text-muted" style="font-size: 4rem;"></i>
+                <h4 class="text-muted mt-3">{% trans "Категории пока не созданы" %}</h4>
+                <p class="text-muted">{% trans "Обратитесь к администратору для создания категорий" %}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Recent Topics -->
+    {% if recent_topics %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="fw-bold mb-0">
+                        <i class="bi bi-clock me-2"></i>{% trans "Последние темы" %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for topic in recent_topics %}
+                    <div class="recent-topic">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-1">
+                                    <a href="{{ topic.get_absolute_url }}" class="text-decoration-none text-dark">
+                                        {{ topic.title|truncatewords:8 }}
+                                    </a>
+                                </h6>
+                                <small class="text-muted">
+                                    <i class="bi bi-person me-1"></i>{{ topic.author.username }} • 
+                                    <i class="bi bi-calendar me-1"></i>{{ topic.created_at|date:"d.m.Y" }} • 
+                                    <i class="bi bi-chat me-1"></i>{{ topic.get_posts_count }} {% trans "сообщений" %}
+                                </small>
+                            </div>
+                            <span class="badge" style="background-color: {{ topic.category.color }};">
+                                {{ topic.category.name }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'forum:search' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-search me-2"></i>{% trans "Все темы" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,311 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ category.name }} - {% trans "Форум" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .category-header {
+        background: linear-gradient(135deg, {{ category.color }}, {{ category.color }}dd);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 2rem 2rem;
+    }
+    
+    .topic-card {
+        transition: all 0.3s ease;
+        border: none;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1rem;
+    }
+    
+    .topic-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+    
+    .topic-pinned {
+        border-left: 4px solid #ffd700;
+        background: linear-gradient(90deg, #fff9e6, #ffffff);
+    }
+    
+    .topic-closed {
+        opacity: 0.7;
+    }
+    
+    .topic-stats {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-top: 1px solid #e9ecef;
+        font-size: 0.9rem;
+    }
+    
+    .filter-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .create-topic-btn {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .create-topic-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+    
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 1rem;
+    }
+    
+    .status-open {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .status-closed {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .status-pinned {
+        background: #fff3cd;
+        color: #856404;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Category Header -->
+<section class="category-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi {{ category.icon }} me-3" style="font-size: 3rem; opacity: 0.8;"></i>
+                    <div>
+                        <h1 class="display-5 fw-bold mb-2">{{ category.name }}</h1>
+                        <p class="lead mb-0">{{ category.description }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-end">
+                {% if user.is_authenticated %}
+                <a href="{% url 'forum:topic_create' %}?category={{ category.pk }}" class="create-topic-btn">
+                    <i class="bi bi-plus-circle me-2"></i>Создать тему
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="filter-card">
+                <div class="card-body p-4">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="bi bi-search me-1"></i>Поиск
+                            </label>
+                            {{ search_form.search_query }}
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="bi bi-funnel me-1"></i>Статус
+                            </label>
+                            {{ search_form.status }}
+                        </div>
+                        
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search me-2"></i>Найти
+                            </button>
+                        </div>
+                        
+                        <div class="col-md-2 d-flex align-items-end">
+                            <a href="{% url 'forum:category_detail' category.pk %}" class="btn btn-outline-secondary w-100">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Topics List -->
+    <div class="row">
+        <div class="col-12">
+            {% if topics %}
+                {% for topic in topics %}
+                <div class="card topic-card {% if topic.is_pinned %}topic-pinned{% endif %} {% if topic.status == 'closed' %}topic-closed{% endif %}">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-lg-8">
+                                <div class="d-flex align-items-start mb-2">
+                                    {% if topic.is_pinned %}
+                                    <i class="bi bi-pin-angle-fill text-warning me-2 mt-1"></i>
+                                    {% endif %}
+                                    <h5 class="fw-bold mb-1">
+                                        <a href="{{ topic.get_absolute_url }}" class="text-decoration-none text-dark">
+                                            {{ topic.title }}
+                                        </a>
+                                    </h5>
+                                </div>
+                                
+                                <p class="text-muted mb-3">
+                                    {{ topic.content|striptags|truncatewords:20 }}
+                                </p>
+                                
+                                <div class="d-flex align-items-center">
+                                    <span class="status-badge status-{{ topic.status }}">
+                                        {% if topic.status == 'open' %}
+                                            <i class="bi bi-unlock me-1"></i>Открыта
+                                        {% elif topic.status == 'closed' %}
+                                            <i class="bi bi-lock me-1"></i>Закрыта
+                                        {% elif topic.status == 'pinned' %}
+                                            <i class="bi bi-pin me-1"></i>Закреплена
+                                        {% endif %}
+                                    </span>
+                                    
+                                    <small class="text-muted ms-3">
+                                        <i class="bi bi-person me-1"></i>{{ topic.author.username }}
+                                    </small>
+                                    
+                                    <small class="text-muted ms-3">
+                                        <i class="bi bi-calendar me-1"></i>{{ topic.created_at|date:"d.m.Y" }}
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4">
+                                <div class="topic-stats">
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <h6 class="fw-bold mb-1 text-primary">{{ topic.views_count }}</h6>
+                                            <small class="text-muted">Просмотров</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <h6 class="fw-bold mb-1 text-success">{{ topic.get_posts_count }}</h6>
+                                            <small class="text-muted">Сообщений</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <h6 class="fw-bold mb-1 text-warning">{{ topic.likes_count }}</h6>
+                                            <small class="text-muted">Лайков</small>
+                                        </div>
+                                    </div>
+                                    
+                                    {% if topic.get_last_post %}
+                                    <div class="mt-3 pt-3 border-top">
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>
+                                            Последнее сообщение: {{ topic.last_activity|timesince }} назад
+                                        </small>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <nav aria-label="Навигация по темам" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link border-0 rounded-pill me-2" 
+                                   href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}"
+                                   style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white;">
+                                    <i class="bi bi-chevron-double-left"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link border-0 rounded-pill me-2" 
+                                   href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}"
+                                   style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white;">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link border-0 rounded-pill px-4" 
+                                  style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white; font-weight: 600;">
+                                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link border-0 rounded-pill ms-2" 
+                                   href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}"
+                                   style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white;">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link border-0 rounded-pill ms-2" 
+                                   href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}"
+                                   style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white;">
+                                    <i class="bi bi-chevron-double-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-chat-dots text-muted" style="font-size: 4rem;"></i>
+                <h4 class="text-muted mt-3">
+                    {% if search_query %}
+                        По запросу "{{ search_query }}" ничего не найдено
+                    {% else %}
+                        В этой категории пока нет тем
+                    {% endif %}
+                </h4>
+                <p class="text-muted mb-4">
+                    {% if user.is_authenticated %}
+                        Станьте первым, кто создаст тему в этой категории!
+                    {% else %}
+                        Войдите в систему, чтобы создать тему обсуждения.
+                    {% endif %}
+                </p>
+                {% if user.is_authenticated %}
+                <a href="{% url 'forum:topic_create' %}?category={{ category.pk }}" class="create-topic-btn">
+                    <i class="bi bi-plus-circle me-2"></i>Создать первую тему
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+{% block title %}Заявка подана - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+.success-section {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 4rem 0;
+    margin-bottom: 3rem;
+}
+
+.success-content {
+    text-align: center;
+}
+
+.success-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.success-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.success-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.info-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.info-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.info-value {
+    color: #2c3e50;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.next-steps {
+    background: #f8f9fa;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.step-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.step-item:last-child {
+    margin-bottom: 0;
+}
+
+.step-number {
+    background: #667eea;
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.step-description {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .success-title {
+        font-size: 2rem;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Success Section -->
+<section class="success-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="success-content">
+                    <div class="success-icon">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h1 class="success-title">Заявка успешно подана!</h1>
+                    <p class="success-subtitle">
+                        Ваша заявка на добавление в каталог медицинских учреждений принята к рассмотрению
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Информация о заявке -->
+            <div class="info-card">
+                <h5 class="info-title">
+                    <i class="bi bi-file-text me-2"></i>Информация о заявке
+                </h5>
+                <div class="info-item">
+                    <span class="info-label">Номер заявки:</span>
+                    <span class="info-value">#{{ request_obj.id }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Название учреждения:</span>
+                    <span class="info-value">{{ request_obj.facility_name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Тип учреждения:</span>
+                    <span class="info-value">{{ request_obj.facility_type.name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Контактное лицо:</span>
+                    <span class="info-value">{{ request_obj.contact_person }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">{{ request_obj.email }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Статус:</span>
+                    <span class="status-badge status-pending">
+                        {{ request_obj.get_status_display }}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Дата подачи:</span>
+                    <span class="info-value">{{ request_obj.created_at|date:"d.m.Y H:i" }}</span>
+                </div>
+            </div>
+            
+            <!-- Следующие шаги -->
+            <div class="next-steps">
+                <h5 class="info-title">
+                    <i class="bi bi-list-ol me-2"></i>Что происходит дальше?
+                </h5>
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Рассмотрение заявки</div>
+                        <div class="step-description">
+                            Наша команда рассмотрит вашу заявку и проверит предоставленные документы в течение 1-3 рабочих дней
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Уведомление о решении</div>
+                        <div class="step-description">
+                            На указанный email придет уведомление о решении по вашей заявке
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Доступ к дашборду</div>
+                        <div class="step-description">
+                            После одобрения вы сможете войти в дашборд учреждения используя указанные логин и пароль
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Кнопки -->
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'healthcare_requests:request_create' %}" class="btn btn-outline-primary">
+                    <i class="bi bi-plus-circle me-2"></i>Подать еще одну заявку
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-primary">
+                    <i class="bi bi-house me-2"></i>На главную
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

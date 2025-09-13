@@ -1,0 +1,370 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if object %}Редактировать прививку{% else %}Добавить прививку{% endif %} - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-hero {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+    }
+    
+    .form-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f1f3f4;
+    }
+    
+    .form-section {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 0.75rem;
+        border-left: 4px solid #28a745;
+    }
+    
+    .form-section h5 {
+        color: #28a745;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+    
+    .btn-submit {
+        background: linear-gradient(45deg, #28a745, #20c997);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        color: white;
+    }
+    
+    .btn-cancel {
+        background: #6c757d;
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-cancel:hover {
+        background: #5a6268;
+        color: white;
+        text-decoration: none;
+    }
+    
+    .help-text {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+    
+    .required {
+        color: #dc3545;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Messages -->
+{% if messages %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="bi bi-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Form Hero -->
+<section class="form-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="bi bi-shield-check me-3"></i>
+                    {% if object %}Редактировать прививку{% else %}Добавить прививку{% endif %}
+                </h1>
+                <p class="lead mb-0">
+                    {% if object %}Обновите информацию о прививке{% else %}Запишите новую прививку для вашего ребенка{% endif %}
+                </p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'tracker:vaccination_list' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-arrow-left me-2"></i>Назад к списку
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-card">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Основная информация -->
+                    <div class="form-section">
+                        <h5>
+                            <i class="bi bi-info-circle me-2"></i>Основная информация
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.child.id_for_label }}">
+                                        {{ form.child.label }}
+                                        <span class="required">*</span>
+                                    </label>
+                                    {{ form.child }}
+                                    {% if form.child.help_text %}
+                                        <div class="help-text">{{ form.child.help_text }}</div>
+                                    {% endif %}
+                                    {% if form.child.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.child.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.vaccine_name.id_for_label }}">
+                                        {{ form.vaccine_name.label }}
+                                        <span class="required">*</span>
+                                    </label>
+                                    {{ form.vaccine_name }}
+                                    {% if form.vaccine_name.help_text %}
+                                        <div class="help-text">{{ form.vaccine_name.help_text }}</div>
+                                    {% endif %}
+                                    {% if form.vaccine_name.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.vaccine_name.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.date_given.id_for_label }}">
+                                        {{ form.date_given.label }}
+                                        <span class="required">*</span>
+                                    </label>
+                                    {{ form.date_given }}
+                                    {% if form.date_given.help_text %}
+                                        <div class="help-text">{{ form.date_given.help_text }}</div>
+                                    {% endif %}
+                                    {% if form.date_given.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.date_given.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.next_due_date.id_for_label }}">
+                                        {{ form.next_due_date.label }}
+                                    </label>
+                                    {{ form.next_due_date }}
+                                    {% if form.next_due_date.help_text %}
+                                        <div class="help-text">{{ form.next_due_date.help_text }}</div>
+                                    {% endif %}
+                                    {% if form.next_due_date.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.next_due_date.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Медицинская информация -->
+                    <div class="form-section">
+                        <h5>
+                            <i class="bi bi-hospital me-2"></i>Медицинская информация
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.doctor_name.id_for_label }}">
+                                        {{ form.doctor_name.label }}
+                                    </label>
+                                    {{ form.doctor_name }}
+                                    {% if form.doctor_name.help_text %}
+                                        <div class="help-text">{{ form.doctor_name.help_text }}</div>
+                                    {% endif %}
+                                    {% if form.doctor_name.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.doctor_name.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.clinic_name.id_for_label }}">
+                                        {{ form.clinic_name.label }}
+                                    </label>
+                                    {{ form.clinic_name }}
+                                    {% if form.clinic_name.help_text %}
+                                        <div class="help-text">{{ form.clinic_name.help_text }}</div>
+                                    {% endif %}
+                                    {% if form.clinic_name.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.clinic_name.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="{{ form.batch_number.id_for_label }}">
+                                        {{ form.batch_number.label }}
+                                    </label>
+                                    {{ form.batch_number }}
+                                    {% if form.batch_number.help_text %}
+                                        <div class="help-text">{{ form.batch_number.help_text }}</div>
+                                    {% endif %}
+                                    {% if form.batch_number.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.batch_number.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Дополнительная информация -->
+                    <div class="form-section">
+                        <h5>
+                            <i class="bi bi-clipboard-data me-2"></i>Дополнительная информация
+                        </h5>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="{{ form.reaction.id_for_label }}">
+                                {{ form.reaction.label }}
+                            </label>
+                            {{ form.reaction }}
+                            {% if form.reaction.help_text %}
+                                <div class="help-text">{{ form.reaction.help_text }}</div>
+                            {% endif %}
+                            {% if form.reaction.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.reaction.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="{{ form.notes.id_for_label }}">
+                                {{ form.notes.label }}
+                            </label>
+                            {{ form.notes }}
+                            {% if form.notes.help_text %}
+                                <div class="help-text">{{ form.notes.help_text }}</div>
+                            {% endif %}
+                            {% if form.notes.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.notes.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Кнопки -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'tracker:vaccination_list' %}" class="btn-cancel">
+                            <i class="bi bi-x-circle me-2"></i>Отмена
+                        </a>
+                        <button type="submit" class="btn-submit">
+                            <i class="bi bi-check-circle me-2"></i>
+                            {% if object %}Обновить прививку{% else %}Добавить прививку{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

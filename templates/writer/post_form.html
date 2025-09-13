@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if post %}{% trans 'Редактировать пост' %}{% else %}{% trans 'Создать пост' %}{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Боковая панель -->
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans 'Меню писателя' %}</h5>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'writer:dashboard' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-tachometer-alt me-2"></i>{% trans 'Дашборд' %}
+                        </a>
+                        <a href="{% url 'writer:profile_edit' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user-edit me-2"></i>{% trans 'Редактировать профиль' %}
+                        </a>
+                        <a href="{% url 'writer:post_list' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-list me-2"></i>{% trans 'Мои посты' %}
+                        </a>
+                        <a href="{% url 'writer:post_create' %}" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-plus me-2"></i>{% trans 'Создать пост' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="col-md-9">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        {% if post %}
+                            <i class="fas fa-edit me-2"></i>{% trans 'Редактировать пост' %}
+                        {% else %}
+                            <i class="fas fa-plus me-2"></i>{% trans 'Создать новый пост' %}
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-8">
+                                {{ form.title|as_crispy_field }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.category|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.language|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mt-4">
+                                    {{ form.is_published }}
+                                    <label class="form-check-label" for="{{ form.is_published.id_for_label }}">
+                                        {% trans 'Опубликовать сразу' %}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form.content|as_crispy_field }}
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'writer:post_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>{% trans 'Назад к списку' %}
+                            </a>
+                            <div>
+                                {% if post %}
+                                    <a href="{% url 'blog:post_detail' post.pk %}" class="btn btn-outline-primary me-2">
+                                        <i class="fas fa-eye me-2"></i>{% trans 'Просмотреть' %}
+                                    </a>
+                                {% endif %}
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>
+                                    {% if post %}{% trans 'Сохранить изменения' %}{% else %}{% trans 'Создать пост' %}{% endif %}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Подсказки -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>{% trans 'Советы по написанию' %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            {% trans 'Используйте четкие и понятные заголовки' %}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            {% trans 'Разбивайте текст на абзацы для лучшей читаемости' %}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            {% trans 'Добавляйте практические советы и примеры' %}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            {% trans 'Проверяйте текст перед публикацией' %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

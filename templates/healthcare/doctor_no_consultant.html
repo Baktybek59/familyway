@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ doctor.full_name }} - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .doctor-hero {
+        background: linear-gradient(135deg, #17a2b8, #138496);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .doctor-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .info-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        border: 1px solid #f1f3f4;
+        text-align: center;
+    }
+    
+    .doctor-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 2;
+        margin: 0 auto 2rem;
+    }
+    
+    .rating-stars {
+        color: #ffc107;
+        margin-right: 0.5rem;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(45deg, #17a2b8, #138496);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Doctor Hero -->
+<section class="doctor-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center">
+                    {% if doctor.photo %}
+                    <img src="{{ doctor.photo.url }}" alt="{{ doctor.full_name }}" class="doctor-avatar me-4">
+                    {% else %}
+                    <div class="doctor-avatar me-4">
+                        <div class="d-flex align-items-center justify-content-center h-100 bg-white text-primary rounded-circle" style="font-size: 3rem;">
+                            <i class="bi bi-person"></i>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <h1 class="display-5 fw-bold mb-2">{{ doctor.full_name }}</h1>
+                        <p class="lead mb-3">{{ doctor.specialization }}</p>
+                        <p class="mb-3">{{ doctor.facility.name }}</p>
+                        <div class="d-flex align-items-center">
+                            <div class="rating-stars me-3">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= avg_rating %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% else %}
+                                        <i class="bi bi-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <span class="badge bg-light text-dark">
+                                {{ avg_rating|floatformat:1 }} ({{ total_reviews }} отзывов)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-end">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'healthcare:facility_detail' doctor.facility.pk %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-building me-2"></i>Учреждение
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="info-card">
+                <div class="doctor-avatar">
+                    <div class="d-flex align-items-center justify-content-center h-100 bg-primary text-white rounded-circle" style="font-size: 3rem;">
+                        <i class="bi bi-stethoscope"></i>
+                    </div>
+                </div>
+                
+                <h2 class="fw-bold mb-3">{{ doctor.full_name }}</h2>
+                <p class="lead text-muted mb-4">{{ doctor.specialization }}</p>
+                
+                <div class="alert alert-info mb-4">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Информация:</strong> Этот врач работает в медицинском учреждении, но пока не доступен для онлайн-консультаций через нашу платформу.
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold">Медицинское учреждение</h6>
+                            <p class="text-muted">{{ doctor.facility.name }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h6 class="fw-bold">Опыт работы</h6>
+                            <p class="text-muted">{{ doctor.experience_years }} лет</p>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if doctor.education %}
+                <div class="mb-4">
+                    <h6 class="fw-bold">Образование</h6>
+                    <p class="text-muted">{{ doctor.education }}</p>
+                </div>
+                {% endif %}
+                
+                {% if doctor.bio %}
+                <div class="mb-4">
+                    <h6 class="fw-bold">О враче</h6>
+                    <p class="text-muted">{{ doctor.bio }}</p>
+                </div>
+                {% endif %}
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{% url 'healthcare:facility_detail' doctor.facility.pk %}" class="btn btn-primary">
+                        <i class="bi bi-building me-2"></i>Посетить учреждение
+                    </a>
+                    <a href="{% url 'consultant:consultant_list' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-stethoscope me-2"></i>Найти консультанта
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,656 @@
+{% extends 'base.html' %}
+
+{% block title %}Дашборд техподдержки - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    position: relative;
+    z-index: 1;
+}
+
+.stats-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.stats-card h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: #2c3e50;
+}
+
+.stats-card p {
+    margin: 0;
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.stats-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.stats-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.stats-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+    
+    .ticket-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border-left: 4px solid #667eea;
+        transition: all 0.3s ease;
+    }
+    
+    .ticket-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .priority-high {
+        border-left-color: #dc3545;
+    }
+    
+    .priority-urgent {
+        border-left-color: #fd7e14;
+    }
+    
+    .priority-medium {
+        border-left-color: #ffc107;
+    }
+    
+    .priority-low {
+        border-left-color: #28a745;
+    }
+    
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .status-open {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    .status-in_progress {
+        background-color: #ffc107;
+        color: #212529;
+    }
+    
+    .status-resolved {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .status-closed {
+        background-color: #6c757d;
+        color: white;
+    }
+    
+    .notification-item {
+        background: white;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        border-left: 4px solid #667eea;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .notification-item.unread {
+        background-color: #f8f9fa;
+        border-left-color: #dc3545;
+    }
+
+    .content-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .content-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #f8f9fa;
+    }
+
+    .writer-item, .facility-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: #f8f9fa;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+    }
+
+    .writer-item:hover, .facility-item:hover {
+        background: #e9ecef;
+        transform: translateY(-2px);
+    }
+
+    .writer-avatar, .facility-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .writer-avatar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .facility-icon {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        font-size: 1.2rem;
+    }
+
+    .writer-avatar-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .writer-avatar-placeholder {
+        font-size: 1.5rem;
+    }
+
+    .writer-info, .facility-info {
+        flex: 1;
+    }
+
+    .writer-name, .facility-name {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+
+    .writer-email, .writer-specialization, .writer-meta,
+    .facility-location, .facility-type, .facility-meta {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+
+    .writer-stats, .facility-stats {
+        text-align: right;
+    }
+
+    .writer-articles, .facility-contact {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #6c757d;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<section class="dashboard-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="dashboard-title">
+                    <i class="bi bi-headset me-3"></i>Дашборд техподдержки
+                </h1>
+                <p class="dashboard-subtitle">
+                    Управление заявками, тикетами и модерацией контента
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="d-flex gap-2 justify-content-md-end">
+                    <a href="{% url 'support:dashboard_settings' %}" class="btn btn-light">
+                        <i class="bi bi-gear me-2"></i>Настройки
+                    </a>
+                    <a href="{% url 'support:ticket_create' %}" class="btn btn-warning">
+                        <i class="bi bi-plus-circle me-2"></i>Новый тикет
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-primary">
+                    <i class="bi bi-ticket-detailed"></i>
+                </div>
+                <div class="stats-number">{{ stats.total_tickets }}</div>
+                <div class="stats-label">Всего тикетов</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-warning">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <div class="stats-number">{{ stats.open_tickets }}</div>
+                <div class="stats-label">Открытых тикетов</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-danger">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <div class="stats-number">{{ stats.high_priority_tickets }}</div>
+                <div class="stats-label">Высокий приоритет</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-danger">
+                    <i class="bi bi-lightning"></i>
+                </div>
+                <div class="stats-number">{{ stats.urgent_tickets }}</div>
+                <div class="stats-label">Срочных тикетов</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Additional Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-success">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="stats-number">{{ stats.approved_writers_count }}</div>
+                <div class="stats-label">Одобренных писателей</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-info">
+                    <i class="bi bi-building-fill"></i>
+                </div>
+                <div class="stats-number">{{ stats.approved_facilities_count }}</div>
+                <div class="stats-label">Одобренных учреждений</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-warning">
+                    <i class="bi bi-file-earmark-person"></i>
+                </div>
+                <div class="stats-number">{{ writer_applications|length }}</div>
+                <div class="stats-label">Заявок писателей</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-secondary">
+                    <i class="bi bi-building"></i>
+                </div>
+                <div class="stats-number">{{ facility_requests|length }}</div>
+                <div class="stats-label">Заявок учреждений</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Filters -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Статус</label>
+                            <select name="status" class="form-select">
+                                <option value="">Все статусы</option>
+                                {% for value, label in statuses %}
+                                <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Приоритет</label>
+                            <select name="priority" class="form-select">
+                                <option value="">Все приоритеты</option>
+                                {% for value, label in priorities %}
+                                <option value="{{ value }}" {% if request.GET.priority == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Категория</label>
+                            <select name="category" class="form-select">
+                                <option value="">Все категории</option>
+                                {% for value, label in categories %}
+                                <option value="{{ value }}" {% if request.GET.category == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Назначение</label>
+                            <select name="assigned" class="form-select">
+                                <option value="">Все</option>
+                                <option value="me" {% if request.GET.assigned == 'me' %}selected{% endif %}>Мне назначенные</option>
+                                <option value="unassigned" {% if request.GET.assigned == 'unassigned' %}selected{% endif %}>Неназначенные</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-funnel me-1"></i>Фильтровать
+                            </button>
+                            <a href="{% url 'support:dashboard' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-1"></i>Сбросить
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Tickets List -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-ticket-detailed me-2"></i>Тикеты
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if tickets %}
+                        {% for ticket in tickets %}
+                        <div class="ticket-card priority-{{ ticket.priority }}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">
+                                        <a href="{% url 'support:ticket_detail' ticket.pk %}" class="text-decoration-none">
+                                            #{{ ticket.id }} - {{ ticket.title }}
+                                        </a>
+                                    </h6>
+                                    <p class="text-muted mb-2">{{ ticket.description|truncatewords:20 }}</p>
+                                    <div class="d-flex gap-2 mb-2">
+                                        <span class="status-badge status-{{ ticket.status }}">
+                                            {{ ticket.get_status_display }}
+                                        </span>
+                                        <span class="badge bg-secondary">{{ ticket.get_category_display }}</span>
+                                        <span class="badge bg-info">{{ ticket.get_priority_display }}</span>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="bi bi-person me-1"></i>{{ ticket.created_by.get_full_name }}
+                                        <i class="bi bi-clock me-1 ms-2"></i>{{ ticket.created_at|date:"d.m.Y H:i" }}
+                                        {% if ticket.assigned_to %}
+                                        <i class="bi bi-person-check me-1 ms-2"></i>{{ ticket.assigned_to.user.get_full_name }}
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                        <!-- Pagination -->
+                        {% if is_paginated %}
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.assigned %}&assigned={{ request.GET.assigned }}{% endif %}">Первая</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.assigned %}&assigned={{ request.GET.assigned }}{% endif %}">Предыдущая</a>
+                                </li>
+                                {% endif %}
+                                
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+                                </li>
+                                
+                                {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.assigned %}&assigned={{ request.GET.assigned }}{% endif %}">Следующая</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.assigned %}&assigned={{ request.GET.assigned }}{% endif %}">Последняя</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="bi bi-ticket-detailed text-muted" style="font-size: 3rem;"></i>
+                            <h5 class="mt-3 text-muted">Тикеты не найдены</h5>
+                            <p class="text-muted">Попробуйте изменить параметры фильтрации</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Actions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="bi bi-lightning me-2"></i>Быстрые действия
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'support:facility_requests' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-building me-1"></i>Заявки учреждений ({{ facility_requests|length }})
+                        </a>
+                        <a href="{% url 'support:writer_applications' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-file-earmark-person me-1"></i>Заявки писателей ({{ writer_applications|length }})
+                        </a>
+                        <a href="{% url 'support:forum_moderation' %}" class="btn btn-outline-warning">
+                            <i class="bi bi-chat-dots me-1"></i>Модерация форума
+                        </a>
+                        <a href="{% url 'support:review_moderation' %}" class="btn btn-outline-info">
+                            <i class="bi bi-star me-1"></i>Модерация отзывов
+                        </a>
+                        <a href="{% url 'support:blog_approval' %}" class="btn btn-outline-success">
+                            <i class="bi bi-file-text me-1"></i>Одобрение блога
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Одобренные писатели -->
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-people-fill me-2"></i>Одобренные писатели
+                </h5>
+                {% if approved_writers %}
+                    {% for writer in approved_writers %}
+                    <div class="writer-item">
+                        <div class="writer-avatar">
+                            {% if writer.photo %}
+                            <img src="{{ writer.photo.url }}" alt="{{ writer.full_name }}" class="writer-avatar-img">
+                            {% else %}
+                            <div class="writer-avatar-placeholder">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="writer-info">
+                            <div class="writer-name">{{ writer.full_name }}</div>
+                            <div class="writer-email">
+                                <i class="bi bi-envelope me-1"></i>{{ writer.email }}
+                            </div>
+                            <div class="writer-specialization">
+                                <i class="bi bi-tags me-1"></i>{{ writer.specialization|default:"Специализация не указана" }}
+                            </div>
+                            <div class="writer-meta">
+                                <i class="bi bi-calendar me-1"></i>Одобрен {{ writer.created_at|date:"d.m.Y" }}
+                            </div>
+                        </div>
+                        <div class="writer-stats">
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle me-1"></i>Активен
+                            </span>
+                            <div class="writer-articles">{{ writer.articles_count }} статей</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'support:writer_applications_approved' %}" class="btn btn-outline-success btn-sm">
+                            <i class="bi bi-eye me-1"></i>Все одобренные писатели
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-people"></i>
+                        <p>Нет одобренных писателей</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Одобренные учреждения -->
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-building-fill me-2"></i>Одобренные учреждения
+                </h5>
+                {% if approved_facilities %}
+                    {% for facility in approved_facilities %}
+                    <div class="facility-item">
+                        <div class="facility-icon">
+                            <i class="bi bi-building"></i>
+                        </div>
+                        <div class="facility-info">
+                            <div class="facility-name">{{ facility.facility_name }}</div>
+                            <div class="facility-location">
+                                <i class="bi bi-geo-alt me-1"></i>{{ facility.city|default:"Город не указан" }}
+                            </div>
+                            <div class="facility-type">
+                                <i class="bi bi-tags me-1"></i>{{ facility.facility_type.name|default:"Тип не указан" }}
+                            </div>
+                            <div class="facility-meta">
+                                <i class="bi bi-calendar me-1"></i>Одобрено {{ facility.created_at|date:"d.m.Y" }}
+                            </div>
+                        </div>
+                        <div class="facility-stats">
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle me-1"></i>Активно
+                            </span>
+                            <div class="facility-contact">{{ facility.contact_person }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'support:facility_requests' %}" class="btn btn-outline-success btn-sm">
+                            <i class="bi bi-eye me-1"></i>Все заявки учреждений
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-building"></i>
+                        <p>Нет одобренных учреждений</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Notifications -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="bi bi-bell me-2"></i>Уведомления
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                        <div class="notification-item {% if not notification.is_read %}unread{% endif %}">
+                            <h6 class="mb-1">{{ notification.title }}</h6>
+                            <p class="mb-1 small">{{ notification.message|truncatewords:10 }}</p>
+                            <small class="text-muted">{{ notification.created_at|date:"d.m.Y H:i" }}</small>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center">Нет новых уведомлений</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

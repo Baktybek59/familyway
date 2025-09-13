@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Отзыв о {{ doctor.full_name }} - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .review-hero {
+        background: linear-gradient(135deg, #17a2b8, #138496);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+    }
+    
+    .form-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f1f3f4;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #17a2b8;
+        box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+    }
+    
+    .btn-submit {
+        background: linear-gradient(45deg, #17a2b8, #138496);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4);
+        color: white;
+    }
+    
+    .btn-cancel {
+        background: #6c757d;
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-cancel:hover {
+        background: #5a6268;
+        color: white;
+        text-decoration: none;
+    }
+    
+    .rating-options {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+    
+    .rating-option {
+        flex: 1;
+        text-align: center;
+        padding: 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .rating-option:hover {
+        border-color: #17a2b8;
+        background: #f8f9fa;
+    }
+    
+    .rating-option.selected {
+        border-color: #17a2b8;
+        background: #e3f2fd;
+    }
+    
+    .rating-option input[type="radio"] {
+        display: none;
+    }
+    
+    .rating-option .rating-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+    
+    .rating-option .rating-desc {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Messages -->
+{% if messages %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="bi bi-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Review Hero -->
+<section class="review-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="bi bi-star me-3"></i>Отзыв о {{ doctor.full_name }}
+                </h1>
+                <p class="lead mb-0">
+                    Поделитесь своим опытом посещения этого врача
+                </p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'healthcare:doctor_detail' doctor.id %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-arrow-left me-2"></i>Назад к врачу
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-card">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Rating -->
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.rating.id_for_label }}">
+                            {{ form.rating.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="rating-options">
+                            {% for choice in form.rating %}
+                            <div class="rating-option" onclick="selectRating({{ choice.choice_value }})">
+                                <input type="radio" name="rating" value="{{ choice.choice_value }}" id="{{ choice.id_for_label }}" {% if choice.choice_value == form.rating.value %}checked{% endif %}>
+                                <div class="rating-label">{{ choice.choice_value }}</div>
+                                <div class="rating-desc">{{ choice.choice_label|slice:"4:" }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if form.rating.errors %}
+                            <div class="text-danger">
+                                {% for error in form.rating.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.title.id_for_label }}">
+                            {{ form.title.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-danger">
+                                {% for error in form.title.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Comment -->
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.comment.id_for_label }}">
+                            {{ form.comment.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.comment }}
+                        {% if form.comment.errors %}
+                            <div class="text-danger">
+                                {% for error in form.comment.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Visit Date -->
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.visit_date.id_for_label }}">
+                            {{ form.visit_date.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.visit_date }}
+                        {% if form.visit_date.errors %}
+                            <div class="text-danger">
+                                {% for error in form.visit_date.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Anonymous -->
+                    <div class="form-group">
+                        <div class="form-check">
+                            {{ form.is_anonymous }}
+                            <label class="form-check-label" for="{{ form.is_anonymous.id_for_label }}">
+                                {{ form.is_anonymous.label }}
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'healthcare:doctor_detail' doctor.id %}" class="btn-cancel">
+                            <i class="bi bi-x-circle me-2"></i>Отмена
+                        </a>
+                        <button type="submit" class="btn-submit">
+                            <i class="bi bi-check-circle me-2"></i>Отправить отзыв
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function selectRating(value) {
+    // Remove selected class from all options
+    document.querySelectorAll('.rating-option').forEach(option => {
+        option.classList.remove('selected');
+    });
+    
+    // Add selected class to clicked option
+    event.currentTarget.classList.add('selected');
+    
+    // Check the radio button
+    event.currentTarget.querySelector('input[type="radio"]').checked = true;
+}
+
+// Initialize selected rating on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const checkedInput = document.querySelector('input[name="rating"]:checked');
+    if (checkedInput) {
+        checkedInput.closest('.rating-option').classList.add('selected');
+    }
+});
+</script>
+{% endblock %}
+
+
+
+

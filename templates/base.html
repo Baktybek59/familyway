@@ -1,0 +1,825 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}familyway + - Платформа для семей с детьми{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #ff6b9d;
+            --secondary-color: #4ecdc4;
+            --accent-color: #ffe66d;
+            --text-color: #2c3e50;
+            --light-bg: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-color) !important;
+        }
+        
+        .card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 25px;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e55a8a;
+            border-color: #e55a8a;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            border-radius: 25px;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #3db8b0;
+            border-color: #3db8b0;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 107, 157, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .navbar-brand:hover {
+            color: #e55a8a !important;
+            transform: scale(1.05);
+        }
+        
+        .navbar-brand::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+        
+        .navbar-brand:hover::before {
+            width: 100%;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-color) !important;
+            padding: 0.75rem 1rem !important;
+            margin: 0 0.25rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 157, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(78, 205, 196, 0.1));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.2);
+        }
+        
+        .nav-link.active {
+            color: white !important;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+        }
+        
+        .nav-link i {
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link:hover i {
+            transform: scale(1.1);
+        }
+        
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 107, 157, 0.25);
+        }
+        
+        .navbar-toggler:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(78, 205, 196, 0.1));
+        }
+        
+        .dropdown-menu {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            margin-top: 0.5rem;
+            padding: 0.5rem 0;
+            animation: dropdownFadeIn 0.3s ease;
+        }
+        
+        @keyframes dropdownFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .dropdown-item {
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 0 0.5rem;
+        }
+        
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(78, 205, 196, 0.1));
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        
+        .badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .notification-badge {
+            font-size: 0.65rem;
+            min-width: 20px;
+            height: 20px;
+            line-height: 20px;
+            padding: 0 6px;
+            background: linear-gradient(135deg, #ff6b9d, #ff8fab) !important;
+            animation: notificationPulse 1.5s infinite;
+        }
+        
+        @keyframes notificationPulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 107, 157, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 157, 0); }
+        }
+        
+        .language-switcher .dropdown-toggle::after {
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .language-switcher .dropdown-toggle[aria-expanded="true"]::after {
+            transform: rotate(180deg);
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+        }
+        
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background: rgba(255, 255, 255, 0.98);
+                border-radius: 15px;
+                margin-top: 1rem;
+                padding: 1rem;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            }
+            
+            .nav-link {
+                margin: 0.25rem 0;
+                padding: 0.75rem 1rem !important;
+                border-radius: 10px;
+            }
+        }
+        
+        .footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            padding: 3rem 0 2rem;
+            margin-top: 3rem;
+        }
+        
+        .footer h5, .footer h6 {
+            color: #2c3e50;
+        }
+        
+        .footer a {
+            transition: color 0.2s ease;
+        }
+        
+        .footer a:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        .footer .social-links a {
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
+        }
+        
+        .footer .social-links a:hover {
+            transform: translateY(-2px);
+        }
+        
+        .language-switcher {
+            margin-left: 1rem;
+        }
+        
+        .notification-badge {
+            font-size: 0.7rem;
+            min-width: 18px;
+            height: 18px;
+            line-height: 18px;
+            padding: 0 6px;
+        }
+        
+        .nav-link.position-relative {
+            padding-right: 1.5rem;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light" id="mainNavbar">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="bi bi-heart-fill"></i> familyway +
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">
+                            <i class="bi bi-house"></i> {% trans "Главная" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog:blog_list' %}">
+                            <i class="bi bi-journal-text"></i> {% trans "Блог" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'consultant:consultant_list' %}">
+                            <i class="bi bi-stethoscope"></i> {% trans "Консультации" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'forum:index' %}">
+                            <i class="bi bi-chat-dots"></i> {% trans "Форум" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'healthcare:index' %}">
+                            <i class="bi bi-hospital"></i> {% trans "Медицинские учреждения" %}
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tracker:dashboard' %}">
+                            <i class="bi bi-graph-up"></i> {% trans "Трекер" %}
+                        </a>
+                    </li>
+                   
+                    {% if user.parent_profile.is_writer %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'writer:dashboard' %}">
+                            <i class="bi bi-pencil-square"></i> {% trans "Дашборд писателя" %}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user.supportprofile.is_active %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.namespace == 'support' %}active{% endif %}" href="{% url 'support:dashboard' %}">
+                            <i class="bi bi-headset"></i> {% trans "Техподдержка" %}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <!-- Notifications Button -->
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="{% url 'notifications:list' %}">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-warning notification-badge position-absolute top-0 start-100 translate-middle rounded-pill" id="notification-count">0</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            {% if user.parent_profile and user.parent_profile.photo %}
+                                <img src="{{ user.parent_profile.photo.url }}" alt="Аватар" class="user-avatar me-2">
+                            {% else %}
+                                <div class="user-avatar me-2 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; font-weight: bold;">
+                                    {{ user.username|first|upper }}
+                                </div>
+                            {% endif %}
+                            <span class="d-none d-md-inline">{{ user.get_full_name|default:user.username }}</span>
+                            {% if user.supportprofile.is_active %}
+                                <span class="badge bg-warning text-dark ms-2">Техподдержка</span>
+                            {% elif user.parent_profile.is_writer %}
+                                <span class="badge bg-info text-dark ms-2">Писатель</span>
+                            {% else %}
+                                <span class="badge bg-primary ms-2">Родитель</span>
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% if user.supportprofile.is_active %}
+                            <li><a class="dropdown-item text-warning fw-bold" href="{% url 'support:profile' %}">
+                                <i class="bi bi-headset"></i> {% trans "Профиль техподдержки" %}
+                            </a></li>
+                            <li><a class="dropdown-item text-warning fw-bold" href="{% url 'support:dashboard' %}">
+                                <i class="bi bi-speedometer2"></i> {% trans "Дашборд техподдержки" %}
+                            </a></li>
+                            {% else %}
+                            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                                <i class="bi bi-person"></i> {% trans "Профиль" %}
+                            </a></li>
+                            {% endif %}
+                            {% if user.parent_profile.is_writer %}
+                            <li><a class="dropdown-item text-primary fw-bold" href="{% url 'writer:dashboard' %}">
+                                <i class="bi bi-pencil-square"></i> {% trans "Дашборд писателя" %}
+                            </a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                                <i class="bi bi-box-arrow-right"></i> {% trans "Выйти" %}
+                            </a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:login' %}">
+                            <i class="bi bi-box-arrow-in-right"></i> {% trans "Войти" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:register' %}">
+                            <i class="bi bi-person-plus"></i> {% trans "Регистрация" %}
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <!-- О приложении -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="fw-bold text-primary mb-3">
+                        <i class="bi bi-heart-fill text-danger"></i> familyway +
+                    </h5>
+                    <p class="text-muted small">
+                        Платформа для семей с детьми. Отслеживайте развитие ребенка, 
+                        общайтесь с другими родителями, получайте консультации специалистов 
+                        и делитесь опытом в нашем сообществе.
+                    </p>
+                    <div class="d-flex gap-2 social-links">
+                        <a href="#" class="text-muted"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-muted"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-muted"><i class="bi bi-telegram"></i></a>
+                        <a href="#" class="text-muted"><i class="bi bi-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Основные сервисы -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="fw-bold text-dark mb-3">Основные сервисы</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="{% url 'home' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-house me-1"></i> Главная
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'blog:blog_list' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-journal-text me-1"></i> Блог
+                            </a>
+                        </li>
+                        {% if user.is_authenticated %}
+                        <li class="mb-2">
+                            <a href="{% url 'tracker:dashboard' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-graph-up me-1"></i> Трекер
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'consultant:consultant_list' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-stethoscope me-1"></i> Консультации
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'healthcare:index' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-hospital me-1"></i> Медицинские учреждения
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'forum:index' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-chat-dots me-1"></i> Форум
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <!-- Медицинские услуги -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="fw-bold text-dark mb-3">Медицинские услуги</h6>
+                    <ul class="list-unstyled">
+                        {% if user.is_authenticated %}
+                        <li class="mb-2">
+                            <a href="{% url 'consultant:consultation_list' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-chat-dots me-1"></i> Мои консультации
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'consultant:consultation_create' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-plus-circle me-1"></i> Новая консультация
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="mb-2">
+                            <a href="{% url 'healthcare:index' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-building me-1"></i> Больницы
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'healthcare:index' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-hospital me-1"></i> Клиники
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'healthcare:index' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-capsule me-1"></i> Аптеки
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'healthcare:index' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-teeth me-1"></i> Стоматологии
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'healthcare_requests:request_create' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-building-add me-1"></i> Подать заявку
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Трекер развития -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="fw-bold text-dark mb-3">Трекер развития</h6>
+                    <ul class="list-unstyled">
+                        {% if user.is_authenticated %}
+                        <li class="mb-2">
+                            <a href="{% url 'tracker:dashboard' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-graph-up me-1"></i> Дашборд
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'tracker:growth_create' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-rulers me-1"></i> Рост и вес
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'tracker:sleep_create' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-moon me-1"></i> Сон
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'tracker:feeding_create' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-cup me-1"></i> Кормление
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'tracker:vaccination_list' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-shield-check me-1"></i> Прививки
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <!-- Аккаунт -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6 class="fw-bold text-dark mb-3">Аккаунт</h6>
+                    <ul class="list-unstyled">
+                        {% if user.is_authenticated %}
+                        <li class="mb-2">
+                            <a href="{% url 'accounts:profile' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-person me-1"></i> Мой профиль
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'accounts:profile_edit' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-gear me-1"></i> Настройки
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'accounts:family_management' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-people me-1"></i> Управление семьей
+                            </a>
+                        </li>
+                        {% if user.parent_profile.is_writer %}
+                        <li class="mb-2">
+                            <a href="{% url 'writer:dashboard' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-pencil-square me-1"></i> Дашборд писателя
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="mb-2">
+                            <a href="{% url 'accounts:logout' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-box-arrow-right me-1"></i> Выйти
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="mb-2">
+                            <a href="{% url 'accounts:login' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Войти
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'accounts:register' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-person-plus me-1"></i> Регистрация
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'healthcare:doctor_login' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-heart-pulse me-1"></i> Вход для врачей
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'accounts:writer_login' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-pencil-square me-1"></i> Вход для писателей
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'accounts:writer_application' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-file-earmark-plus me-1"></i> Стать писателем
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'healthcare_requests:facility_login' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-building me-1"></i> Вход для учреждений
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <!-- Заявки -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6 class="fw-bold text-dark mb-3">Заявки</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="{% url 'healthcare_requests:request_create' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-building-add me-1"></i> Заявка учреждения
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'accounts:writer_application' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-file-earmark-plus me-1"></i> Заявка писателя
+                            </a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            {% for group in user.groups.all %}
+                                {% if group.name == 'support' %}
+                        <li class="mb-2">
+                            <a href="{% url 'healthcare_requests:admin_request_list' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-list-check me-1"></i> Заявки учреждений
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'support:writer_applications' %}" class="text-muted text-decoration-none">
+                                <i class="bi bi-file-earmark-person me-1"></i> Заявки писателей
+                            </a>
+                        </li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Нижняя часть футера -->
+            <hr class="my-4">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-muted small mb-0">
+                        &copy; 2024 familyway +. Все права защищены.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex justify-content-md-end gap-3">
+                        <a href="#" class="text-muted small text-decoration-none">Политика конфиденциальности</a>
+                        <a href="#" class="text-muted small text-decoration-none">Условия использования</a>
+                        <a href="#" class="text-muted small text-decoration-none">Контакты</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+    
+    <!-- Notification counter update -->
+    <script>
+    function updateNotificationCount() {
+        fetch('/notifications/api/count/')
+            .then(response => response.json())
+            .then(data => {
+                const countElement = document.getElementById('notification-count');
+                if (countElement) {
+                    countElement.textContent = data.count;
+                    if (data.count > 0) {
+                        countElement.style.display = 'inline';
+                    } else {
+                        countElement.style.display = 'none';
+                    }
+                }
+            })
+            .catch(error => console.error('Ошибка обновления счетчика уведомлений:', error));
+    }
+    
+    // Обновляем счетчик при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        updateNotificationCount();
+        initNavbarEffects();
+    });
+    
+    // Обновляем счетчик каждые 30 секунд
+    setInterval(updateNotificationCount, 30000);
+    
+    // Navbar scroll effect
+    function handleNavbarScroll() {
+        const navbar = document.getElementById('mainNavbar');
+        if (navbar) {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+    }
+    
+    // Initialize navbar effects
+    function initNavbarEffects() {
+        // Add scroll event listener
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initialize on page load
+        handleNavbarScroll();
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Add hover effects to nav links
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            link.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    }
+    </script>
+</body>
+</html>

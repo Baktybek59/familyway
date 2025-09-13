@@ -1,0 +1,397 @@
+{% extends 'base.html' %}
+
+{% block title %}Консультация - {{ doctor.full_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 0 0 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.content-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f1f3f4;
+}
+
+.content-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.consultation-info {
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #495057;
+    min-width: 150px;
+}
+
+.info-value {
+    color: #2c3e50;
+    text-align: right;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.message-box {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.message-author {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.message-date {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.message-content {
+    color: #495057;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.attachment-item {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.attachment-icon {
+    color: #667eea;
+    font-size: 1.2rem;
+}
+
+.attachment-name {
+    color: #495057;
+    font-weight: 500;
+}
+
+.response-form {
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-outline-primary {
+    border: 2px solid #667eea;
+    color: #667eea;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    
+    .info-value {
+        text-align: left;
+    }
+    
+    .message-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<section class="dashboard-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="dashboard-title">
+                    <i class="bi bi-chat-dots me-3"></i>Консультация
+                </h1>
+                <p class="dashboard-subtitle">
+                    Детали консультации с пациентом
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'healthcare:doctor_consultations' %}" class="btn btn-light">
+                    <i class="bi bi-arrow-left me-2"></i>Назад к консультациям
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Consultation Info -->
+    <div class="content-card">
+        <h5 class="content-title">
+            <i class="bi bi-info-circle me-2"></i>Информация о консультации
+        </h5>
+        
+        <div class="consultation-info">
+            <div class="info-row">
+                <div class="info-label">Пациент:</div>
+                <div class="info-value">
+                    {{ consultation.patient.first_name }} {{ consultation.patient.last_name }}
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Дата создания:</div>
+                <div class="info-value">
+                    {{ consultation.created_at|date:"d.m.Y H:i" }}
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Статус:</div>
+                <div class="info-value">
+                    <span class="status-badge status-{{ consultation.status }}">
+                        {% if consultation.status == 'pending' %}
+                            <i class="bi bi-clock me-1"></i>Ожидает ответа
+                        {% elif consultation.status == 'completed' %}
+                            <i class="bi bi-check-circle me-1"></i>Завершена
+                        {% elif consultation.status == 'cancelled' %}
+                            <i class="bi bi-x-circle me-1"></i>Отменена
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            {% if consultation.updated_at %}
+            <div class="info-row">
+                <div class="info-label">Последнее обновление:</div>
+                <div class="info-value">
+                    {{ consultation.updated_at|date:"d.m.Y H:i" }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Patient Message -->
+    <div class="content-card">
+        <h5 class="content-title">
+            <i class="bi bi-person me-2"></i>Сообщение от пациента
+        </h5>
+        
+        <div class="message-box">
+            <div class="message-header">
+                <div class="message-author">
+                    <i class="bi bi-person-circle me-2"></i>
+                    {{ consultation.patient.first_name }} {{ consultation.patient.last_name }}
+                </div>
+                <div class="message-date">
+                    {{ consultation.created_at|date:"d.m.Y H:i" }}
+                </div>
+            </div>
+            <div class="message-content">
+                {{ consultation.message }}
+            </div>
+        </div>
+        
+        {% if consultation.attachments %}
+            <div class="mt-3">
+                <h6 class="mb-2">
+                    <i class="bi bi-paperclip me-2"></i>Прикрепленные файлы:
+                </h6>
+                <div class="attachment-item">
+                    <i class="bi bi-file-earmark attachment-icon"></i>
+                    <span class="attachment-name">{{ consultation.attachments.name|slice:"-30:" }}</span>
+                    <a href="{{ consultation.attachments.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-download me-1"></i>Скачать
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Doctor Response -->
+    {% if consultation.response %}
+        <div class="content-card">
+            <h5 class="content-title">
+                <i class="bi bi-reply me-2"></i>Ваш ответ
+            </h5>
+            
+            <div class="message-box">
+                <div class="message-header">
+                    <div class="message-author">
+                        <i class="bi bi-person-badge me-2"></i>
+                        Др. {{ doctor.last_name }} {{ doctor.first_name }}
+                    </div>
+                    <div class="message-date">
+                        {{ consultation.updated_at|date:"d.m.Y H:i" }}
+                    </div>
+                </div>
+                <div class="message-content">
+                    {{ consultation.response }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    
+    <!-- Response Form -->
+    {% if consultation.status == 'pending' %}
+        <div class="content-card">
+            <h5 class="content-title">
+                <i class="bi bi-reply me-2"></i>Ответить пациенту
+            </h5>
+            
+            <form method="post" class="response-form">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="response" class="form-label">Ваш ответ:</label>
+                    <textarea name="response" id="response" class="form-control" rows="6" 
+                              placeholder="Введите ваш ответ пациенту..." required></textarea>
+                </div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-send me-2"></i>Отправить ответ
+                    </button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+

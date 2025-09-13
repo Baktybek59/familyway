@@ -1,0 +1,800 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block title %}{% trans "Регистрация" %} - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .register-hero {
+        background: linear-gradient(135deg, #ff6b9d, #4ecdc4);
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .register-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .register-card {
+        border: none;
+        border-radius: 1.5rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+        background: white;
+    }
+    
+    .register-header {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        padding: 2rem;
+        border-bottom: 1px solid #dee2e6;
+        text-align: center;
+    }
+    
+    .register-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1rem;
+        box-shadow: 0 8px 32px rgba(255, 107, 157, 0.3);
+    }
+    
+    .form-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #ff6b9d;
+        display: flex;
+        align-items: center;
+    }
+    
+    .section-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 0.75rem;
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+    
+    .form-control:focus {
+        border-color: #ff6b9d;
+        box-shadow: 0 0 0 0.2rem rgba(255, 107, 157, 0.25);
+        background: white;
+    }
+    
+    .form-check-input {
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid #dee2e6;
+        border-radius: 0.375rem;
+        margin-top: 0.125rem;
+    }
+    
+    .form-check-input:checked {
+        background-color: #ff6b9d;
+        border-color: #ff6b9d;
+    }
+    
+    .form-check-input:focus {
+        box-shadow: 0 0 0 0.2rem rgba(255, 107, 157, 0.25);
+    }
+    
+    .form-check-label {
+        font-weight: 500;
+        color: #2c3e50;
+        margin-left: 0.5rem;
+    }
+    
+    /* Стили для выбора роли в семье */
+    .role-selection {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .role-option {
+        flex: 1;
+        position: relative;
+    }
+    
+    .role-card {
+        border: 2px solid #e9ecef;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .role-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, #ff6b9d, #4ecdc4);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .role-card:hover {
+        border-color: #ff6b9d;
+        background: #fff5f8;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.15);
+    }
+    
+    .role-card:hover::before {
+        opacity: 0.1;
+    }
+    
+    .role-card.selected {
+        border-color: #ff6b9d;
+        background: linear-gradient(135deg, #fff5f8, #f0fdfa);
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.2);
+        transform: translateY(-2px);
+    }
+    
+    .role-card.selected::before {
+        opacity: 0.1;
+    }
+    
+    .role-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .role-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .role-checkbox {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 24px;
+        height: 24px;
+        border: 2px solid #dee2e6;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        z-index: 2;
+    }
+    
+    .role-checkbox::after {
+        content: '✓';
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .role-card.selected .role-checkbox {
+        background: #ff6b9d;
+        border-color: #ff6b9d;
+        transform: scale(1.1);
+    }
+    
+    .role-card.selected .role-checkbox::after {
+        opacity: 1;
+    }
+    
+    .role-card:hover .role-checkbox {
+        border-color: #ff6b9d;
+        transform: scale(1.05);
+    }
+    
+    .role-card.selected:hover .role-checkbox {
+        transform: scale(1.15);
+    }
+    
+    /* Скрываем стандартный checkbox */
+    .role-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    .user-type-card {
+        border: 2px solid #e9ecef;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: #f8f9fa;
+    }
+    
+    .user-type-card:hover {
+        border-color: #ff6b9d;
+        background: #fff5f8;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.15);
+    }
+    
+    .user-type-card.selected {
+        border-color: #ff6b9d;
+        background: linear-gradient(135deg, #fff5f8, #f0fdfa);
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.2);
+    }
+    
+    .user-type-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto 1rem;
+    }
+    
+    .btn-register {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        border: none;
+        color: white;
+        padding: 1rem 3rem;
+        border-radius: 2rem;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .btn-register:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+    
+    .btn-register:active {
+        transform: translateY(-1px);
+    }
+    
+    .login-link {
+        color: #ff6b9d;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .login-link:hover {
+        color: #4ecdc4;
+        text-decoration: underline;
+    }
+    
+    .benefits-card {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-left: 4px solid #ff6b9d;
+    }
+    
+    .benefit-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0.5rem 0;
+    }
+    
+    .benefit-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .benefit-text {
+        flex: 1;
+    }
+    
+    .benefit-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+    
+    .benefit-desc {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+    
+    .step-indicator {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+    
+    .step {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e9ecef;
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin: 0 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .step.active {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .step.completed {
+        background: #4ecdc4;
+        color: white;
+    }
+    
+    .step-line {
+        width: 60px;
+        height: 2px;
+        background: #e9ecef;
+        margin-top: 19px;
+    }
+    
+    .step-line.completed {
+        background: #4ecdc4;
+    }
+    
+    .fade-in {
+        animation: fadeIn 0.6s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .slide-in {
+        animation: slideIn 0.8s ease-out;
+    }
+    
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateX(-30px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Register Hero -->
+<section class="register-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="bi bi-heart me-3"></i>{% trans "Регистрация для родителей" %}
+                </h1>
+                <p class="lead mb-4">
+                    {% trans "Создайте аккаунт и начните отслеживать развитие вашего ребенка" %}
+                </p>
+                <div class="d-flex align-items-center">
+                    <span class="badge bg-light text-dark me-3 px-3 py-2">
+                        <i class="bi bi-shield-check me-2"></i>Безопасно
+                    </span>
+                    <span class="badge bg-light text-dark me-3 px-3 py-2">
+                        <i class="bi bi-people me-2"></i>Сообщество
+                    </span>
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-graph-up me-2"></i>Отслеживание
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="register-icon">
+                    <i class="bi bi-person-plus"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <!-- Main Registration Form -->
+        <div class="col-lg-8">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active">1</div>
+                <div class="step-line"></div>
+                <div class="step">2</div>
+            </div>
+
+            <div class="register-card fade-in">
+                <div class="register-header">
+                    <h2 class="fw-bold mb-2">{% trans "Регистрация родителя" %}</h2>
+                    <p class="text-muted mb-0">{% trans "Создайте аккаунт для отслеживания развития вашего ребенка" %}</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="post" novalidate id="registerForm">
+                        {% csrf_token %}
+                        
+                        <!-- Скрытое поле для типа пользователя (всегда родитель) -->
+                        <input type="hidden" name="user_type" value="parent">
+
+                        <!-- Basic Information -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <div class="section-icon">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                Основная информация
+                            </h4>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.username.id_for_label }}">
+                                            <i class="bi bi-person me-2"></i>{% trans "Имя пользователя" %}
+                                        </label>
+                                        {{ form.username }}
+                                        {% if form.username.help_text %}
+                                            <small class="form-text text-muted">{{ form.username.help_text }}</small>
+                                        {% endif %}
+                                        {% if form.username.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.username.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.email.id_for_label }}">
+                                            <i class="bi bi-envelope me-2"></i>{% trans "Email адрес" %}
+                                        </label>
+                                        {{ form.email }}
+                                        {% if form.email.help_text %}
+                                            <small class="form-text text-muted">{{ form.email.help_text }}</small>
+                                        {% endif %}
+                                        {% if form.email.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.email.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.password1.id_for_label }}">
+                                            <i class="bi bi-lock me-2"></i>{% trans "Пароль" %}
+                                        </label>
+                                        {{ form.password1 }}
+                                        {% if form.password1.help_text %}
+                                            <small class="form-text text-muted">{{ form.password1.help_text }}</small>
+                                        {% endif %}
+                                        {% if form.password1.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.password1.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="{{ form.password2.id_for_label }}">
+                                            <i class="bi bi-lock-fill me-2"></i>{% trans "Подтверждение пароля" %}
+                                        </label>
+                                        {{ form.password2 }}
+                                        {% if form.password2.help_text %}
+                                            <small class="form-text text-muted">{{ form.password2.help_text }}</small>
+                                        {% endif %}
+                                        {% if form.password2.errors %}
+                                            <div class="text-danger">
+                                                {% for error in form.password2.errors %}
+                                                    <small>{{ error }}</small>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Parent Information -->
+                        <div class="form-section" id="parent-fields" style="display: none;">
+                            <h4 class="section-title">
+                                <div class="section-icon">
+                                    <i class="bi bi-heart"></i>
+                                </div>
+                                Роль в семье
+                            </h4>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Я:</label>
+                                <div class="role-selection">
+                                    {% for choice in form.role %}
+                                    <div class="role-option">
+                                        <div class="role-card" onclick="selectRole('{{ choice.data.value }}', this)">
+                                            <div class="role-checkbox"></div>
+                                            <div class="role-icon">
+                                                {% if choice.data.value == 'mom' %}
+                                                    <i class="bi bi-heart-fill"></i>
+                                                {% else %}
+                                                    <i class="bi bi-person-badge"></i>
+                                                {% endif %}
+                                            </div>
+                                            <div class="role-title">{{ choice.choice_label }}</div>
+                                            {{ choice.tag }}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Submit Button -->
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn-register">
+                                <i class="bi bi-person-plus me-2"></i>{% trans "Создать аккаунт" %}
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-muted">
+                            {% trans "Уже есть аккаунт?" %} 
+                            <a href="{% url 'accounts:login' %}" class="login-link">{% trans "Войти в систему" %}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Benefits Card -->
+            <div class="benefits-card slide-in">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-star me-2"></i>Преимущества регистрации
+                </h5>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Отслеживание развития</div>
+                        <div class="benefit-desc">Ведите дневник роста и развития вашего ребенка</div>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="bi bi-chat-dots"></i>
+                    </div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Сообщество родителей</div>
+                        <div class="benefit-desc">Общайтесь с другими родителями в форуме</div>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="bi bi-stethoscope"></i>
+                    </div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Консультации врачей</div>
+                        <div class="benefit-desc">Получайте профессиональные консультации</div>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <div class="benefit-text">
+                        <div class="benefit-title">Полезные статьи</div>
+                        <div class="benefit-desc">Читайте экспертные материалы о воспитании</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Info -->
+            <div class="form-section">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-shield-check me-2"></i>Безопасность данных
+                </h5>
+                
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-check-circle text-success me-2"></i>
+                    <small class="text-muted">Шифрование всех данных</small>
+                </div>
+                
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-check-circle text-success me-2"></i>
+                    <small class="text-muted">Соответствие GDPR</small>
+                </div>
+                
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-check-circle text-success me-2"></i>
+                    <small class="text-muted">Защита персональных данных</small>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-check-circle text-success me-2"></i>
+                    <small class="text-muted">Регулярные резервные копии</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Register page loaded');
+    
+    // Автоматически показываем поля родителя (всегда родитель)
+    const parentFields = document.getElementById('parent-fields');
+    if (parentFields) {
+        parentFields.style.display = 'block';
+        parentFields.classList.add('fade-in');
+    }
+    
+    function selectRole(roleValue, element) {
+        // Remove selected class from all role cards
+        const roleCards = document.querySelectorAll('.role-card');
+        roleCards.forEach(card => card.classList.remove('selected'));
+        
+        // Add selected class to clicked card
+        element.classList.add('selected');
+        
+        // Check the radio button
+        const radio = element.querySelector('input[type="radio"]');
+        if (radio) {
+            radio.checked = true;
+        }
+        
+        console.log('Selected role:', roleValue);
+    }
+    
+    // Add click handlers to role cards
+    const roleCards = document.querySelectorAll('.role-card');
+    roleCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) {
+                selectRole(radio.value, this);
+            }
+        });
+    });
+    
+    
+    // Form validation
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', function(e) {
+        // Проверяем только роль в семье (всегда родитель)
+        const role = document.querySelector('input[name="role"]:checked');
+        
+        if (!role) {
+            e.preventDefault();
+            alert('Пожалуйста, выберите вашу роль в семье');
+            return;
+        }
+        
+        // Show loading state
+        const submitBtn = document.querySelector('.btn-register');
+        submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Создание аккаунта...';
+        submitBtn.disabled = true;
+    });
+    
+    // Add focus effects to form controls
+    const formControls = document.querySelectorAll('.form-control');
+    formControls.forEach(control => {
+        control.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        
+        control.addEventListener('blur', function() {
+            this.parentElement.classList.remove('focused');
+        });
+    });
+});
+</script>
+{% endblock %}
+

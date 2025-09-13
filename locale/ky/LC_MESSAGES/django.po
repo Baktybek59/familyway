@@ -1,0 +1,4114 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-08 13:07+0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+#: accounts/forms.py:11
+msgid "Я мама"
+msgstr ""
+
+#: accounts/forms.py:12
+msgid "Я папа"
+msgstr ""
+
+#: accounts/forms.py:15 accounts/forms.py:121 accounts/forms.py:260
+#: accounts/models.py:135 accounts/models.py:225 healthcare/forms.py:53
+#: healthcare/forms.py:189 healthcare/models.py:65
+msgid "Имя"
+msgstr ""
+
+#: accounts/forms.py:16 accounts/forms.py:122 accounts/forms.py:261
+#: accounts/models.py:136 accounts/models.py:226 healthcare/forms.py:54
+#: healthcare/forms.py:190 healthcare/models.py:66
+msgid "Фамилия"
+msgstr ""
+
+#: accounts/forms.py:17 accounts/forms.py:70 accounts/forms.py:124
+#: accounts/forms.py:263 accounts/models.py:138 accounts/models.py:228
+#: healthcare/forms.py:26 healthcare/forms.py:61 healthcare/forms.py:130
+#: healthcare/forms.py:197 healthcare/models.py:31 healthcare/models.py:73
+#: healthcare_requests/models.py:28 support/models.py:13
+msgid "Email"
+msgstr ""
+
+#: accounts/forms.py:18 accounts/forms.py:125 accounts/forms.py:176
+#: accounts/forms.py:264 accounts/models.py:140 accounts/models.py:229
+#: healthcare/forms.py:25 healthcare/forms.py:60 healthcare/forms.py:196
+#: healthcare/models.py:30 healthcare/models.py:72
+#: healthcare_requests/models.py:29 support/models.py:12
+#: templates/healthcare/facility_detail.html:190
+#: templates/healthcare/index.html:564
+msgid "Телефон"
+msgstr ""
+
+#: accounts/forms.py:22 accounts/forms.py:180
+msgid "Роль в семье"
+msgstr ""
+
+#: accounts/forms.py:78 accounts/forms.py:266 accounts/models.py:139
+#: accounts/models.py:233 healthcare/forms.py:138 healthcare/models.py:74
+#: healthcare_requests/forms.py:125 healthcare_requests/forms.py:127
+#: healthcare_requests/models.py:37 templates/accounts/login.html:301
+#: templates/accounts/login.html:303 templates/accounts/register.html:560
+msgid "Пароль"
+msgstr ""
+
+#: accounts/forms.py:123 accounts/forms.py:262 accounts/models.py:137
+#: accounts/models.py:227 healthcare/forms.py:55 healthcare/forms.py:191
+#: healthcare/models.py:67
+msgid "Отчество"
+msgstr ""
+
+#: accounts/forms.py:126 accounts/models.py:141 healthcare/forms.py:62
+#: healthcare/forms.py:198 healthcare/models.py:75
+msgid "Фото"
+msgstr ""
+
+#: accounts/forms.py:127 accounts/models.py:142 healthcare/forms.py:63
+#: healthcare/forms.py:199 healthcare/models.py:76 writer/models.py:9
+msgid "Биография"
+msgstr ""
+
+#: accounts/forms.py:128 accounts/forms.py:267 accounts/models.py:81
+#: accounts/models.py:236
+msgid "Почему хотите стать писателем?"
+msgstr ""
+
+#: accounts/forms.py:129 accounts/forms.py:268 accounts/models.py:82
+#: accounts/models.py:146 accounts/models.py:237
+msgid "Опыт в журналистике"
+msgstr ""
+
+#: accounts/forms.py:130 accounts/forms.py:269 accounts/models.py:147
+#: accounts/models.py:238
+msgid "Годы опыта"
+msgstr ""
+
+#: accounts/forms.py:131 accounts/forms.py:270 accounts/models.py:148
+#: accounts/models.py:239 consultant/models.py:24 healthcare/forms.py:56
+#: healthcare/forms.py:192 healthcare/models.py:68
+#: templates/consultant/consultant_detail.html:406
+#: templates/writer/dashboard.html:100 writer/models.py:10
+msgid "Специализация"
+msgstr ""
+
+#: accounts/forms.py:132 accounts/forms.py:271 accounts/models.py:149
+#: accounts/models.py:240 healthcare/forms.py:201 healthcare/models.py:88
+#: support/models.py:22
+msgid "Языки"
+msgstr ""
+
+#: accounts/forms.py:139 healthcare/forms.py:213
+msgid "Текущий пароль"
+msgstr ""
+
+#: accounts/forms.py:143 healthcare/forms.py:217
+msgid "Новый пароль"
+msgstr ""
+
+#: accounts/forms.py:147 healthcare/forms.py:221
+msgid "Подтвердите новый пароль"
+msgstr ""
+
+#: accounts/forms.py:157 accounts/forms.py:316 healthcare/forms.py:231
+#: healthcare_requests/forms.py:57
+msgid "Пароли не совпадают"
+msgstr ""
+
+#: accounts/forms.py:177 healthcare_requests/models.py:33
+msgid "Город"
+msgstr ""
+
+#: accounts/forms.py:178 accounts/models.py:75
+msgid "Место работы"
+msgstr ""
+
+#: accounts/forms.py:179 accounts/forms.py:225 accounts/models.py:30
+#: accounts/models.py:73 support/models.py:17
+msgid "Дата рождения"
+msgstr ""
+
+#: accounts/forms.py:181 accounts/models.py:76
+msgid "Фотография профиля"
+msgstr ""
+
+#: accounts/forms.py:189
+msgid "Размер файла не должен превышать 5MB."
+msgstr ""
+
+#: accounts/forms.py:194
+msgid "Поддерживаются только файлы изображений (JPEG, PNG, GIF, WebP)."
+msgstr ""
+
+#: accounts/forms.py:203 accounts/models.py:78
+msgid "Код семьи"
+msgstr ""
+
+#: accounts/forms.py:223
+msgid "Имя ребенка"
+msgstr ""
+
+#: accounts/forms.py:224 accounts/models.py:31
+msgid "Пол"
+msgstr ""
+
+#: accounts/forms.py:232 healthcare_requests/forms.py:14
+msgid "Подтвердите пароль"
+msgstr ""
+
+#: accounts/forms.py:234
+msgid "Введите пароль еще раз для подтверждения"
+msgstr ""
+
+#: accounts/forms.py:265 accounts/models.py:232
+#: healthcare_requests/forms.py:120 healthcare_requests/models.py:36
+msgid "Логин"
+msgstr ""
+
+#: accounts/forms.py:288
+msgid ""
+"Логин для входа в систему. Может содержать только буквы, цифры и символы @/./"
+"+/-/_"
+msgstr ""
+
+#: accounts/forms.py:289 accounts/forms.py:319
+msgid "Пароль должен содержать минимум 8 символов"
+msgstr ""
+
+#: accounts/forms.py:297 healthcare_requests/forms.py:65
+msgid "Пользователь с таким логином уже существует"
+msgstr ""
+
+#: accounts/forms.py:305
+msgid "Заявка с таким логином уже подана"
+msgstr ""
+
+#: accounts/models.py:10
+msgid "Название семьи"
+msgstr ""
+
+#: accounts/models.py:15 accounts/models.py:28 accounts/models.py:77
+#: forum/models.py:49 templates/tracker/dashboard.html:231
+msgid "Семья"
+msgstr ""
+
+#: accounts/models.py:16
+msgid "Семьи"
+msgstr ""
+
+#: accounts/models.py:24
+msgid "Мальчик"
+msgstr ""
+
+#: accounts/models.py:25
+msgid "Девочка"
+msgstr ""
+
+#: accounts/models.py:29 accounts/models.py:70
+msgid "Имя ребёнка"
+msgstr ""
+
+#: accounts/models.py:36 tracker/forms.py:19 tracker/forms.py:56
+#: tracker/forms.py:93 tracker/forms.py:132 tracker/forms.py:179
+#: tracker/models.py:10 tracker/models.py:30 tracker/models.py:59
+#: tracker/models.py:89 tracker/models.py:119
+msgid "Ребёнок"
+msgstr ""
+
+#: accounts/models.py:37
+msgid "Дети"
+msgstr ""
+
+#: accounts/models.py:58
+msgid "Мама"
+msgstr ""
+
+#: accounts/models.py:59
+msgid "Папа"
+msgstr ""
+
+#: accounts/models.py:63
+msgid "Родитель"
+msgstr ""
+
+#: accounts/models.py:64
+msgid "Писатель"
+msgstr ""
+
+#: accounts/models.py:68
+msgid "Тип пользователя"
+msgstr ""
+
+#: accounts/models.py:69
+msgid "Роль"
+msgstr ""
+
+#: accounts/models.py:71
+msgid "Дата рождения ребёнка"
+msgstr ""
+
+#: accounts/models.py:72
+msgid "Номер телефона"
+msgstr ""
+
+#: accounts/models.py:74
+msgid "Город проживания"
+msgstr ""
+
+#: accounts/models.py:83
+msgid "Сколько лет опыта?"
+msgstr ""
+
+#: accounts/models.py:88
+msgid "Профиль родителя"
+msgstr ""
+
+#: accounts/models.py:89
+msgid "Профили родителей"
+msgstr ""
+
+#: accounts/models.py:134 blog/models.py:88 blog/models.py:103
+#: blog/models.py:118 forum/models.py:166 forum/models.py:181
+#: forum/models.py:196 forum/models.py:211 forum/models.py:232
+#: forum/models.py:250 forum/models.py:267 forum/models.py:284
+#: forum/models.py:323 forum/models.py:413 healthcare/models.py:63
+#: healthcare/models.py:136 healthcare/models.py:162 notifications/admin.py:55
+#: notifications/models.py:120 support/models.py:9 support/models.py:150
+msgid "Пользователь"
+msgstr ""
+
+#: accounts/models.py:145
+msgid "Почему хочет стать писателем"
+msgstr ""
+
+#: accounts/models.py:152
+msgid "Количество статей"
+msgstr ""
+
+#: accounts/models.py:153
+msgid "Общее количество просмотров"
+msgstr ""
+
+#: accounts/models.py:154
+msgid "Общее время чтения (мин)"
+msgstr ""
+
+#: accounts/models.py:155 healthcare_requests/models.py:120
+msgid "Средний рейтинг"
+msgstr ""
+
+#: accounts/models.py:157 healthcare/models.py:79 notifications/models.py:173
+#: support/models.py:23
+msgid "Активен"
+msgstr ""
+
+#: accounts/models.py:158
+msgid "Одобрен"
+msgstr ""
+
+#: accounts/models.py:163 templates/writer/dashboard.html:96
+#: writer/models.py:19
+msgid "Профиль писателя"
+msgstr ""
+
+#: accounts/models.py:164 writer/models.py:20
+msgid "Профили писателей"
+msgstr ""
+
+#: accounts/models.py:219 templates/writer/dashboard.html:112
+msgid "На рассмотрении"
+msgstr ""
+
+#: accounts/models.py:220 blog/models.py:29 blog/models.py:33 blog/models.py:74
+msgid "Одобрено"
+msgstr ""
+
+#: accounts/models.py:221 blog/models.py:35
+msgid "Отклонено"
+msgstr ""
+
+#: accounts/models.py:243 blog/models.py:36 consultant/models.py:87
+#: forum/models.py:50 notifications/admin.py:33 support/models.py:74
+#: templates/writer/dashboard.html:108
+msgid "Статус"
+msgstr ""
+
+#: accounts/models.py:244 healthcare_requests/models.py:78
+msgid "Дата подачи"
+msgstr ""
+
+#: accounts/models.py:245
+msgid "Дата рассмотрения"
+msgstr ""
+
+#: accounts/models.py:246
+msgid "Рассмотрел"
+msgstr ""
+
+#: accounts/models.py:247 templates/blog/blog_detail.html:423
+msgid "Комментарии"
+msgstr ""
+
+#: accounts/models.py:250
+msgid "Заявка писателя"
+msgstr ""
+
+#: accounts/models.py:251
+msgid "Заявки писателей"
+msgstr ""
+
+#: accounts/views.py:20
+msgid "Регистрация успешна! Теперь вы можете войти в систему."
+msgstr ""
+
+#: accounts/views.py:63
+msgid "Профиль обновлен!"
+msgstr ""
+
+#: accounts/views.py:66 accounts/views.py:249 accounts/views.py:284
+msgid "Пожалуйста, исправьте ошибки в форме."
+msgstr ""
+
+#: accounts/views.py:83
+msgid "Профиль не найден. Сначала заполните профиль."
+msgstr ""
+
+#: accounts/views.py:92
+msgid "Вы уже подключены к этой семье."
+msgstr ""
+
+#: accounts/views.py:97
+msgid "Вы успешно подключились к семье!"
+msgstr ""
+
+#: accounts/views.py:115 accounts/views.py:144 accounts/views.py:173
+#: accounts/views.py:233 accounts/views.py:268 accounts/views.py:304
+msgid "Профиль не найден."
+msgstr ""
+
+#: accounts/views.py:123
+msgid "Вы отключились от семьи и создали новую."
+msgstr ""
+
+#: accounts/views.py:125 accounts/views.py:148 accounts/views.py:177
+#: accounts/views.py:237 accounts/views.py:272 accounts/views.py:308
+msgid "Вы не подключены к семье."
+msgstr ""
+
+#: accounts/views.py:133
+msgid "Вы успешно вышли из системы."
+msgstr ""
+
+#: accounts/views.py:246
+msgid "Ребёнок успешно добавлен!"
+msgstr ""
+
+#: accounts/views.py:281
+msgid "Информация о ребёнке обновлена!"
+msgstr ""
+
+#: accounts/views.py:316
+msgid "Ребёнок {} удален из семьи."
+msgstr ""
+
+#: accounts/views.py:345
+msgid "Новая заявка писателя"
+msgstr ""
+
+#: accounts/views.py:346
+msgid "Подана новая заявка на роль писателя от {}"
+msgstr ""
+
+#: accounts/views.py:356
+msgid "Заявка успешно отправлена! Мы рассмотрим её в ближайшее время."
+msgstr ""
+
+#: accounts/views.py:363
+msgid "Заявка на роль писателя"
+msgstr ""
+
+#: accounts/views.py:372
+msgid "Заявка отправлена"
+msgstr ""
+
+#: accounts/writer_views.py:57
+msgid "Добро пожаловать в дашборд писателя!"
+msgstr ""
+
+#: accounts/writer_views.py:60 healthcare/views.py:258
+#: healthcare_requests/views.py:110
+msgid "Ошибка аутентификации"
+msgstr ""
+
+#: accounts/writer_views.py:62 healthcare/views.py:260
+#: healthcare_requests/views.py:112
+msgid "Неверный пароль"
+msgstr ""
+
+#: accounts/writer_views.py:64
+msgid "Писатель с таким email не найден или неактивен"
+msgstr ""
+
+#: accounts/writer_views.py:70
+msgid "Вход для писателей"
+msgstr ""
+
+#: accounts/writer_views.py:79 accounts/writer_views.py:137
+#: accounts/writer_views.py:173 accounts/writer_views.py:216
+#: accounts/writer_views.py:246 accounts/writer_views.py:300
+#: accounts/writer_views.py:327
+msgid "Доступ запрещен. Только для писателей."
+msgstr ""
+
+#: accounts/writer_views.py:127 templates/base.html:382 templates/base.html:484
+#: templates/writer/dashboard.html:4 templates/writer/dashboard.html:36
+#: writer/models.py:43
+msgid "Дашборд писателя"
+msgstr ""
+
+#: accounts/writer_views.py:163
+msgid "Мои статьи"
+msgstr ""
+
+#: accounts/writer_views.py:196
+msgid "Статья отправлена на одобрение"
+msgstr ""
+
+#: accounts/writer_views.py:198
+msgid "Статья сохранена как черновик"
+msgstr ""
+
+#: accounts/writer_views.py:202
+msgid "Заполните все обязательные поля"
+msgstr ""
+
+#: accounts/writer_views.py:206
+msgid "Создать статью"
+msgstr ""
+
+#: accounts/writer_views.py:230 support/views.py:367
+msgid "Статья обновлена"
+msgstr ""
+
+#: accounts/writer_views.py:236
+msgid "Редактировать статью"
+msgstr ""
+
+#: accounts/writer_views.py:290 healthcare_requests/views.py:411
+msgid "Аналитика"
+msgstr ""
+
+#: accounts/writer_views.py:309 healthcare/views.py:396
+msgid "Профиль успешно обновлен"
+msgstr ""
+
+#: accounts/writer_views.py:317 healthcare/views.py:404
+msgid "Редактирование профиля"
+msgstr ""
+
+#: accounts/writer_views.py:341 healthcare/views.py:428
+msgid "Пароль успешно изменен"
+msgstr ""
+
+#: accounts/writer_views.py:344 healthcare/views.py:431
+msgid "Неверный текущий пароль"
+msgstr ""
+
+#: accounts/writer_views.py:351 healthcare/views.py:438
+msgid "Смена пароля"
+msgstr ""
+
+#: blog/forms.py:20 consultant/models.py:154 healthcare/forms.py:81
+#: healthcare/forms.py:111 healthcare/models.py:142 healthcare/models.py:168
+msgid "Комментарий"
+msgstr ""
+
+#: blog/models.py:8
+msgid "Для мамы"
+msgstr ""
+
+#: blog/models.py:9
+msgid "Для папы"
+msgstr ""
+
+#: blog/models.py:10 templates/blog/blog_detail.html:284
+#: templates/blog/blog_detail.html:395 templates/blog/blog_list.html:292
+msgid "Общие"
+msgstr ""
+
+#: blog/models.py:18 blog/models.py:70 forum/models.py:48 forum/models.py:129
+#: support/models.py:104
+msgid "Автор"
+msgstr ""
+
+#: blog/models.py:19 forum/models.py:45 healthcare_requests/models.py:192
+#: notifications/models.py:78 support/models.py:70 support/models.py:133
+msgid "Заголовок"
+msgstr ""
+
+#: blog/models.py:20 blog/models.py:71 consultant/models.py:127
+#: forum/models.py:46 forum/models.py:130 notifications/admin.py:26
+#: support/models.py:105 templates/forum/topic_create.html:195
+msgid "Содержание"
+msgstr ""
+
+#: blog/models.py:21 forum/models.py:55
+msgid "Просмотры"
+msgstr ""
+
+#: blog/models.py:22
+msgid "Количество просмотров"
+msgstr ""
+
+#: blog/models.py:23
+msgid "Время чтения (мин)"
+msgstr ""
+
+#: blog/models.py:24 forum/models.py:47 forum/models.py:268
+#: healthcare/forms.py:21 healthcare/models.py:26 support/models.py:72
+#: templates/blog/blog_list.html:234 templates/forum/topic_create.html:134
+msgid "Категория"
+msgstr ""
+
+#: blog/models.py:25 templates/blog/blog_list.html:248
+msgid "Язык"
+msgstr ""
+
+#: blog/models.py:26 blog/models.py:72 blog/models.py:89 blog/models.py:104
+#: blog/models.py:133 healthcare_requests/models.py:128
+#: healthcare_requests/models.py:196
+msgid "Дата создания"
+msgstr ""
+
+#: blog/models.py:27 blog/models.py:73 healthcare_requests/models.py:79
+#: healthcare_requests/models.py:129
+msgid "Дата обновления"
+msgstr ""
+
+#: blog/models.py:28 blog/models.py:34
+msgid "Опубликовано"
+msgstr ""
+
+#: blog/models.py:31 templates/writer/dashboard.html:138
+#: templates/writer/post_list.html:115
+msgid "Черновик"
+msgstr ""
+
+#: blog/models.py:32
+msgid "На одобрении"
+msgstr ""
+
+#: blog/models.py:39 support/models.py:85
+msgid "Статья блога"
+msgstr ""
+
+#: blog/models.py:40
+msgid "Статьи блога"
+msgstr ""
+
+#: blog/models.py:69 blog/models.py:87 blog/models.py:102 blog/models.py:117
+msgid "Статья"
+msgstr ""
+
+#: blog/models.py:77 notifications/models.py:37
+msgid "Комментарий к статье"
+msgstr ""
+
+#: blog/models.py:78
+msgid "Комментарии к статьям"
+msgstr ""
+
+#: blog/models.py:92
+msgid "Лайк статьи"
+msgstr ""
+
+#: blog/models.py:93
+msgid "Лайки статей"
+msgstr ""
+
+#: blog/models.py:107
+msgid "Дизлайк статьи"
+msgstr ""
+
+#: blog/models.py:108
+msgid "Дизлайки статей"
+msgstr ""
+
+#: blog/models.py:119
+msgid "Время просмотра (сек)"
+msgstr ""
+
+#: blog/models.py:120
+msgid "Прогресс чтения (%)"
+msgstr ""
+
+#: blog/models.py:121
+msgid "Возраст пользователя"
+msgstr ""
+
+#: blog/models.py:123
+msgid "Мужской"
+msgstr ""
+
+#: blog/models.py:124
+msgid "Женский"
+msgstr ""
+
+#: blog/models.py:125
+msgid "Другой"
+msgstr ""
+
+#: blog/models.py:126
+msgid "Пол пользователя"
+msgstr ""
+
+#: blog/models.py:127
+msgid "Город пользователя"
+msgstr ""
+
+#: blog/models.py:129
+msgid "Десктоп"
+msgstr ""
+
+#: blog/models.py:130
+msgid "Мобильный"
+msgstr ""
+
+#: blog/models.py:131
+msgid "Планшет"
+msgstr ""
+
+#: blog/models.py:132
+msgid "Тип устройства"
+msgstr ""
+
+#: blog/models.py:136
+msgid "Аналитика статьи"
+msgstr ""
+
+#: blog/models.py:137
+msgid "Аналитика статей"
+msgstr ""
+
+#: blog/views.py:70 templates/blog/blog_detail.html:440
+msgid "Для добавления комментария необходимо войти в систему."
+msgstr ""
+
+#: blog/views.py:81
+msgid "Комментарий добавлен!"
+msgstr ""
+
+#: consultant/forms.py:58
+msgid "Выберите врача"
+msgstr ""
+
+#: consultant/forms.py:72
+msgid "Размер файла не должен превышать 10MB"
+msgstr ""
+
+#: consultant/forms.py:78
+msgid "Разрешены только файлы: JPG, PNG, GIF, PDF, DOC, DOCX"
+msgstr ""
+
+#: consultant/forms.py:92
+msgid "Введите ваше сообщение..."
+msgstr ""
+
+#: consultant/forms.py:115
+msgid "Оставьте отзыв о консультации..."
+msgstr ""
+
+#: consultant/forms.py:127
+msgid "Все специализации"
+msgstr ""
+
+#: consultant/forms.py:136
+msgid "Минимальный опыт (лет)"
+msgstr ""
+
+#: consultant/forms.py:144
+msgid "Максимальная стоимость"
+msgstr ""
+
+#: consultant/forms.py:152
+msgid "Поиск по имени или специализации..."
+msgstr ""
+
+#: consultant/models.py:10
+msgid "Педиатр"
+msgstr ""
+
+#: consultant/models.py:11
+msgid "Невролог"
+msgstr ""
+
+#: consultant/models.py:12
+msgid "Диетолог"
+msgstr ""
+
+#: consultant/models.py:13
+msgid "Детский психолог"
+msgstr ""
+
+#: consultant/models.py:14
+msgid "Консультант по грудному вскармливанию"
+msgstr ""
+
+#: consultant/models.py:15
+msgid "Консультант по сну"
+msgstr ""
+
+#: consultant/models.py:16
+msgid "Специалист по развитию"
+msgstr ""
+
+#: consultant/models.py:17 support/models.py:67 tracker/models.py:70
+msgid "Другое"
+msgstr ""
+
+#: consultant/models.py:26
+msgid "Номер лицензии"
+msgstr ""
+
+#: consultant/models.py:27 healthcare/forms.py:57 healthcare/forms.py:193
+#: healthcare/models.py:69 writer/models.py:11
+msgid "Опыт работы (лет)"
+msgstr ""
+
+#: consultant/models.py:28 healthcare/forms.py:58 healthcare/forms.py:194
+#: healthcare/models.py:70 templates/consultant/consultant_detail.html:325
+msgid "Образование"
+msgstr ""
+
+#: consultant/models.py:29 support/models.py:15
+msgid "О себе"
+msgstr ""
+
+#: consultant/models.py:34
+msgid "Стоимость консультации"
+msgstr ""
+
+#: consultant/models.py:36 healthcare/forms.py:206 healthcare/models.py:84
+msgid "Доступен для консультаций"
+msgstr ""
+
+#: consultant/models.py:37 templates/writer/dashboard.html:110
+#: writer/models.py:14
+msgid "Верифицирован"
+msgstr ""
+
+#: consultant/models.py:38 healthcare/models.py:34 healthcare/models.py:77
+#: templates/consultant/consultant_detail.html:293
+msgid "Рейтинг"
+msgstr ""
+
+#: consultant/models.py:39 healthcare_requests/models.py:114
+msgid "Всего консультаций"
+msgstr ""
+
+#: consultant/models.py:44
+msgid "Профиль консультанта"
+msgstr ""
+
+#: consultant/models.py:45
+msgid "Профили консультантов"
+msgstr ""
+
+#: consultant/models.py:58 templates/consultant/consultation_list.html:67
+msgid "Ожидает ответа"
+msgstr ""
+
+#: consultant/models.py:59 templates/consultant/consultation_list.html:71
+msgid "В процессе"
+msgstr ""
+
+#: consultant/models.py:60 templates/consultant/consultation_list.html:75
+msgid "Завершена"
+msgstr ""
+
+#: consultant/models.py:61 templates/consultant/consultation_list.html:79
+msgid "Отменена"
+msgstr ""
+
+#: consultant/models.py:65 templates/consultant/consultation_list.html:92
+msgid "Низкая"
+msgstr ""
+
+#: consultant/models.py:66 templates/consultant/consultation_list.html:90
+msgid "Средняя"
+msgstr ""
+
+#: consultant/models.py:67 templates/consultant/consultation_list.html:88
+msgid "Высокая"
+msgstr ""
+
+#: consultant/models.py:68 templates/consultant/consultation_list.html:86
+msgid "Срочно"
+msgstr ""
+
+#: consultant/models.py:75 templates/consultant/consultation_form.html:319
+msgid "Тема консультации"
+msgstr ""
+
+#: consultant/models.py:76 templates/consultant/consultation_form.html:315
+msgid "Описание проблемы"
+msgstr ""
+
+#: consultant/models.py:81
+msgid "Срочность"
+msgstr ""
+
+#: consultant/models.py:89 templates/consultant/consultation_form.html:331
+msgid "Возраст ребенка (месяцы)"
+msgstr ""
+
+#: consultant/models.py:90
+msgid "Симптомы"
+msgstr ""
+
+#: consultant/models.py:91 templates/consultant/consultation_form.html:348
+msgid "Медицинская история"
+msgstr ""
+
+#: consultant/models.py:96 templates/consultant/consultation_form.html:356
+msgid "Документы и анализы"
+msgstr ""
+
+#: consultant/models.py:103 healthcare/views.py:377
+#: templates/consultant/consultant_detail.html:369
+msgid "Консультация"
+msgstr ""
+
+#: consultant/models.py:104 healthcare_requests/views.py:350
+#: templates/base.html:359
+msgid "Консультации"
+msgstr ""
+
+#: consultant/models.py:114 forum/models.py:374
+msgid "Вопрос"
+msgstr ""
+
+#: consultant/models.py:115
+msgid "Ответ"
+msgstr ""
+
+#: consultant/models.py:116
+msgid "Уточнение"
+msgstr ""
+
+#: consultant/models.py:125
+msgid "Тип сообщения"
+msgstr ""
+
+#: consultant/models.py:128 forum/models.py:236
+#: healthcare_requests/models.py:195 notifications/models.py:86
+#: support/models.py:135
+msgid "Прочитано"
+msgstr ""
+
+#: consultant/models.py:133
+msgid "Вложения"
+msgstr ""
+
+#: consultant/models.py:138
+msgid "Сообщение консультации"
+msgstr ""
+
+#: consultant/models.py:139
+msgid "Сообщения консультаций"
+msgstr ""
+
+#: consultant/models.py:152 healthcare/forms.py:79 healthcare/forms.py:109
+#: healthcare/models.py:139 healthcare/models.py:165
+msgid "Оценка"
+msgstr ""
+
+#: consultant/models.py:158
+msgid "Отзыв о консультации"
+msgstr ""
+
+#: consultant/models.py:159
+msgid "Отзывы о консультациях"
+msgstr ""
+
+#: consultant/models.py:167 forum/models.py:10 healthcare/forms.py:22
+#: healthcare/models.py:27
+msgid "Название"
+msgstr ""
+
+#: consultant/models.py:168 forum/models.py:11 healthcare/forms.py:23
+#: healthcare/models.py:28 support/models.py:71
+msgid "Описание"
+msgstr ""
+
+#: consultant/models.py:169 forum/models.py:12 healthcare/models.py:11
+msgid "Иконка"
+msgstr ""
+
+#: consultant/models.py:170 forum/models.py:15 forum/models.py:51
+#: forum/models.py:253 forum/models.py:270
+msgid "Активна"
+msgstr ""
+
+#: consultant/models.py:174
+msgid "Категория консультаций"
+msgstr ""
+
+#: consultant/models.py:175
+msgid "Категории консультаций"
+msgstr ""
+
+#: consultant/views.py:108 consultant/views.py:317
+msgid "У вас нет профиля консультанта"
+msgstr ""
+
+#: consultant/views.py:115
+msgid "Профиль консультанта обновлен!"
+msgstr ""
+
+#: consultant/views.py:216
+msgid "Консультация создана! Врач получит уведомление."
+msgstr ""
+
+#: consultant/views.py:243
+msgid "Сообщение отправлено!"
+msgstr ""
+
+#: consultant/views.py:261
+msgid "Отзыв можно оставить только после завершения консультации"
+msgstr ""
+
+#: consultant/views.py:266
+msgid "Вы уже оставили отзыв по этой консультации"
+msgstr ""
+
+#: consultant/views.py:285
+msgid "Отзыв добавлен! Спасибо за обратную связь."
+msgstr ""
+
+#: consultant/views.py:304
+msgid "Консультация отмечена как завершенная"
+msgstr ""
+
+#: consultant/views.py:306
+msgid "Консультация уже завершена или отменена"
+msgstr ""
+
+#: forum/forms.py:12
+msgid "Теги через запятую (например: вопрос, помощь, ребенок)"
+msgstr ""
+
+#: forum/forms.py:15
+msgid "Введите теги через запятую для лучшей категоризации"
+msgstr ""
+
+#: forum/forms.py:24
+msgid "Введите заголовок темы..."
+msgstr ""
+
+#: forum/forms.py:30
+msgid "Опишите вашу тему подробно..."
+msgstr ""
+
+#: forum/forms.py:44
+msgid "Выберите категорию..."
+msgstr ""
+
+#: forum/forms.py:49
+msgid "Заголовок должен содержать минимум 5 символов."
+msgstr ""
+
+#: forum/forms.py:55
+msgid "Содержание должно содержать минимум 10 символов."
+msgstr ""
+
+#: forum/forms.py:69
+msgid "Напишите ваше сообщение..."
+msgstr ""
+
+#: forum/forms.py:82
+msgid "Сообщение должно содержать минимум 3 символа."
+msgstr ""
+
+#: forum/forms.py:93
+msgid "Поиск по темам..."
+msgstr ""
+
+#: forum/forms.py:94 templates/writer/post_list.html:58
+msgid "Поиск"
+msgstr ""
+
+#: forum/forms.py:101 templates/blog/blog_list.html:237
+msgid "Все категории"
+msgstr ""
+
+#: forum/forms.py:109 templates/writer/post_list.html:51
+msgid "Все статусы"
+msgstr ""
+
+#: forum/forms.py:110
+msgid "Открытые"
+msgstr ""
+
+#: forum/forms.py:111
+msgid "Закрытые"
+msgstr ""
+
+#: forum/forms.py:112
+msgid "Закрепленные"
+msgstr ""
+
+#: forum/forms.py:130 healthcare/models.py:9
+msgid "Название категории"
+msgstr ""
+
+#: forum/forms.py:135
+msgid "Описание категории"
+msgstr ""
+
+#: forum/forms.py:140
+msgid "Bootstrap Icons класс (например: bi-chat-dots)"
+msgstr ""
+
+#: forum/forms.py:159
+msgid "Название должно содержать минимум 2 символа."
+msgstr ""
+
+#: forum/forms.py:165
+msgid "Иконка должна начинаться с \"bi-\" (Bootstrap Icons)."
+msgstr ""
+
+#: forum/forms.py:178
+msgid "Введите вопрос для опроса..."
+msgstr ""
+
+#: forum/forms.py:203
+msgid "Вариант ответа..."
+msgstr ""
+
+#: forum/forms.py:227
+msgid "Заблокировать тему"
+msgstr ""
+
+#: forum/forms.py:228
+msgid "Разблокировать тему"
+msgstr ""
+
+#: forum/forms.py:229
+msgid "Закрепить тему"
+msgstr ""
+
+#: forum/forms.py:230
+msgid "Открепить тему"
+msgstr ""
+
+#: forum/forms.py:231
+msgid "Закрыть тему"
+msgstr ""
+
+#: forum/forms.py:232
+msgid "Открыть тему"
+msgstr ""
+
+#: forum/forms.py:233
+msgid "Скрыть сообщение"
+msgstr ""
+
+#: forum/forms.py:234
+msgid "Показать сообщение"
+msgstr ""
+
+#: forum/forms.py:246
+msgid "Причина модерации (необязательно)..."
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:17
+#: forum/management/commands/create_sample_forum_data.py:140
+msgid "Здоровье ребенка"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:18
+msgid "Вопросы здоровья, развития, болезней и лечения детей"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:24
+#: forum/management/commands/create_sample_forum_data.py:110
+#: forum/management/commands/create_sample_forum_data.py:122
+msgid "Питание и кормление"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:25
+msgid "Грудное вскармливание, прикорм, детское питание"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:31
+#: forum/management/commands/create_sample_forum_data.py:128
+#: forum/management/commands/create_sample_forum_data.py:152
+msgid "Развитие и воспитание"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:32
+msgid "Физическое и психическое развитие, воспитательные вопросы"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:38
+#: forum/management/commands/create_sample_forum_data.py:116
+msgid "Сон и режим"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:39
+msgid "Налаживание сна, режим дня, проблемы со сном"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:45
+#: forum/management/commands/create_sample_forum_data.py:146
+msgid "Игрушки и развлечения"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:46
+msgid "Выбор игрушек, развивающие игры, развлечения"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:52
+#: forum/management/commands/create_sample_forum_data.py:134
+msgid "Безопасность"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:53
+msgid "Безопасность дома, на улице, в путешествиях"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:108
+#: forum/management/commands/create_sample_forum_data.py:187
+#: forum/management/commands/create_sample_forum_data.py:192
+msgid "Ребенок не хочет есть овощи"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:109
+msgid ""
+"Моему сыну 2 года, и он категорически отказывается есть любые овощи. "
+"Пробовали разные способы приготовления, но ничего не помогает. Может быть, у "
+"кого-то есть проверенные рецепты или советы?"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:114
+#: forum/management/commands/create_sample_forum_data.py:197
+msgid "Проблемы со сном у 8-месячного ребенка"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:115
+msgid ""
+"Дочка просыпается каждые 2-3 часа ночью и требует грудь. Днем спит только на "
+"руках. Уже не знаю, что делать. Помогите советом!"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:120
+#: forum/management/commands/create_sample_forum_data.py:202
+msgid "Когда начинать прикорм?"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:121
+msgid ""
+"Педиатр говорит начинать в 6 месяцев, а бабушка настаивает на 4. Ребенку "
+"сейчас 5 месяцев, он на ГВ. Когда лучше начать и с чего?"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:126
+#: forum/management/commands/create_sample_forum_data.py:207
+msgid "Ребенок не говорит в 2 года"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:127
+msgid ""
+"Сыну 2 года и 3 месяца, а он говорит только несколько слов. Сверстники уже "
+"строят предложения. Стоит ли беспокоиться?"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:132
+#: forum/management/commands/create_sample_forum_data.py:212
+msgid "Как обезопасить квартиру для малыша?"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:133
+msgid ""
+"Ребенок начал ползать и везде лезет. Какие меры безопасности нужно принять? "
+"Что купить в первую очередь?"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:138
+#: forum/management/commands/create_sample_forum_data.py:217
+msgid "Температура 38.5 у ребенка"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:139
+msgid ""
+"У дочки поднялась температура 38.5, больше никаких симптомов нет. Стоит ли "
+"вызывать врача или можно подождать?"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:144
+#: forum/management/commands/create_sample_forum_data.py:222
+msgid "Какие игрушки выбрать для 1 года?"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:145
+msgid ""
+"Сыну скоро год, хочу подарить развивающие игрушки. Что посоветуете? Какие "
+"действительно полезны для развития?"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:150
+msgid "Ребенок кусается в детском саду"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:151
+msgid ""
+"Воспитатель жалуется, что мой сын кусает других детей. Дома такого не "
+"замечала. Как отучить?"
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:188
+msgid ""
+"Попробуйте делать овощные пюре с фруктами. Мой сын ел морковное пюре с "
+"яблоком."
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:193
+msgid ""
+"А мы делали овощи в виде фигурок - морковные звездочки, огурчики-кружочки. "
+"Детям нравится играть с едой."
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:198
+msgid ""
+"У нас была похожая ситуация. Помогло введение ритуала перед сном и "
+"постепенное отучение от засыпания на руках."
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:203
+msgid ""
+"ВОЗ рекомендует начинать прикорм в 6 месяцев. Начните с овощных пюре - "
+"кабачок, брокколи."
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:208
+msgid ""
+"Не паникуйте! Мальчики часто начинают говорить позже. Но консультация "
+"логопеда не помешает."
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:213
+msgid ""
+"Обязательно: заглушки на розетки, блокировка дверей, защита углов, ворота "
+"безопасности."
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:218
+msgid ""
+"При такой температуре лучше вызвать врача, особенно если ребенку меньше 3 "
+"лет."
+msgstr ""
+
+#: forum/management/commands/create_sample_forum_data.py:223
+msgid ""
+"Кубики, пирамидки, сортеры, музыкальные игрушки. Главное - безопасность и "
+"соответствие возрасту."
+msgstr ""
+
+#: forum/models.py:13 healthcare/models.py:12
+msgid "Цвет"
+msgstr ""
+
+#: forum/models.py:14
+msgid "Порядок"
+msgstr ""
+
+#: forum/models.py:20
+msgid "Категория форума"
+msgstr ""
+
+#: forum/models.py:21
+msgid "Категории форума"
+msgstr ""
+
+#: forum/models.py:40 templates/forum/topic_detail.html:128
+msgid "Открыта"
+msgstr ""
+
+#: forum/models.py:41 templates/forum/topic_detail.html:130
+msgid "Закрыта"
+msgstr ""
+
+#: forum/models.py:42 forum/models.py:52 templates/forum/topic_detail.html:132
+msgid "Закреплена"
+msgstr ""
+
+#: forum/models.py:53
+msgid "Заблокирована"
+msgstr ""
+
+#: forum/models.py:54
+msgid "Объявление"
+msgstr ""
+
+#: forum/models.py:56 forum/models.py:133
+msgid "Лайки"
+msgstr ""
+
+#: forum/models.py:57 forum/models.py:139
+msgid "Сообщения"
+msgstr ""
+
+#: forum/models.py:58 templates/forum/topic_create.html:151
+msgid "Теги"
+msgstr ""
+
+#: forum/models.py:62
+msgid "Последнее сообщение"
+msgstr ""
+
+#: forum/models.py:65 forum/models.py:128 forum/models.py:165
+#: forum/models.py:195 forum/models.py:234 forum/models.py:251
+#: forum/models.py:326 forum/models.py:357 forum/models.py:373
+msgid "Тема"
+msgstr ""
+
+#: forum/models.py:66
+msgid "Темы"
+msgstr ""
+
+#: forum/models.py:131
+msgid "Ответ на сообщение"
+msgstr ""
+
+#: forum/models.py:132 templates/forum/topic_detail.html:192
+#: templates/forum/topic_detail.html:213
+msgid "Решение"
+msgstr ""
+
+#: forum/models.py:138 forum/models.py:180 forum/models.py:210
+#: forum/models.py:235 forum/models.py:327 forum/models.py:358
+#: healthcare_requests/models.py:193 notifications/models.py:79
+#: support/models.py:134
+msgid "Сообщение"
+msgstr ""
+
+#: forum/models.py:170
+msgid "Лайк темы"
+msgstr ""
+
+#: forum/models.py:171
+msgid "Лайки тем"
+msgstr ""
+
+#: forum/models.py:185
+msgid "Лайк сообщения"
+msgstr ""
+
+#: forum/models.py:186
+msgid "Лайки сообщений"
+msgstr ""
+
+#: forum/models.py:200
+msgid "Дизлайк темы"
+msgstr ""
+
+#: forum/models.py:201
+msgid "Дизлайки тем"
+msgstr ""
+
+#: forum/models.py:215
+msgid "Дизлайк сообщения"
+msgstr ""
+
+#: forum/models.py:216
+msgid "Дизлайки сообщений"
+msgstr ""
+
+#: forum/models.py:226
+msgid "Новое сообщение"
+msgstr ""
+
+#: forum/models.py:227
+msgid "Тема понравилась"
+msgstr ""
+
+#: forum/models.py:228
+msgid "Сообщение понравилось"
+msgstr ""
+
+#: forum/models.py:229 forum/models.py:319
+msgid "Отмечено как решение"
+msgstr ""
+
+#: forum/models.py:233 healthcare_requests/models.py:190
+#: notifications/models.py:75 notifications/models.py:162 support/models.py:132
+msgid "Тип уведомления"
+msgstr ""
+
+#: forum/models.py:240
+msgid "Уведомление форума"
+msgstr ""
+
+#: forum/models.py:241
+msgid "Уведомления форума"
+msgstr ""
+
+#: forum/models.py:252 forum/models.py:269
+msgid "Дата подписки"
+msgstr ""
+
+#: forum/models.py:256
+msgid "Подписка на тему"
+msgstr ""
+
+#: forum/models.py:257
+msgid "Подписки на темы"
+msgstr ""
+
+#: forum/models.py:273
+msgid "Подписка на категорию"
+msgstr ""
+
+#: forum/models.py:274
+msgid "Подписки на категории"
+msgstr ""
+
+#: forum/models.py:285
+msgid "Очки репутации"
+msgstr ""
+
+#: forum/models.py:286
+msgid "Уровень"
+msgstr ""
+
+#: forum/models.py:291
+msgid "Репутация пользователя"
+msgstr ""
+
+#: forum/models.py:292
+msgid "Репутация пользователей"
+msgstr ""
+
+#: forum/models.py:315
+msgid "Лайк за сообщение"
+msgstr ""
+
+#: forum/models.py:316
+msgid "Дизлайк за сообщение"
+msgstr ""
+
+#: forum/models.py:317
+msgid "Лайк за тему"
+msgstr ""
+
+#: forum/models.py:318
+msgid "Дизлайк за тему"
+msgstr ""
+
+#: forum/models.py:320
+msgid "Полезное сообщение"
+msgstr ""
+
+#: forum/models.py:324 forum/models.py:355
+msgid "Тип действия"
+msgstr ""
+
+#: forum/models.py:325
+msgid "Очки"
+msgstr ""
+
+#: forum/models.py:331
+msgid "Действие репутации"
+msgstr ""
+
+#: forum/models.py:332
+msgid "Действия репутации"
+msgstr ""
+
+#: forum/models.py:342
+msgid "Тема заблокирована"
+msgstr ""
+
+#: forum/models.py:343
+msgid "Тема разблокирована"
+msgstr ""
+
+#: forum/models.py:344
+msgid "Тема закреплена"
+msgstr ""
+
+#: forum/models.py:345
+msgid "Тема откреплена"
+msgstr ""
+
+#: forum/models.py:346
+msgid "Тема закрыта"
+msgstr ""
+
+#: forum/models.py:347
+msgid "Тема открыта"
+msgstr ""
+
+#: forum/models.py:348
+msgid "Сообщение скрыто"
+msgstr ""
+
+#: forum/models.py:349
+msgid "Сообщение показано"
+msgstr ""
+
+#: forum/models.py:350
+msgid "Пользователь предупрежден"
+msgstr ""
+
+#: forum/models.py:351
+msgid "Пользователь забанен"
+msgstr ""
+
+#: forum/models.py:354
+msgid "Модератор"
+msgstr ""
+
+#: forum/models.py:356
+msgid "Причина"
+msgstr ""
+
+#: forum/models.py:359
+msgid "Целевой пользователь"
+msgstr ""
+
+#: forum/models.py:363
+msgid "Действие модерации"
+msgstr ""
+
+#: forum/models.py:364
+msgid "Действия модерации"
+msgstr ""
+
+#: forum/models.py:375
+msgid "Множественный выбор"
+msgstr ""
+
+#: forum/models.py:376
+msgid "Анонимный"
+msgstr ""
+
+#: forum/models.py:377
+msgid "Истекает"
+msgstr ""
+
+#: forum/models.py:381 forum/models.py:396 forum/models.py:411
+msgid "Опрос"
+msgstr ""
+
+#: forum/models.py:382
+msgid "Опросы"
+msgstr ""
+
+#: forum/models.py:397
+msgid "Текст варианта"
+msgstr ""
+
+#: forum/models.py:398
+msgid "Количество голосов"
+msgstr ""
+
+#: forum/models.py:401
+msgid "Вариант ответа"
+msgstr ""
+
+#: forum/models.py:402
+msgid "Варианты ответов"
+msgstr ""
+
+#: forum/models.py:412
+msgid "Вариант"
+msgstr ""
+
+#: forum/models.py:417
+msgid "Голос"
+msgstr ""
+
+#: forum/models.py:418
+msgid "Голоса"
+msgstr ""
+
+#: forum/views.py:140
+msgid "Необходимо войти в систему для создания сообщений."
+msgstr ""
+
+#: forum/views.py:153
+msgid "Нельзя отвечать на сообщение из другой темы."
+msgstr ""
+
+#: forum/views.py:166
+msgid "Сообщение успешно добавлено!"
+msgstr ""
+
+#: forum/views.py:169
+msgid "Ошибка при создании сообщения."
+msgstr ""
+
+#: forum/views.py:206
+msgid "Тема успешно создана!"
+msgstr ""
+
+#: forum/views.py:226
+msgid "Тема успешно обновлена!"
+msgstr ""
+
+#: forum/views.py:244
+msgid "Тема успешно удалена!"
+msgstr ""
+
+#: forum/views.py:259
+msgid "Сообщение успешно обновлено!"
+msgstr ""
+
+#: forum/views.py:282
+msgid "Сообщение успешно удалено!"
+msgstr ""
+
+#: healthcare/forms.py:24 healthcare/models.py:29
+#: healthcare_requests/models.py:32 support/models.py:18
+#: templates/healthcare/facility_detail.html:184
+#: templates/healthcare/index.html:554
+msgid "Адрес"
+msgstr ""
+
+#: healthcare/forms.py:27 healthcare/models.py:32
+#: templates/healthcare/facility_detail.html:207
+#: templates/healthcare/facility_detail.html:332 writer/models.py:12
+msgid "Веб-сайт"
+msgstr ""
+
+#: healthcare/forms.py:28 healthcare/forms.py:200 healthcare/models.py:33
+#: healthcare/models.py:87 templates/healthcare/facility_detail.html:221
+msgid "Часы работы"
+msgstr ""
+
+#: healthcare/forms.py:52 healthcare/models.py:41 healthcare/models.py:62
+#: healthcare/models.py:161
+msgid "Медицинское учреждение"
+msgstr ""
+
+#: healthcare/forms.py:59 healthcare/forms.py:195 healthcare/models.py:71
+msgid "Квалификации"
+msgstr ""
+
+#: healthcare/forms.py:80 healthcare/forms.py:110 healthcare/models.py:141
+#: healthcare/models.py:167
+msgid "Заголовок отзыва"
+msgstr ""
+
+#: healthcare/forms.py:82 healthcare/forms.py:112 healthcare/models.py:143
+#: healthcare/models.py:169
+msgid "Дата посещения"
+msgstr ""
+
+#: healthcare/forms.py:83 healthcare/forms.py:113 healthcare/models.py:144
+#: healthcare/models.py:170
+msgid "Анонимный отзыв"
+msgstr ""
+
+#: healthcare/forms.py:202 healthcare/models.py:89
+msgid "Награды и достижения"
+msgstr ""
+
+#: healthcare/forms.py:203 healthcare/models.py:90
+msgid "Публикации"
+msgstr ""
+
+#: healthcare/forms.py:204 healthcare/models.py:82
+msgid "Цена консультации (сом)"
+msgstr ""
+
+#: healthcare/forms.py:205 healthcare/models.py:83
+msgid "Длительность консультации (мин)"
+msgstr ""
+
+#: healthcare/models.py:10
+msgid "URL-адрес"
+msgstr ""
+
+#: healthcare/models.py:11
+msgid "Bootstrap Icons класс"
+msgstr ""
+
+#: healthcare/models.py:12
+msgid "Bootstrap цвет класс"
+msgstr ""
+
+#: healthcare/models.py:13
+msgid "Порядок сортировки"
+msgstr ""
+
+#: healthcare/models.py:16
+msgid "Категория медицинского учреждения"
+msgstr ""
+
+#: healthcare/models.py:17
+msgid "Категории медицинских учреждений"
+msgstr ""
+
+#: healthcare/models.py:35 healthcare/models.py:78
+msgid "Количество отзывов"
+msgstr ""
+
+#: healthcare/models.py:36 healthcare_requests/models.py:124
+msgid "Активно"
+msgstr ""
+
+#: healthcare/models.py:42 templates/base.html:369
+#: templates/healthcare/index.html:4 templates/healthcare/index.html:451
+#: templates/home.html:33
+msgid "Медицинские учреждения"
+msgstr ""
+
+#: healthcare/models.py:64
+msgid "Консультант"
+msgstr ""
+
+#: healthcare/models.py:96 healthcare/models.py:135
+#: templates/healthcare/doctor_detail.html:4
+msgid "Врач"
+msgstr ""
+
+#: healthcare/models.py:97 templates/healthcare/doctor_list.html:4
+#: templates/healthcare/doctor_list.html:92
+#: templates/healthcare/facility_detail.html:233
+msgid "Врачи"
+msgstr ""
+
+#: healthcare/models.py:145 healthcare/models.py:171
+msgid "Проверен"
+msgstr ""
+
+#: healthcare/models.py:150
+msgid "Отзыв о враче"
+msgstr ""
+
+#: healthcare/models.py:151
+msgid "Отзывы о врачах"
+msgstr ""
+
+#: healthcare/models.py:176
+msgid "Отзыв о медицинском учреждении"
+msgstr ""
+
+#: healthcare/models.py:177
+msgid "Отзывы о медицинских учреждениях"
+msgstr ""
+
+#: healthcare/views.py:118
+msgid "Вы уже оставляли отзыв об этом враче."
+msgstr ""
+
+#: healthcare/views.py:129 healthcare/views.py:162
+msgid "Отзыв успешно добавлен!"
+msgstr ""
+
+#: healthcare/views.py:151
+msgid "Вы уже оставляли отзыв об этом учреждении."
+msgstr ""
+
+#: healthcare/views.py:198
+msgid "Медицинское учреждение успешно добавлено!"
+msgstr ""
+
+#: healthcare/views.py:209
+msgid "Врач успешно добавлен!"
+msgstr ""
+
+#: healthcare/views.py:255
+msgid "Добро пожаловать в дашборд врача!"
+msgstr ""
+
+#: healthcare/views.py:262
+msgid "Врач с таким email не найден или неактивен"
+msgstr ""
+
+#: healthcare/views.py:268
+msgid "Вход для врачей"
+msgstr ""
+
+#: healthcare/views.py:277 healthcare/views.py:324 healthcare/views.py:357
+#: healthcare/views.py:387 healthcare/views.py:414
+msgid "Доступ запрещен. Только для врачей."
+msgstr ""
+
+#: healthcare/views.py:314
+msgid "Дашборд врача"
+msgstr ""
+
+#: healthcare/views.py:347 templates/consultant/consultant_detail.html:461
+#: templates/consultant/consultation_list.html:4
+#: templates/consultant/consultation_list.html:12
+msgid "Мои консультации"
+msgstr ""
+
+#: healthcare/views.py:371
+msgid "Ответ отправлен пациенту"
+msgstr ""
+
+#: healthcare_requests/forms.py:72
+msgid "Пользователь с таким email уже существует"
+msgstr ""
+
+#: healthcare_requests/forms.py:80
+msgid "Размер файла не должен превышать 5MB"
+msgstr ""
+
+#: healthcare_requests/forms.py:86
+msgid "Разрешены только файлы: PDF, JPG, PNG"
+msgstr ""
+
+#: healthcare_requests/forms.py:102
+msgid "Введите заметки по заявке..."
+msgstr ""
+
+#: healthcare_requests/forms.py:118
+msgid "Логин учреждения"
+msgstr ""
+
+#: healthcare_requests/models.py:11
+msgid "Ожидает рассмотрения"
+msgstr ""
+
+#: healthcare_requests/models.py:12
+msgid "Одобрена"
+msgstr ""
+
+#: healthcare_requests/models.py:13
+msgid "Отклонена"
+msgstr ""
+
+#: healthcare_requests/models.py:14
+msgid "Требует доработки"
+msgstr ""
+
+#: healthcare_requests/models.py:18
+msgid "Название учреждения"
+msgstr ""
+
+#: healthcare_requests/models.py:22
+msgid "Тип учреждения"
+msgstr ""
+
+#: healthcare_requests/models.py:24
+msgid "Описание учреждения"
+msgstr ""
+
+#: healthcare_requests/models.py:27
+msgid "Контактное лицо"
+msgstr ""
+
+#: healthcare_requests/models.py:42
+#: templates/consultant/consultant_detail.html:443
+msgid "Лицензия"
+msgstr ""
+
+#: healthcare_requests/models.py:43
+msgid "Загрузите копию лицензии на медицинскую деятельность"
+msgstr ""
+
+#: healthcare_requests/models.py:49
+msgid "Дополнительные документы"
+msgstr ""
+
+#: healthcare_requests/models.py:57
+msgid "Статус заявки"
+msgstr ""
+
+#: healthcare_requests/models.py:61
+msgid "Заметки администратора"
+msgstr ""
+
+#: healthcare_requests/models.py:69
+msgid "Обработано администратором"
+msgstr ""
+
+#: healthcare_requests/models.py:74
+msgid "Дата обработки"
+msgstr ""
+
+#: healthcare_requests/models.py:82
+msgid "Заявка медицинского учреждения"
+msgstr ""
+
+#: healthcare_requests/models.py:83
+msgid "Заявки медицинских учреждений"
+msgstr ""
+
+#: healthcare_requests/models.py:109 healthcare_requests/models.py:184
+#: healthcare_requests/views.py:260 support/models.py:62 support/models.py:83
+msgid "Заявка учреждения"
+msgstr ""
+
+#: healthcare_requests/models.py:113
+msgid "Всего врачей"
+msgstr ""
+
+#: healthcare_requests/models.py:115
+msgid "Всего отзывов"
+msgstr ""
+
+#: healthcare_requests/models.py:125 support/models.py:163
+msgid "Последняя активность"
+msgstr ""
+
+#: healthcare_requests/models.py:132 healthcare_requests/views.py:178
+msgid "Дашборд учреждения"
+msgstr ""
+
+#: healthcare_requests/models.py:133
+msgid "Дашборды учреждений"
+msgstr ""
+
+#: healthcare_requests/models.py:173 healthcare_requests/views.py:233
+#: support/views.py:227
+msgid "Заявка одобрена"
+msgstr ""
+
+#: healthcare_requests/models.py:174 healthcare_requests/views.py:233
+#: support/views.py:231
+msgid "Заявка отклонена"
+msgstr ""
+
+#: healthcare_requests/models.py:175
+#: templates/consultant/consultation_form.html:5
+#: templates/consultant/consultation_form.html:232
+#: templates/consultant/consultation_list.html:29
+msgid "Новая консультация"
+msgstr ""
+
+#: healthcare_requests/models.py:176
+msgid "Новый отзыв"
+msgstr ""
+
+#: healthcare_requests/models.py:177 notifications/models.py:11
+msgid "Обновление системы"
+msgstr ""
+
+#: healthcare_requests/models.py:199
+msgid "Уведомление учреждения"
+msgstr ""
+
+#: healthcare_requests/models.py:200
+msgid "Уведомления учреждений"
+msgstr ""
+
+#: healthcare_requests/views.py:31
+msgid "Заявка подана"
+msgstr ""
+
+#: healthcare_requests/views.py:32
+msgid ""
+"Ваша заявка на добавление в каталог успешно подана. Мы рассмотрим её в "
+"ближайшее время."
+msgstr ""
+
+#: healthcare_requests/views.py:35
+msgid "Заявка успешно подана! Мы рассмотрим её в ближайшее время."
+msgstr ""
+
+#: healthcare_requests/views.py:42
+msgid "Подача заявки"
+msgstr ""
+
+#: healthcare_requests/views.py:60
+msgid "Вы успешно вышли из системы"
+msgstr ""
+
+#: healthcare_requests/views.py:107
+msgid "Добро пожаловать в дашборд учреждения!"
+msgstr ""
+
+#: healthcare_requests/views.py:114
+msgid "Учреждение с таким логином не найдено или не одобрено"
+msgstr ""
+
+#: healthcare_requests/views.py:120
+msgid "Вход для учреждения"
+msgstr ""
+
+#: healthcare_requests/views.py:138 healthcare_requests/views.py:292
+#: healthcare_requests/views.py:328 healthcare_requests/views.py:370
+#: healthcare_requests/views.py:431
+msgid "Учреждение не найдено или не одобрено"
+msgstr ""
+
+#: healthcare_requests/views.py:210
+msgid "Управление заявками"
+msgstr ""
+
+#: healthcare_requests/views.py:234
+msgid "Ваша заявка была одобрена. Теперь вы можете войти в систему."
+msgstr ""
+
+#: healthcare_requests/views.py:234
+msgid "Ваша заявка была отклонена."
+msgstr ""
+
+#: healthcare_requests/views.py:252
+msgid "Заявка обновлена"
+msgstr ""
+
+#: healthcare_requests/views.py:308
+msgid "Управление врачами"
+msgstr ""
+
+#: healthcare_requests/views.py:453 notifications/models.py:98
+msgid "Уведомления"
+msgstr ""
+
+#: notifications/admin.py:23 notifications/admin.py:94 support/admin.py:14
+#: support/admin.py:32
+msgid "Основная информация"
+msgstr ""
+
+#: notifications/admin.py:29 support/admin.py:38
+msgid "Связанные объекты"
+msgstr ""
+
+#: notifications/admin.py:36 notifications/admin.py:73
+#: notifications/admin.py:103 support/admin.py:17 support/admin.py:43
+msgid "Временные метки"
+msgstr ""
+
+#: notifications/admin.py:58
+msgid "Email уведомления"
+msgstr ""
+
+#: notifications/admin.py:64
+msgid "Push уведомления"
+msgstr ""
+
+#: notifications/admin.py:70
+msgid "Настройки"
+msgstr ""
+
+#: notifications/admin.py:97
+msgid "Шаблоны"
+msgstr ""
+
+#: notifications/admin.py:100
+msgid "Настройки отправки"
+msgstr ""
+
+#: notifications/models.py:10
+msgid "Системное объявление"
+msgstr ""
+
+#: notifications/models.py:12
+msgid "Техническое обслуживание"
+msgstr ""
+
+#: notifications/models.py:15
+msgid "Запрос на консультацию"
+msgstr ""
+
+#: notifications/models.py:16
+msgid "Консультация принята"
+msgstr ""
+
+#: notifications/models.py:17
+msgid "Консультация отклонена"
+msgstr ""
+
+#: notifications/models.py:18
+msgid "Консультация завершена"
+msgstr ""
+
+#: notifications/models.py:19
+msgid "Сообщение в консультации"
+msgstr ""
+
+#: notifications/models.py:22
+msgid "Ответ в теме форума"
+msgstr ""
+
+#: notifications/models.py:23
+msgid "Создана новая тема"
+msgstr ""
+
+#: notifications/models.py:24
+msgid "Тема отмечена как решение"
+msgstr ""
+
+#: notifications/models.py:25 support/views.py:304
+msgid "Тема удалена"
+msgstr ""
+
+#: notifications/models.py:28
+msgid "Оставлен отзыв"
+msgstr ""
+
+#: notifications/models.py:29 support/views.py:644
+msgid "Отзыв одобрен"
+msgstr ""
+
+#: notifications/models.py:30
+msgid "Отзыв удален"
+msgstr ""
+
+#: notifications/models.py:31
+msgid "Ответ на отзыв"
+msgstr ""
+
+#: notifications/models.py:34
+msgid "Опубликована статья блога"
+msgstr ""
+
+#: notifications/models.py:35
+msgid "Статья блога одобрена"
+msgstr ""
+
+#: notifications/models.py:36
+msgid "Статья блога отклонена"
+msgstr ""
+
+#: notifications/models.py:40
+msgid "Подана заявка писателя"
+msgstr ""
+
+#: notifications/models.py:41
+msgid "Заявка писателя одобрена"
+msgstr ""
+
+#: notifications/models.py:42
+msgid "Заявка писателя отклонена"
+msgstr ""
+
+#: notifications/models.py:45
+msgid "Новый отзыв об учреждении"
+msgstr ""
+
+#: notifications/models.py:46
+msgid "Новый отзыв о враче"
+msgstr ""
+
+#: notifications/models.py:47
+msgid "Новая запись к врачу"
+msgstr ""
+
+#: notifications/models.py:48
+msgid "Заявка учреждения одобрена"
+msgstr ""
+
+#: notifications/models.py:49
+msgid "Заявка учреждения отклонена"
+msgstr ""
+
+#: notifications/models.py:52
+msgid "Достигнута веха развития"
+msgstr ""
+
+#: notifications/models.py:53
+msgid "Подошло время прививки"
+msgstr ""
+
+#: notifications/models.py:54
+msgid "Напоминание о приеме"
+msgstr ""
+
+#: notifications/models.py:57
+msgid "Создан тикет техподдержки"
+msgstr ""
+
+#: notifications/models.py:58 support/models.py:123
+msgid "Тикет обновлен"
+msgstr ""
+
+#: notifications/models.py:59 support/models.py:124
+msgid "Тикет решен"
+msgstr ""
+
+#: notifications/models.py:64 support/models.py:47
+msgid "Низкий"
+msgstr ""
+
+#: notifications/models.py:65
+msgid "Обычный"
+msgstr ""
+
+#: notifications/models.py:66 support/models.py:49
+msgid "Высокий"
+msgstr ""
+
+#: notifications/models.py:67 support/models.py:50
+msgid "Срочный"
+msgstr ""
+
+#: notifications/models.py:72 support/models.py:131
+msgid "Получатель"
+msgstr ""
+
+#: notifications/models.py:73
+msgid "Отправитель"
+msgstr ""
+
+#: notifications/models.py:76 support/models.py:73
+msgid "Приоритет"
+msgstr ""
+
+#: notifications/models.py:82
+msgid "ID связанного объекта"
+msgstr ""
+
+#: notifications/models.py:83
+msgid "Тип связанного объекта"
+msgstr ""
+
+#: notifications/models.py:87
+msgid "Email отправлен"
+msgstr ""
+
+#: notifications/models.py:90 notifications/models.py:149
+#: notifications/models.py:174
+msgid "Создано"
+msgstr ""
+
+#: notifications/models.py:91
+msgid "Прочитано в"
+msgstr ""
+
+#: notifications/models.py:94
+msgid "Дополнительные данные"
+msgstr ""
+
+#: notifications/models.py:97
+msgid "Уведомление"
+msgstr ""
+
+#: notifications/models.py:123
+msgid "Email уведомления включены"
+msgstr ""
+
+#: notifications/models.py:124
+msgid "Email о консультациях"
+msgstr ""
+
+#: notifications/models.py:125
+msgid "Email о форуме"
+msgstr ""
+
+#: notifications/models.py:126
+msgid "Email об отзывах"
+msgstr ""
+
+#: notifications/models.py:127
+msgid "Email о блоге"
+msgstr ""
+
+#: notifications/models.py:128
+msgid "Email системные"
+msgstr ""
+
+#: notifications/models.py:129
+msgid "Email о трекере"
+msgstr ""
+
+#: notifications/models.py:132
+msgid "Push уведомления включены"
+msgstr ""
+
+#: notifications/models.py:133
+msgid "Push о консультациях"
+msgstr ""
+
+#: notifications/models.py:134
+msgid "Push о форуме"
+msgstr ""
+
+#: notifications/models.py:135
+msgid "Push об отзывах"
+msgstr ""
+
+#: notifications/models.py:136
+msgid "Push о блоге"
+msgstr ""
+
+#: notifications/models.py:137
+msgid "Push системные"
+msgstr ""
+
+#: notifications/models.py:138
+msgid "Push о трекере"
+msgstr ""
+
+#: notifications/models.py:142
+msgid "Немедленно"
+msgstr ""
+
+#: notifications/models.py:143
+msgid "Каждый час"
+msgstr ""
+
+#: notifications/models.py:144
+msgid "Ежедневно"
+msgstr ""
+
+#: notifications/models.py:145
+msgid "Еженедельно"
+msgstr ""
+
+#: notifications/models.py:146
+msgid "Никогда"
+msgstr ""
+
+#: notifications/models.py:147
+msgid "Частота уведомлений"
+msgstr ""
+
+#: notifications/models.py:150 notifications/models.py:175
+#: templates/blog/blog_detail.html:321
+msgid "Обновлено"
+msgstr ""
+
+#: notifications/models.py:153 notifications/models.py:154
+msgid "Настройки уведомлений"
+msgstr ""
+
+#: notifications/models.py:163
+msgid "Шаблон заголовка"
+msgstr ""
+
+#: notifications/models.py:164
+msgid "Шаблон сообщения"
+msgstr ""
+
+#: notifications/models.py:167
+msgid "Отправлять email"
+msgstr ""
+
+#: notifications/models.py:168
+msgid "Отправлять push"
+msgstr ""
+
+#: notifications/models.py:171
+msgid "Приоритет по умолчанию"
+msgstr ""
+
+#: notifications/models.py:178
+msgid "Шаблон уведомления"
+msgstr ""
+
+#: notifications/models.py:179
+msgid "Шаблоны уведомлений"
+msgstr ""
+
+#: support/admin.py:35
+msgid "Назначение"
+msgstr ""
+
+#: support/models.py:10
+msgid "ID сотрудника"
+msgstr ""
+
+#: support/models.py:11
+msgid "Отдел"
+msgstr ""
+
+#: support/models.py:14
+msgid "Должность"
+msgstr ""
+
+#: support/models.py:16
+msgid "Аватар"
+msgstr ""
+
+#: support/models.py:19
+msgid "Контакт для экстренных случаев"
+msgstr ""
+
+#: support/models.py:20
+msgid "Телефон экстренного контакта"
+msgstr ""
+
+#: support/models.py:21
+msgid "Навыки и компетенции"
+msgstr ""
+
+#: support/models.py:24
+msgid "Руководитель команды"
+msgstr ""
+
+#: support/models.py:25 support/models.py:88 support/models.py:107
+#: support/models.py:137
+msgid "Создан"
+msgstr ""
+
+#: support/models.py:26 support/models.py:89
+msgid "Обновлен"
+msgstr ""
+
+#: support/models.py:29 templates/base.html:472
+msgid "Профиль техподдержки"
+msgstr ""
+
+#: support/models.py:30
+msgid "Профили техподдержки"
+msgstr ""
+
+#: support/models.py:48
+msgid "Средний"
+msgstr ""
+
+#: support/models.py:54
+msgid "Открыт"
+msgstr ""
+
+#: support/models.py:55
+msgid "В работе"
+msgstr ""
+
+#: support/models.py:56 support/models.py:90
+msgid "Решен"
+msgstr ""
+
+#: support/models.py:57
+msgid "Закрыт"
+msgstr ""
+
+#: support/models.py:61
+msgid "Спорный вопрос врач-родитель"
+msgstr ""
+
+#: support/models.py:63
+msgid "Модерация форума"
+msgstr ""
+
+#: support/models.py:64
+msgid "Одобрение статей блога"
+msgstr ""
+
+#: support/models.py:65
+msgid "Добавление авторов блога"
+msgstr ""
+
+#: support/models.py:66
+msgid "Модерация отзывов"
+msgstr ""
+
+#: support/models.py:77
+msgid "Создан пользователем"
+msgstr ""
+
+#: support/models.py:78
+msgid "Назначен"
+msgstr ""
+
+#: support/models.py:81
+msgid "Связанный врач"
+msgstr ""
+
+#: support/models.py:82
+msgid "Связанный родитель"
+msgstr ""
+
+#: support/models.py:84
+msgid "Пост форума"
+msgstr ""
+
+#: support/models.py:93
+msgid "Тикет техподдержки"
+msgstr ""
+
+#: support/models.py:94
+msgid "Тикеты техподдержки"
+msgstr ""
+
+#: support/models.py:103
+msgid "Тикет"
+msgstr ""
+
+#: support/models.py:106
+msgid "Внутренний комментарий"
+msgstr ""
+
+#: support/models.py:110
+msgid "Комментарий тикета"
+msgstr ""
+
+#: support/models.py:111
+msgid "Комментарии тикетов"
+msgstr ""
+
+#: support/models.py:121
+msgid "Новый тикет"
+msgstr ""
+
+#: support/models.py:122 support/views.py:193
+msgid "Тикет назначен"
+msgstr ""
+
+#: support/models.py:125
+msgid "Новая заявка учреждения"
+msgstr ""
+
+#: support/models.py:126
+msgid "Жалоба на форум"
+msgstr ""
+
+#: support/models.py:127
+msgid "Статья на одобрение"
+msgstr ""
+
+#: support/models.py:128
+msgid "Жалоба на отзыв"
+msgstr ""
+
+#: support/models.py:136
+msgid "Связанный тикет"
+msgstr ""
+
+#: support/models.py:140
+msgid "Уведомление техподдержки"
+msgstr ""
+
+#: support/models.py:141
+msgid "Уведомления техподдержки"
+msgstr ""
+
+#: support/models.py:153
+msgid "Показывать открытые тикеты"
+msgstr ""
+
+#: support/models.py:154
+msgid "Показывать высокий приоритет"
+msgstr ""
+
+#: support/models.py:155
+msgid "Показывать мои тикеты"
+msgstr ""
+
+#: support/models.py:156
+msgid "Показывать заявки учреждений"
+msgstr ""
+
+#: support/models.py:157
+msgid "Показывать жалобы форума"
+msgstr ""
+
+#: support/models.py:158
+msgid "Показывать одобрения блога"
+msgstr ""
+
+#: support/models.py:161
+msgid "Решенных тикетов"
+msgstr ""
+
+#: support/models.py:162
+msgid "Среднее время решения"
+msgstr ""
+
+#: support/models.py:166 templates/base.html:475
+msgid "Дашборд техподдержки"
+msgstr ""
+
+#: support/models.py:167
+msgid "Дашборды техподдержки"
+msgstr ""
+
+#: support/views.py:176
+msgid "Комментарий добавлен"
+msgstr ""
+
+#: support/views.py:178
+msgid "Ошибка при добавлении комментария"
+msgstr ""
+
+#: support/views.py:195
+msgid "Ошибка при назначении тикета"
+msgstr ""
+
+#: support/views.py:263
+msgid "Пост отмечен как решение"
+msgstr ""
+
+#: support/views.py:274
+msgid "Пост удален"
+msgstr ""
+
+#: support/views.py:289
+msgid "Пост обновлен"
+msgstr ""
+
+#: support/views.py:322
+msgid "Тема обновлена"
+msgstr ""
+
+#: support/views.py:353
+msgid "Статья одобрена"
+msgstr ""
+
+#: support/views.py:386
+msgid "Статья удалена"
+msgstr ""
+
+#: support/views.py:449
+msgid "Настройки сохранены"
+msgstr ""
+
+#: support/views.py:498
+msgid "Профиль обновлен"
+msgstr ""
+
+#: support/views.py:586
+msgid "Отзыв удален. Пользователю отправлено уведомление с причиной."
+msgstr ""
+
+#: support/views.py:623
+msgid "Отзыв обновлен"
+msgstr ""
+
+#: support/views.py:754
+msgid ""
+"Заявка одобрена. Профиль писателя создан. Пользователь может войти с "
+"логином: {}"
+msgstr ""
+
+#: support/views.py:793
+msgid "Заявка отклонена."
+msgstr ""
+
+#: templates/accounts/login.html:5
+msgid "Вход"
+msgstr ""
+
+#: templates/accounts/login.html:293 templates/accounts/login.html:295
+#: templates/accounts/register.html:521 templates/writer/dashboard.html:99
+msgid "Имя пользователя"
+msgstr ""
+
+#: templates/accounts/login.html:309
+msgid "Войти в аккаунт"
+msgstr ""
+
+#: templates/accounts/login.html:350
+msgid "Нет аккаунта?"
+msgstr ""
+
+#: templates/accounts/login.html:353 templates/accounts/register.html:632
+msgid "Создать аккаунт"
+msgstr ""
+
+#: templates/accounts/logout.html:4
+msgid "Выход"
+msgstr ""
+
+#: templates/accounts/logout.html:12
+msgid "Вы вышли из системы"
+msgstr ""
+
+#: templates/accounts/logout.html:13
+msgid "Спасибо за использование familyway +!"
+msgstr ""
+
+#: templates/accounts/logout.html:16
+msgid "Войти снова"
+msgstr ""
+
+#: templates/accounts/logout.html:19
+msgid "На главную"
+msgstr ""
+
+#: templates/accounts/register.html:5 templates/base.html:501
+#: templates/blog/blog_detail.html:446
+msgid "Регистрация"
+msgstr ""
+
+#: templates/accounts/register.html:458
+msgid "Регистрация для родителей"
+msgstr ""
+
+#: templates/accounts/register.html:461
+msgid "Создайте аккаунт и начните отслеживать развитие вашего ребенка"
+msgstr ""
+
+#: templates/accounts/register.html:497
+msgid "Регистрация родителя"
+msgstr ""
+
+#: templates/accounts/register.html:498
+msgid "Создайте аккаунт для отслеживания развития вашего ребенка"
+msgstr ""
+
+#: templates/accounts/register.html:539
+msgid "Email адрес"
+msgstr ""
+
+#: templates/accounts/register.html:578
+msgid "Подтверждение пароля"
+msgstr ""
+
+#: templates/accounts/register.html:639
+msgid "Уже есть аккаунт?"
+msgstr ""
+
+#: templates/accounts/register.html:640
+msgid "Войти в систему"
+msgstr ""
+
+#: templates/base.html:349
+msgid "Главная"
+msgstr ""
+
+#: templates/base.html:354 templates/blog/blog_list.html:4
+msgid "Блог"
+msgstr ""
+
+#: templates/base.html:364 templates/forum/category_detail.html:4
+#: templates/forum/index.html:4 templates/forum/topic_create.html:4
+#: templates/forum/topic_detail.html:4
+msgid "Форум"
+msgstr ""
+
+#: templates/base.html:375 templates/tracker/dashboard.html:4
+#: templates/tracker/growth_list.html:4
+msgid "Трекер"
+msgstr ""
+
+#: templates/base.html:389
+msgid "Техподдержка"
+msgstr ""
+
+#: templates/base.html:479
+msgid "Профиль"
+msgstr ""
+
+#: templates/base.html:489
+msgid "Выйти"
+msgstr ""
+
+#: templates/base.html:496 templates/blog/blog_detail.html:443
+msgid "Войти"
+msgstr ""
+
+#: templates/blog/blog_detail.html:280 templates/blog/blog_detail.html:389
+#: templates/blog/blog_list.html:179 templates/blog/blog_list.html:288
+msgid "Для мам"
+msgstr ""
+
+#: templates/blog/blog_detail.html:282 templates/blog/blog_detail.html:392
+#: templates/blog/blog_list.html:182 templates/blog/blog_list.html:290
+msgid "Для пап"
+msgstr ""
+
+#: templates/blog/blog_detail.html:299 templates/forum/topic_detail.html:145
+#: templates/writer/post_list.html:103
+msgid "просмотров"
+msgstr ""
+
+#: templates/blog/blog_detail.html:324
+msgid "Назад к блогу"
+msgstr ""
+
+#: templates/blog/blog_detail.html:334
+msgid "Убрать лайк"
+msgstr ""
+
+#: templates/blog/blog_detail.html:334
+msgid "Поставить лайк"
+msgstr ""
+
+#: templates/blog/blog_detail.html:341
+msgid "Убрать дизлайк"
+msgstr ""
+
+#: templates/blog/blog_detail.html:341
+msgid "Поставить дизлайк"
+msgstr ""
+
+#: templates/blog/blog_detail.html:346
+msgid "Войдите в систему, чтобы поставить лайк"
+msgstr ""
+
+#: templates/blog/blog_detail.html:350
+msgid "Войдите в систему, чтобы поставить дизлайк"
+msgstr ""
+
+#: templates/blog/blog_detail.html:365
+#: templates/consultant/consultant_detail.html:453
+#: templates/consultant/consultation_list.html:25
+#: templates/healthcare/facility_detail.html:318
+#: templates/tracker/dashboard.html:255
+msgid "Быстрые действия"
+msgstr ""
+
+#: templates/blog/blog_detail.html:369
+msgid "Консультация врача"
+msgstr ""
+
+#: templates/blog/blog_detail.html:372 templates/home.html:30
+msgid "Мой трекер"
+msgstr ""
+
+#: templates/blog/blog_detail.html:375
+msgid "Все статьи"
+msgstr ""
+
+#: templates/blog/blog_detail.html:385 templates/blog/blog_list.html:208
+#: templates/healthcare/index.html:473
+msgid "Категории"
+msgstr ""
+
+#: templates/blog/blog_detail.html:405
+msgid "Нужна помощь?"
+msgstr ""
+
+#: templates/blog/blog_detail.html:408
+msgid "Если у вас есть вопросы по статье или нужна персональная консультация"
+msgstr ""
+
+#: templates/blog/blog_detail.html:411
+msgid "Задать вопрос врачу"
+msgstr ""
+
+#: templates/blog/blog_detail.html:434
+msgid "Добавить комментарий"
+msgstr ""
+
+#: templates/blog/blog_detail.html:486 templates/forum/topic_detail.html:223
+#: templates/writer/post_list.html:92
+msgid "Удалить"
+msgstr ""
+
+#: templates/blog/blog_detail.html:496
+msgid "Пока нет комментариев. Будьте первым!"
+msgstr ""
+
+#: templates/blog/blog_detail.html:582
+msgid "Вы уверены, что хотите удалить этот комментарий?"
+msgstr ""
+
+#: templates/blog/blog_detail.html:597
+msgid "Ошибка при удалении комментария"
+msgstr ""
+
+#: templates/blog/blog_list.html:172
+msgid "Блог для родителей"
+msgstr ""
+
+#: templates/blog/blog_list.html:175
+msgid ""
+"Полезные статьи, советы экспертов и практические рекомендации для заботливых "
+"мам и пап"
+msgstr ""
+
+#: templates/blog/blog_list.html:185
+msgid "Общие советы"
+msgstr ""
+
+#: templates/blog/blog_list.html:204
+msgid "Статей"
+msgstr ""
+
+#: templates/blog/blog_list.html:212
+msgid "Языка"
+msgstr ""
+
+#: templates/blog/blog_list.html:216
+msgid "Доступ"
+msgstr ""
+
+#: templates/blog/blog_list.html:229
+msgid "Фильтры и поиск"
+msgstr ""
+
+#: templates/blog/blog_list.html:251
+msgid "Все языки"
+msgstr ""
+
+#: templates/blog/blog_list.html:263
+msgid "Найти"
+msgstr ""
+
+#: templates/blog/blog_list.html:319
+msgid "Читать"
+msgstr ""
+
+#: templates/blog/blog_list.html:331
+msgid "Статьи не найдены"
+msgstr ""
+
+#: templates/blog/blog_list.html:332
+msgid "Попробуйте изменить фильтры или загляните позже"
+msgstr ""
+
+#: templates/blog/blog_list.html:334
+msgid "Сбросить фильтры"
+msgstr ""
+
+#: templates/blog/blog_list.html:345 templates/tracker/growth_list.html:75
+#: templates/writer/post_list.html:127
+msgid "Навигация по страницам"
+msgstr ""
+
+#: templates/blog/blog_list.html:367 templates/forum/topic_detail.html:257
+#: templates/healthcare/doctor_list.html:184
+#: templates/healthcare/index.html:597 templates/tracker/growth_list.html:92
+msgid "Страница"
+msgstr ""
+
+#: templates/blog/blog_list.html:367
+#: templates/consultant/consultation_list.html:148
+#: templates/forum/topic_detail.html:257
+#: templates/healthcare/doctor_list.html:184
+#: templates/healthcare/index.html:597 templates/tracker/growth_list.html:92
+msgid "из"
+msgstr ""
+
+#: templates/blog/blog_list.html:402
+msgid "Нужна помощь с ребенком?"
+msgstr ""
+
+#: templates/blog/blog_list.html:405
+msgid "Получите профессиональную консультацию от опытных врачей"
+msgstr ""
+
+#: templates/blog/blog_list.html:408
+#: templates/consultant/consultation_list.html:32
+msgid "Найти консультанта"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:258
+#: templates/consultant/consultant_detail.html:380
+#: templates/consultant/consultant_detail.html:390
+msgid "Записаться на консультацию"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:262
+#: templates/consultant/consultant_detail.html:385
+msgid "Недоступен"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:281
+msgid "Лет опыта"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:287
+msgid "Консультаций"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:302
+#: templates/consultant/consultant_detail.html:431
+msgid "Бесплатно"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:305
+#: templates/consultant/consultant_detail.html:426
+msgid "Стоимость"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:315
+msgid "О консультанте"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:335
+msgid "Отзывы пациентов"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:375
+msgid "Доступен"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:378
+msgid "Получите профессиональную консультацию"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:388
+msgid "Консультант временно недоступен"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:398
+msgid "Информация"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:416
+#: templates/writer/dashboard.html:107
+msgid "Опыт работы"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:417
+#: templates/writer/dashboard.html:107
+msgid "лет"
+msgstr ""
+
+#: templates/consultant/consultant_detail.html:458
+msgid "К списку консультантов"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:234
+msgid "Опишите вашу проблему и получите профессиональную консультацию"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:264
+msgid "лет опыта"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:268
+msgid "рейтинг"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:272
+msgid "отзывов"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:291
+msgid "за консультацию"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:295
+msgid "Бесплатная консультация"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:323
+msgid "Подробное описание"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:327
+msgid "Уровень срочности"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:339
+msgid "Дополнительная информация"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:341
+msgid "Эта информация поможет врачу лучше понять ситуацию"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:344
+msgid "Симптомы ребенка"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:358
+msgid ""
+"Прикрепите фото анализов, справки или другие документы (JPG, PNG, PDF, DOC, "
+"DOCX)"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:361
+msgid "Файлы"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:366
+msgid "Перетащите файлы сюда или нажмите для выбора"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:367
+msgid "Максимальный размер: 10MB"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:384
+#: templates/forum/topic_create.html:226 templates/tracker/growth_form.html:394
+#: templates/writer/post_confirm_delete.html:34
+msgid "Отмена"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:387
+msgid "Отправить консультацию"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:398
+msgid "Советы по написанию консультации"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:401
+msgid "Опишите проблему максимально подробно"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:402
+msgid "Укажите возраст ребенка и основные симптомы"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:403
+msgid "Добавьте информацию о предыдущих заболеваниях"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:404
+msgid "Выберите подходящий уровень срочности"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:405
+msgid "Врач ответит в течение 24 часов"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:466
+msgid "Неподдерживаемый тип файла"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:471
+msgid "Файл слишком большой"
+msgstr ""
+
+#: templates/consultant/consultation_form.html:471
+msgid "максимум 10MB"
+msgstr ""
+
+#: templates/consultant/consultation_list.html:14
+msgid "Управляйте своими консультациями с врачами"
+msgstr ""
+
+#: templates/consultant/consultation_list.html:98
+#: templates/healthcare/index.html:572 templates/tracker/dashboard.html:363
+msgid "Подробнее"
+msgstr ""
+
+#: templates/consultant/consultation_list.html:103
+msgid "Написать"
+msgstr ""
+
+#: templates/consultant/consultation_list.html:109
+msgid "Оценить"
+msgstr ""
+
+#: templates/consultant/consultation_list.html:122
+msgid "У вас пока нет консультаций"
+msgstr ""
+
+#: templates/consultant/consultation_list.html:123
+msgid "Создайте первую консультацию с врачом"
+msgstr ""
+
+#: templates/consultant/consultation_list.html:125
+msgid "Создать консультацию"
+msgstr ""
+
+#: templates/consultant/consultation_list.html:140
+#: templates/healthcare/doctor_list.html:175
+#: templates/healthcare/index.html:588
+msgid "Первая"
+msgstr ""
+
+#: templates/consultant/consultation_list.html:143
+#: templates/healthcare/doctor_list.html:178
+#: templates/healthcare/index.html:591
+msgid "Предыдущая"
+msgstr ""
+
+#: templates/consultant/consultation_list.html:153
+#: templates/healthcare/doctor_list.html:190
+#: templates/healthcare/index.html:603
+msgid "Следующая"
+msgstr ""
+
+#: templates/consultant/consultation_list.html:156
+#: templates/healthcare/doctor_list.html:193
+#: templates/healthcare/index.html:606
+msgid "Последняя"
+msgstr ""
+
+#: templates/forum/index.html:94
+msgid "Форум для родителей"
+msgstr ""
+
+#: templates/forum/index.html:97
+msgid ""
+"Общайтесь с другими родителями, делитесь опытом, задавайте вопросы и "
+"получайте поддержку"
+msgstr ""
+
+#: templates/forum/index.html:101
+msgid "Сообщество"
+msgstr ""
+
+#: templates/forum/index.html:104
+msgid "Поддержка"
+msgstr ""
+
+#: templates/forum/index.html:107
+msgid "Советы"
+msgstr ""
+
+#: templates/forum/index.html:126
+msgid "Тем обсуждения"
+msgstr ""
+
+#: templates/forum/index.html:130 templates/forum/index.html:182
+msgid "Сообщений"
+msgstr ""
+
+#: templates/forum/index.html:134
+msgid "Категорий"
+msgstr ""
+
+#: templates/forum/index.html:138
+msgid "Активность"
+msgstr ""
+
+#: templates/forum/index.html:150 templates/forum/topic_create.html:100
+msgid "Создать новую тему"
+msgstr ""
+
+#: templates/forum/index.html:178
+msgid "Тем"
+msgstr ""
+
+#: templates/forum/index.html:188
+msgid "Перейти"
+msgstr ""
+
+#: templates/forum/index.html:197
+msgid "Категории пока не созданы"
+msgstr ""
+
+#: templates/forum/index.html:198
+msgid "Обратитесь к администратору для создания категорий"
+msgstr ""
+
+#: templates/forum/index.html:211
+msgid "Последние темы"
+msgstr ""
+
+#: templates/forum/index.html:227
+msgid "сообщений"
+msgstr ""
+
+#: templates/forum/index.html:239
+msgid "Все темы"
+msgstr ""
+
+#: templates/forum/topic_create.html:4 templates/forum/topic_create.html:229
+msgid "Создать тему"
+msgstr ""
+
+#: templates/forum/topic_create.html:103
+msgid "Поделитесь своим опытом, задайте вопрос или начните обсуждение"
+msgstr ""
+
+#: templates/forum/topic_create.html:108
+msgid "К форуму"
+msgstr ""
+
+#: templates/forum/topic_create.html:121
+msgid "Информация о теме"
+msgstr ""
+
+#: templates/forum/topic_create.html:124
+msgid "Заполните все поля для создания новой темы обсуждения"
+msgstr ""
+
+#: templates/forum/topic_create.html:170
+msgid "Сделать объявлением"
+msgstr ""
+
+#: templates/forum/topic_create.html:173
+msgid "Объявления отображаются в верхней части форума"
+msgstr ""
+
+#: templates/forum/topic_create.html:178
+msgid "Заголовок темы"
+msgstr ""
+
+#: templates/forum/topic_create.html:182
+msgid "Опишите суть вашего вопроса или темы кратко и понятно"
+msgstr ""
+
+#: templates/forum/topic_create.html:199
+msgid ""
+"Подробно опишите вашу тему, задайте конкретные вопросы или поделитесь опытом"
+msgstr ""
+
+#: templates/forum/topic_create.html:213
+msgid "Советы для хорошей темы:"
+msgstr ""
+
+#: templates/forum/topic_create.html:216
+msgid "Используйте понятный и описательный заголовок"
+msgstr ""
+
+#: templates/forum/topic_create.html:217
+msgid "Опишите проблему или вопрос подробно"
+msgstr ""
+
+#: templates/forum/topic_create.html:218
+msgid "Укажите возраст ребенка, если это релевантно"
+msgstr ""
+
+#: templates/forum/topic_create.html:219
+msgid "Будьте вежливы и уважительны к другим участникам"
+msgstr ""
+
+#: templates/forum/topic_create.html:220
+msgid ""
+"Используйте поиск, чтобы убедиться, что похожая тема не создавалась ранее"
+msgstr ""
+
+#: templates/forum/topic_create.html:264
+msgid "Осталось символов"
+msgstr ""
+
+#: templates/forum/topic_detail.html:151
+msgid "К категории"
+msgstr ""
+
+#: templates/forum/topic_detail.html:155 templates/forum/topic_detail.html:220
+#: templates/writer/post_list.html:85 writer/views.py:140
+msgid "Редактировать"
+msgstr ""
+
+#: templates/forum/topic_detail.html:230
+msgid "Изменено"
+msgstr ""
+
+#: templates/forum/topic_detail.html:242
+msgid "Навигация по сообщениям"
+msgstr ""
+
+#: templates/forum/topic_detail.html:278
+msgid "Ответить в теме"
+msgstr ""
+
+#: templates/forum/topic_detail.html:288
+msgid "Отправить сообщение"
+msgstr ""
+
+#: templates/forum/topic_detail.html:297
+msgid "Войдите в систему"
+msgstr ""
+
+#: templates/forum/topic_detail.html:298
+msgid "чтобы участвовать в обсуждении"
+msgstr ""
+
+#: templates/forum/topic_detail.html:305
+msgid "Эта тема закрыта для новых сообщений"
+msgstr ""
+
+#: templates/forum/topic_detail.html:339
+msgid "Отметить это сообщение как решение?"
+msgstr ""
+
+#: templates/healthcare/doctor_list.html:95
+msgid "Найдите лучших врачей в медицинских учреждениях"
+msgstr ""
+
+#: templates/healthcare/doctor_list.html:101
+#: templates/healthcare/doctor_list.html:119
+#: templates/healthcare/index.html:513
+msgid "Все учреждения"
+msgstr ""
+
+#: templates/healthcare/doctor_list.html:113
+msgid "Фильтр по учреждениям"
+msgstr ""
+
+#: templates/healthcare/doctor_list.html:206
+msgid "Нет врачей"
+msgstr ""
+
+#: templates/healthcare/doctor_list.html:207
+msgid "Пока не добавлено ни одного врача"
+msgstr ""
+
+#: templates/healthcare/doctor_list.html:209
+msgid "Добавить врача"
+msgstr ""
+
+#: templates/healthcare/facility_detail.html:163
+#: templates/healthcare/facility_detail.html:323
+msgid "Оставить отзыв"
+msgstr ""
+
+#: templates/healthcare/facility_detail.html:178
+msgid "Информация об учреждении"
+msgstr ""
+
+#: templates/healthcare/facility_detail.html:278
+msgid "Отзывы"
+msgstr ""
+
+#: templates/healthcare/facility_detail.html:287
+msgid "Анонимный пользователь"
+msgstr ""
+
+#: templates/healthcare/facility_detail.html:327
+msgid "Позвонить"
+msgstr ""
+
+#: templates/healthcare/facility_detail.html:341
+msgid "Статистика"
+msgstr ""
+
+#: templates/healthcare/facility_detail.html:348
+msgid "Врачей"
+msgstr ""
+
+#: templates/healthcare/facility_detail.html:354
+msgid "Отзывов"
+msgstr ""
+
+#: templates/healthcare/index.html:454
+msgid "Найдите лучшие клиники, аптеки и больницы в вашем городе"
+msgstr ""
+
+#: templates/healthcare/index.html:476
+msgid "Выберите тип медицинского учреждения"
+msgstr ""
+
+#: templates/healthcare/index.html:501
+msgid "учреждений"
+msgstr ""
+
+#: templates/healthcare/index.html:619
+msgid "Нет медицинских учреждений"
+msgstr ""
+
+#: templates/healthcare/index.html:620
+msgid "Пока не добавлено ни одного медицинского учреждения"
+msgstr ""
+
+#: templates/home.html:4
+msgid "familyway + - Главная"
+msgstr ""
+
+#: templates/home.html:16
+msgid ""
+"Платформа для семей с детьми. Отслеживайте развитие ребенка, общайтесь с "
+"другими родителями и получайте консультации специалистов."
+msgstr ""
+
+#: templates/home.html:21
+msgid "Начать"
+msgstr ""
+
+#: templates/home.html:24 templates/home.html:36
+msgid "Читать блог"
+msgstr ""
+
+#: templates/home.html:52
+msgid "Возможности приложения"
+msgstr ""
+
+#: templates/home.html:53
+msgid "Все, что нужно для заботы о вашем ребенке"
+msgstr ""
+
+#: templates/home.html:64
+msgid "Отслеживание развития"
+msgstr ""
+
+#: templates/home.html:66
+msgid ""
+"Ведите дневник роста, веса, сна, кормления и других важных показателей "
+"развития вашего ребенка."
+msgstr ""
+
+#: templates/home.html:78
+msgid "Полезные статьи"
+msgstr ""
+
+#: templates/home.html:80
+msgid ""
+"Читайте статьи и советы от экспертов по воспитанию детей, разделенные по "
+"категориям для мам и пап."
+msgstr ""
+
+#: templates/home.html:92
+msgid "Персональный профиль"
+msgstr ""
+
+#: templates/home.html:94
+msgid ""
+"Создайте профиль родителя с информацией о вашем ребенке и получайте "
+"персонализированные рекомендации."
+msgstr ""
+
+#: templates/tracker/dashboard.html:222
+msgid "Трекер развития"
+msgstr ""
+
+#: templates/tracker/dashboard.html:225
+msgid "Отслеживайте развитие ваших детей и ведите подробную статистику"
+msgstr ""
+
+#: templates/tracker/dashboard.html:235
+msgid "Код"
+msgstr ""
+
+#: templates/tracker/dashboard.html:243
+msgid "Управление детьми"
+msgstr ""
+
+#: templates/tracker/dashboard.html:263 templates/tracker/growth_form.html:6
+msgid "Рост/Вес"
+msgstr ""
+
+#: templates/tracker/dashboard.html:264
+msgid "Записать измерения"
+msgstr ""
+
+#: templates/tracker/dashboard.html:272 templates/tracker/dashboard.html:345
+msgid "Сон"
+msgstr ""
+
+#: templates/tracker/dashboard.html:273
+msgid "Записать сон"
+msgstr ""
+
+#: templates/tracker/dashboard.html:281 templates/tracker/dashboard.html:353
+msgid "Кормление"
+msgstr ""
+
+#: templates/tracker/dashboard.html:282
+msgid "Записать кормление"
+msgstr ""
+
+#: templates/tracker/dashboard.html:290 templates/tracker/dashboard.html:349
+msgid "Плач"
+msgstr ""
+
+#: templates/tracker/dashboard.html:291
+msgid "Записать плач"
+msgstr ""
+
+#: templates/tracker/dashboard.html:302 templates/tracker/dashboard.html:357
+msgid "Прививки"
+msgstr ""
+
+#: templates/tracker/dashboard.html:303
+msgid "Записать прививку"
+msgstr ""
+
+#: templates/tracker/dashboard.html:313
+msgid "Мои дети"
+msgstr ""
+
+#: templates/tracker/dashboard.html:341
+msgid "Рост"
+msgstr ""
+
+#: templates/tracker/dashboard.html:376
+msgid "Пока нет детей"
+msgstr ""
+
+#: templates/tracker/dashboard.html:377
+msgid "Добавьте первого ребёнка, чтобы начать отслеживать его развитие"
+msgstr ""
+
+#: templates/tracker/dashboard.html:379
+msgid "Добавить ребёнка"
+msgstr ""
+
+#: templates/tracker/growth_form.html:6 templates/tracker/growth_form.html:267
+msgid "Редактировать запись"
+msgstr ""
+
+#: templates/tracker/growth_form.html:6 templates/tracker/growth_form.html:267
+#: templates/tracker/growth_form.html:391 templates/tracker/growth_list.html:18
+#: templates/tracker/growth_list.html:117
+msgid "Добавить запись"
+msgstr ""
+
+#: templates/tracker/growth_form.html:270
+msgid "Отслеживайте рост и вес вашего ребенка"
+msgstr ""
+
+#: templates/tracker/growth_form.html:285 templates/tracker/growth_list.html:4
+#: templates/tracker/growth_list.html:13
+msgid "Рост и вес"
+msgstr ""
+
+#: templates/tracker/growth_form.html:286
+msgid "Запишите текущие показатели развития"
+msgstr ""
+
+#: templates/tracker/growth_form.html:314 templates/tracker/growth_list.html:34
+#: tracker/forms.py:20 tracker/models.py:11
+msgid "Рост (см)"
+msgstr ""
+
+#: templates/tracker/growth_form.html:336 templates/tracker/growth_list.html:35
+#: tracker/forms.py:21 tracker/models.py:12
+msgid "Вес (кг)"
+msgstr ""
+
+#: templates/tracker/growth_form.html:377
+msgid "Дополнительные заметки о развитии ребенка..."
+msgstr ""
+
+#: templates/tracker/growth_form.html:391 templates/writer/post_form.html:83
+#: templates/writer/profile_edit.html:24
+msgid "Сохранить изменения"
+msgstr ""
+
+#: templates/tracker/growth_list.html:15
+msgid "Отслеживание физического развития ребенка"
+msgstr ""
+
+#: templates/tracker/growth_list.html:33 tracker/forms.py:22
+#: tracker/forms.py:57 tracker/forms.py:94 tracker/forms.py:133
+#: tracker/models.py:13 tracker/models.py:31 tracker/models.py:60
+#: tracker/models.py:90
+msgid "Дата"
+msgstr ""
+
+#: templates/tracker/growth_list.html:36 tracker/forms.py:23
+#: tracker/forms.py:60 tracker/forms.py:97 tracker/forms.py:138
+#: tracker/forms.py:187 tracker/models.py:14 tracker/models.py:43
+#: tracker/models.py:74 tracker/models.py:104 tracker/models.py:127
+msgid "Заметки"
+msgstr ""
+
+#: templates/tracker/growth_list.html:37
+msgid "Действия"
+msgstr ""
+
+#: templates/tracker/growth_list.html:114
+msgid "Нет записей"
+msgstr ""
+
+#: templates/tracker/growth_list.html:115
+msgid "Добавьте первую запись о росте и весе вашего ребенка"
+msgstr ""
+
+#: templates/tracker/growth_list.html:130 templates/writer/profile_edit.html:21
+msgid "Назад к дашборду"
+msgstr ""
+
+#: templates/writer/dashboard.html:13 templates/writer/post_form.html:14
+#: templates/writer/post_list.html:13
+msgid "Меню писателя"
+msgstr ""
+
+#: templates/writer/dashboard.html:16 templates/writer/post_form.html:17
+#: templates/writer/post_list.html:16
+msgid "Дашборд"
+msgstr ""
+
+#: templates/writer/dashboard.html:19 templates/writer/dashboard.html:116
+#: templates/writer/post_form.html:20 templates/writer/post_list.html:19
+msgid "Редактировать профиль"
+msgstr ""
+
+#: templates/writer/dashboard.html:22 templates/writer/post_form.html:23
+#: templates/writer/post_list.html:4 templates/writer/post_list.html:22
+#: templates/writer/post_list.html:36
+msgid "Мои посты"
+msgstr ""
+
+#: templates/writer/dashboard.html:25 templates/writer/dashboard.html:38
+#: templates/writer/post_form.html:5 templates/writer/post_form.html:26
+#: templates/writer/post_form.html:83 templates/writer/post_list.html:25
+#: templates/writer/post_list.html:38 templates/writer/post_list.html:175
+msgid "Создать пост"
+msgstr ""
+
+#: templates/writer/dashboard.html:50
+msgid "Всего постов"
+msgstr ""
+
+#: templates/writer/dashboard.html:65
+msgid "Всего просмотров"
+msgstr ""
+
+#: templates/writer/dashboard.html:80
+msgid "Заработок"
+msgstr ""
+
+#: templates/writer/dashboard.html:104
+msgid "Не указано"
+msgstr ""
+
+#: templates/writer/dashboard.html:124
+msgid "Последние посты"
+msgstr ""
+
+#: templates/writer/dashboard.html:136 templates/writer/post_list.html:113
+msgid "Опубликован"
+msgstr ""
+
+#: templates/writer/dashboard.html:144
+msgid "Все посты"
+msgstr ""
+
+#: templates/writer/dashboard.html:147 templates/writer/post_list.html:172
+msgid "У вас пока нет постов"
+msgstr ""
+
+#: templates/writer/dashboard.html:149
+msgid "Создать первый пост"
+msgstr ""
+
+#: templates/writer/post_confirm_delete.html:4
+msgid "Удалить пост"
+msgstr ""
+
+#: templates/writer/post_confirm_delete.html:13
+msgid "Подтверждение удаления"
+msgstr ""
+
+#: templates/writer/post_confirm_delete.html:18
+msgid "Вы уверены, что хотите удалить пост"
+msgstr ""
+
+#: templates/writer/post_confirm_delete.html:21
+msgid "Это действие нельзя отменить. Пост будет удален навсегда."
+msgstr ""
+
+#: templates/writer/post_confirm_delete.html:26
+msgid "Внимание!"
+msgstr ""
+
+#: templates/writer/post_confirm_delete.html:27
+msgid "Если пост уже опубликован, он исчезнет с сайта."
+msgstr ""
+
+#: templates/writer/post_confirm_delete.html:37
+msgid "Да, удалить"
+msgstr ""
+
+#: templates/writer/post_form.html:5 templates/writer/post_form.html:39
+msgid "Редактировать пост"
+msgstr ""
+
+#: templates/writer/post_form.html:41
+msgid "Создать новый пост"
+msgstr ""
+
+#: templates/writer/post_form.html:64
+msgid "Опубликовать сразу"
+msgstr ""
+
+#: templates/writer/post_form.html:73
+msgid "Назад к списку"
+msgstr ""
+
+#: templates/writer/post_form.html:78 templates/writer/post_list.html:88
+msgid "Просмотреть"
+msgstr ""
+
+#: templates/writer/post_form.html:95
+msgid "Советы по написанию"
+msgstr ""
+
+#: templates/writer/post_form.html:102
+msgid "Используйте четкие и понятные заголовки"
+msgstr ""
+
+#: templates/writer/post_form.html:106
+msgid "Разбивайте текст на абзацы для лучшей читаемости"
+msgstr ""
+
+#: templates/writer/post_form.html:110
+msgid "Добавляйте практические советы и примеры"
+msgstr ""
+
+#: templates/writer/post_form.html:114
+msgid "Проверяйте текст перед публикацией"
+msgstr ""
+
+#: templates/writer/post_list.html:47
+msgid "Поиск по заголовку или содержанию"
+msgstr ""
+
+#: templates/writer/post_list.html:52
+msgid "Опубликованные"
+msgstr ""
+
+#: templates/writer/post_list.html:53
+msgid "Черновики"
+msgstr ""
+
+#: templates/writer/post_list.html:63
+msgid "Сбросить"
+msgstr ""
+
+#: templates/writer/post_list.html:173
+msgid "Создайте свой первый пост и начните делиться знаниями!"
+msgstr ""
+
+#: templates/writer/profile_edit.html:5 templates/writer/profile_edit.html:13
+msgid "Редактировать профиль писателя"
+msgstr ""
+
+#: tracker/forms.py:58 tracker/models.py:32
+msgid "Часы сна"
+msgstr ""
+
+#: tracker/forms.py:59 tracker/models.py:41
+msgid "Качество сна"
+msgstr ""
+
+#: tracker/forms.py:95 tracker/models.py:61
+msgid "Минуты плача"
+msgstr ""
+
+#: tracker/forms.py:96 tracker/models.py:72
+msgid "Причина плача"
+msgstr ""
+
+#: tracker/forms.py:134 tracker/models.py:91
+msgid "Время"
+msgstr ""
+
+#: tracker/forms.py:135 tracker/models.py:100
+msgid "Тип питания"
+msgstr ""
+
+#: tracker/forms.py:136 tracker/models.py:102
+msgid "Количество"
+msgstr ""
+
+#: tracker/forms.py:137 tracker/models.py:103
+msgid "Длительность (мин)"
+msgstr ""
+
+#: tracker/forms.py:180 tracker/models.py:120
+msgid "Название вакцины"
+msgstr ""
+
+#: tracker/forms.py:181 tracker/models.py:121
+msgid "Дата вакцинации"
+msgstr ""
+
+#: tracker/forms.py:182 tracker/models.py:122
+msgid "Следующая вакцинация"
+msgstr ""
+
+#: tracker/forms.py:183 tracker/models.py:123
+msgid "Имя врача"
+msgstr ""
+
+#: tracker/forms.py:184 tracker/models.py:124
+msgid "Название клиники"
+msgstr ""
+
+#: tracker/forms.py:185 tracker/models.py:125
+msgid "Номер партии"
+msgstr ""
+
+#: tracker/forms.py:186 tracker/models.py:126
+msgid "Реакция на вакцину"
+msgstr ""
+
+#: tracker/models.py:18
+msgid "Запись роста и веса"
+msgstr ""
+
+#: tracker/models.py:19
+msgid "Записи роста и веса"
+msgstr ""
+
+#: tracker/models.py:36
+msgid "Отлично"
+msgstr ""
+
+#: tracker/models.py:37
+msgid "Хорошо"
+msgstr ""
+
+#: tracker/models.py:38
+msgid "Удовлетворительно"
+msgstr ""
+
+#: tracker/models.py:39
+msgid "Плохо"
+msgstr ""
+
+#: tracker/models.py:47
+msgid "Запись сна"
+msgstr ""
+
+#: tracker/models.py:48
+msgid "Записи сна"
+msgstr ""
+
+#: tracker/models.py:65
+msgid "Голод"
+msgstr ""
+
+#: tracker/models.py:66
+msgid "Усталость"
+msgstr ""
+
+#: tracker/models.py:67
+msgid "Дискомфорт"
+msgstr ""
+
+#: tracker/models.py:68
+msgid "Боль"
+msgstr ""
+
+#: tracker/models.py:69
+msgid "Внимание"
+msgstr ""
+
+#: tracker/models.py:78
+msgid "Запись плача"
+msgstr ""
+
+#: tracker/models.py:79
+msgid "Записи плача"
+msgstr ""
+
+#: tracker/models.py:95
+msgid "Грудное молоко"
+msgstr ""
+
+#: tracker/models.py:96
+msgid "Смесь"
+msgstr ""
+
+#: tracker/models.py:97
+msgid "Прикорм"
+msgstr ""
+
+#: tracker/models.py:98
+msgid "Смешанное"
+msgstr ""
+
+#: tracker/models.py:108
+msgid "Запись кормления"
+msgstr ""
+
+#: tracker/models.py:109
+msgid "Записи кормления"
+msgstr ""
+
+#: tracker/models.py:131
+msgid "Запись прививки"
+msgstr ""
+
+#: tracker/models.py:132
+msgid "Записи прививок"
+msgstr ""
+
+#: tracker/views.py:74
+msgid "Запись о росте и весе добавлена!"
+msgstr ""
+
+#: tracker/views.py:93
+msgid "Запись о росте и весе обновлена!"
+msgstr ""
+
+#: tracker/views.py:106
+msgid "Запись о росте и весе удалена!"
+msgstr ""
+
+#: tracker/views.py:148
+msgid "Запись о сне добавлена!"
+msgstr ""
+
+#: tracker/views.py:167
+msgid "Запись о сне обновлена!"
+msgstr ""
+
+#: tracker/views.py:180
+msgid "Запись о сне удалена!"
+msgstr ""
+
+#: tracker/views.py:222
+msgid "Запись о плаче добавлена!"
+msgstr ""
+
+#: tracker/views.py:241
+msgid "Запись о плаче обновлена!"
+msgstr ""
+
+#: tracker/views.py:254
+msgid "Запись о плаче удалена!"
+msgstr ""
+
+#: tracker/views.py:296
+msgid "Запись о кормлении добавлена!"
+msgstr ""
+
+#: tracker/views.py:315
+msgid "Запись о кормлении обновлена!"
+msgstr ""
+
+#: tracker/views.py:328
+msgid "Запись о кормлении удалена!"
+msgstr ""
+
+#: tracker/views.py:370
+msgid "Запись о прививке добавлена!"
+msgstr ""
+
+#: tracker/views.py:389
+msgid "Запись о прививке обновлена!"
+msgstr ""
+
+#: tracker/views.py:402
+msgid "Запись о прививке удалена!"
+msgstr ""
+
+#: writer/models.py:13
+msgid "Социальные сети"
+msgstr ""
+
+#: writer/models.py:40
+msgid "Общий заработок"
+msgstr ""
+
+#: writer/models.py:44
+msgid "Дашборды писателей"
+msgstr ""
+
+#: writer/views.py:19
+msgid "У вас нет доступа к дашборду писателя"
+msgstr ""
+
+#: writer/views.py:22 writer/views.py:60 writer/views.py:94 writer/views.py:123
+#: writer/views.py:155 writer/views.py:198
+msgid "Профиль не найден"
+msgstr ""
+
+#: writer/views.py:57
+msgid "У вас нет доступа к редактированию профиля писателя"
+msgstr ""
+
+#: writer/views.py:72
+msgid "Профиль успешно обновлен!"
+msgstr ""
+
+#: writer/views.py:91
+msgid "У вас нет доступа к созданию постов"
+msgstr ""
+
+#: writer/views.py:101
+msgid "Пост успешно создан!"
+msgstr ""
+
+#: writer/views.py:108
+msgid "Создать"
+msgstr ""
+
+#: writer/views.py:120
+msgid "У вас нет доступа к редактированию постов"
+msgstr ""
+
+#: writer/views.py:132
+msgid "Пост успешно обновлен!"
+msgstr ""
+
+#: writer/views.py:152
+msgid "У вас нет доступа к списку постов"
+msgstr ""
+
+#: writer/views.py:195
+msgid "У вас нет доступа к удалению постов"
+msgstr ""
+
+#: writer/views.py:205
+msgid "Пост успешно удален!"
+msgstr ""

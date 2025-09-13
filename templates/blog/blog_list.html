@@ -1,0 +1,416 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Блог" %} - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .blog-hero {
+        background: linear-gradient(135deg, #ff6b9d, #4ecdc4);
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 2rem 2rem;
+    }
+    
+    .filter-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    .post-card {
+        transition: all 0.3s ease;
+        border: none;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .post-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .post-category {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .category-mom {
+        background: linear-gradient(45deg, #ff6b9d, #ff8fab);
+        color: white;
+    }
+    
+    .category-dad {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+    }
+    
+    .category-general {
+        background: linear-gradient(45deg, #ffe66d, #ffd93d);
+        color: #2c3e50;
+    }
+    
+    .post-language {
+        background: #f8f9fa;
+        color: #6c757d;
+        font-size: 0.7rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 1rem;
+        border: 1px solid #e9ecef;
+    }
+    
+    .post-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        line-height: 1.3;
+        margin: 1rem 0;
+        color: #2c3e50;
+    }
+    
+    .post-excerpt {
+        color: #6c757d;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+    
+    .post-meta {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-top: 1px solid #e9ecef;
+        font-size: 0.85rem;
+    }
+    
+    .read-more-btn {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        border: none;
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .read-more-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+    
+    .empty-state {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 1rem;
+        padding: 4rem 2rem;
+        text-align: center;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 1rem;
+    }
+    
+    .filter-btn {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+    
+    .reset-btn {
+        background: transparent;
+        border: 2px solid #dee2e6;
+        color: #6c757d;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .reset-btn:hover {
+        background: #f8f9fa;
+        border-color: #adb5bd;
+        color: #495057;
+    }
+    
+    .stats-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="blog-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="bi bi-journal-text me-3"></i>{% trans "Блог для родителей" %}
+                </h1>
+                <p class="lead mb-4">
+                    {% trans "Полезные статьи, советы экспертов и практические рекомендации для заботливых мам и пап" %}
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-heart me-2"></i>{% trans "Для мам" %}
+                    </span>
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-person-badge me-2"></i>{% trans "Для пап" %}
+                    </span>
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-people me-2"></i>{% trans "Общие советы" %}
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="bi bi-journal-text" style="font-size: 8rem; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Stats -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="stats-card">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <h3 class="text-primary fw-bold mb-1">{{ posts|length }}</h3>
+                        <p class="text-muted mb-0">{% trans "Статей" %}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-secondary fw-bold mb-1">3</h3>
+                        <p class="text-muted mb-0">{% trans "Категории" %}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-success fw-bold mb-1">2</h3>
+                        <p class="text-muted mb-0">{% trans "Языка" %}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-warning fw-bold mb-1">24/7</h3>
+                        <p class="text-muted mb-0">{% trans "Доступ" %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Filters -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="filter-card">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-dark mb-4">
+                        <i class="bi bi-funnel me-2"></i>{% trans "Фильтры и поиск" %}
+                    </h5>
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="bi bi-tags me-1"></i>{% trans "Категория" %}
+                            </label>
+                            <select name="category" class="form-select form-select-lg">
+                                <option value="">{% trans "Все категории" %}</option>
+                                {% for value, label in categories %}
+                                <option value="{{ value }}" {% if current_category == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-dark">
+                                <i class="bi bi-globe me-1"></i>{% trans "Язык" %}
+                            </label>
+                            <select name="language" class="form-select form-select-lg">
+                                <option value="">{% trans "Все языки" %}</option>
+                                {% for value, label in languages %}
+                                <option value="{{ value }}" {% if current_language == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4 d-flex align-items-end">
+                            <div class="d-flex gap-2 w-100">
+                                <button type="submit" class="btn filter-btn flex-fill">
+                                    <i class="bi bi-search me-2"></i>{% trans "Найти" %}
+                                </button>
+                                <a href="{% url 'blog:blog_list' %}" class="btn reset-btn">
+                                    <i class="bi bi-arrow-clockwise"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Posts -->
+    <div class="row">
+        {% if posts %}
+            {% for post in posts %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <article class="card post-card h-100">
+                    <div class="card-body p-0">
+                        <!-- Post Header -->
+                        <div class="p-4 pb-2">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <span class="post-category category-{{ post.category }}">
+                                    {% if post.category == 'mom' %}
+                                        <i class="bi bi-heart me-1"></i>{% trans "Для мам" %}
+                                    {% elif post.category == 'dad' %}
+                                        <i class="bi bi-person-badge me-1"></i>{% trans "Для пап" %}
+                                    {% else %}
+                                        <i class="bi bi-people me-1"></i>{% trans "Общие" %}
+                                    {% endif %}
+                                </span>
+                                <span class="post-language">
+                                    <i class="bi bi-globe me-1"></i>{{ post.get_language_display }}
+                                </span>
+                            </div>
+                            
+                            <h3 class="post-title">
+                                <a href="{{ post.get_absolute_url }}" class="text-decoration-none">
+                                    {{ post.title }}
+                                </a>
+                            </h3>
+                            
+                            <p class="post-excerpt">
+                                {{ post.content|striptags|truncatewords:25 }}
+                            </p>
+                        </div>
+                        
+                        <!-- Post Footer -->
+                        <div class="post-meta">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-calendar3 me-2 text-primary"></i>
+                                    <span class="text-muted">{{ post.created_at|date:"d.m.Y" }}</span>
+                                </div>
+                                <a href="{{ post.get_absolute_url }}" class="read-more-btn">
+                                    <i class="bi bi-arrow-right me-1"></i>{% trans "Читать" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-journal-x"></i>
+                    <h4 class="text-muted mb-3">{% trans "Статьи не найдены" %}</h4>
+                    <p class="text-muted mb-4">{% trans "Попробуйте изменить фильтры или загляните позже" %}</p>
+                    <a href="{% url 'blog:blog_list' %}" class="btn filter-btn">
+                        <i class="bi bi-arrow-clockwise me-2"></i>{% trans "Сбросить фильтры" %}
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <nav aria-label="{% trans 'Навигация по страницам' %}">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link border-0 rounded-pill me-2" 
+                               href="?page=1{% if current_category %}&category={{ current_category }}{% endif %}{% if current_language %}&language={{ current_language }}{% endif %}"
+                               style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white;">
+                                <i class="bi bi-chevron-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link border-0 rounded-pill me-2" 
+                               href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_language %}&language={{ current_language }}{% endif %}"
+                               style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white;">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link border-0 rounded-pill px-4" 
+                              style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white; font-weight: 600;">
+                            {% trans "Страница" %} {{ page_obj.number }} {% trans "из" %} {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link border-0 rounded-pill ms-2" 
+                               href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_language %}&language={{ current_language }}{% endif %}"
+                               style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white;">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link border-0 rounded-pill ms-2" 
+                               href="?page={{ page_obj.paginator.num_pages }}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_language %}&language={{ current_language }}{% endif %}"
+                               style="background: linear-gradient(45deg, #ff6b9d, #4ecdc4); color: white;">
+                                <i class="bi bi-chevron-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Call to Action -->
+<section class="mt-5 mb-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center p-5" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 2rem;">
+                    <h3 class="fw-bold text-dark mb-3">
+                        <i class="bi bi-heart-fill text-primary me-2"></i>
+                        {% trans "Нужна помощь с ребенком?" %}
+                    </h3>
+                    <p class="text-muted mb-4">
+                        {% trans "Получите профессиональную консультацию от опытных врачей" %}
+                    </p>
+                    <a href="{% url 'consultant:consultant_list' %}" class="btn filter-btn btn-lg">
+                        <i class="bi bi-stethoscope me-2"></i>{% trans "Найти консультанта" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

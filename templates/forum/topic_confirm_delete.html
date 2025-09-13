@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Удалить тему - Форум{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="fw-bold mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Подтверждение удаления
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Вы уверены, что хотите удалить тему?</p>
+                    <div class="alert alert-warning">
+                        <h6 class="fw-bold">"{{ topic.title }}"</h6>
+                        <p class="mb-0">Эта тема содержит {{ topic.get_posts_count }} сообщений и {{ topic.views_count }} просмотров.</p>
+                    </div>
+                    <p class="text-muted">Это действие нельзя отменить.</p>
+                </div>
+                <div class="card-footer">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'forum:topic_detail' topic.pk %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Отмена
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-2"></i>Удалить тему
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,382 @@
+{% extends 'base.html' %}
+
+{% block title %}Заявка писателя - {{ application.full_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.application-detail {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.application-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.application-name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.application-status {
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.application-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.info-section {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.info-value {
+    color: #6c757d;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.review-section {
+    background: #e3f2fd;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.review-form {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.btn-approve {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border: none;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-approve:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+}
+
+.btn-reject {
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
+    border: none;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-reject:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+}
+
+.btn-back {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    border: none;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="page-title">
+                    <i class="bi bi-file-earmark-person me-3"></i>Заявка писателя
+                </h1>
+                <p class="page-subtitle">
+                    Детальный просмотр заявки на роль писателя
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'support:writer_applications' %}" class="btn btn-back">
+                    <i class="bi bi-arrow-left me-2"></i>Назад к списку
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="application-detail">
+        <div class="application-header">
+            <h2 class="application-name">{{ application.full_name }}</h2>
+            <div class="application-status status-{{ application.status }}">
+                <i class="bi bi-{% if application.status == 'pending' %}clock{% elif application.status == 'approved' %}check-circle{% else %}x-circle{% endif %} me-1"></i>
+                {{ application.get_status_display }}
+            </div>
+        </div>
+        
+        <div class="application-info">
+            <!-- Личная информация -->
+            <div class="info-section">
+                <h3 class="section-title">
+                    <i class="bi bi-person me-2"></i>Личная информация
+                </h3>
+                <div class="info-item">
+                    <span class="info-label">ФИО</span>
+                    <span class="info-value">{{ application.full_name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Email</span>
+                    <span class="info-value">{{ application.email }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Телефон</span>
+                    <span class="info-value">{{ application.phone|default:"Не указан" }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Логин</span>
+                    <span class="info-value">{{ application.username|default:"Не указан" }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Дата подачи</span>
+                    <span class="info-value">{{ application.created_at|date:"d.m.Y в H:i" }}</span>
+                </div>
+            </div>
+            
+            <!-- Писательская информация -->
+            <div class="info-section">
+                <h3 class="section-title">
+                    <i class="bi bi-pen me-2"></i>Писательская информация
+                </h3>
+                <div class="info-item">
+                    <span class="info-label">Опыт</span>
+                    <span class="info-value">{{ application.years_experience }} лет</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Специализация</span>
+                    <span class="info-value">{{ application.specialization|default:"Не указана" }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Языки</span>
+                    <span class="info-value">{{ application.languages|default:"Не указаны" }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Мотивация -->
+        <div class="info-section">
+            <h3 class="section-title">
+                <i class="bi bi-heart me-2"></i>Мотивация
+            </h3>
+            <div class="info-value">{{ application.writing_motivation|linebreaks }}</div>
+        </div>
+        
+        <!-- Опыт в журналистике -->
+        <div class="info-section">
+            <h3 class="section-title">
+                <i class="bi bi-journal-text me-2"></i>Опыт в журналистике
+            </h3>
+            <div class="info-value">{{ application.journalism_experience|linebreaks }}</div>
+        </div>
+        
+        {% if application.status != 'pending' %}
+        <!-- Информация о рассмотрении -->
+        <div class="info-section">
+            <h3 class="section-title">
+                <i class="bi bi-clipboard-check me-2"></i>Информация о рассмотрении
+            </h3>
+            <div class="info-item">
+                <span class="info-label">Рассмотрел</span>
+                <span class="info-value">{{ application.reviewed_by.get_full_name|default:application.reviewed_by.username }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Дата рассмотрения</span>
+                <span class="info-value">{{ application.reviewed_at|date:"d.m.Y в H:i" }}</span>
+            </div>
+            {% if application.review_notes %}
+            <div class="info-item">
+                <span class="info-label">Комментарии</span>
+                <span class="info-value">{{ application.review_notes|linebreaks }}</span>
+            </div>
+            {% endif %}
+            
+            {% if application.status == 'approved' %}
+            <!-- Информация о созданном профиле писателя -->
+            <div class="info-item">
+                <span class="info-label">Статус</span>
+                <span class="info-value">
+                    <span class="badge bg-success">
+                        <i class="bi bi-check-circle me-1"></i>Профиль писателя создан
+                    </span>
+                </span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Примечание</span>
+                <span class="info-value">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Пользователь может войти в систему, используя временный пароль
+                    </small>
+                </span>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        {% if application.status == 'pending' %}
+        <!-- Форма рассмотрения -->
+        <div class="review-section">
+            <h3 class="section-title">
+                <i class="bi bi-clipboard-check me-2"></i>Рассмотрение заявки
+            </h3>
+            <form method="post" class="review-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="review_notes" class="form-label">Комментарии (необязательно)</label>
+                    <textarea name="review_notes" id="review_notes" class="form-control" rows="4" 
+                              placeholder="Добавьте комментарии к решению..."></textarea>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="submit" name="action" value="approve" class="btn-approve">
+                        <i class="bi bi-check-circle me-2"></i>Одобрить
+                    </button>
+                    <button type="submit" name="action" value="reject" class="btn-reject">
+                        <i class="bi bi-x-circle me-2"></i>Отклонить
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

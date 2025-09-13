@@ -1,0 +1,509 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {% if object %}Редактировать запись{% else %}Добавить запись{% endif %} - Сон
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tracker-form-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tracker-form-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .form-card {
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid #f1f3f4;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .form-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+    
+    .form-header {
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        padding: 2rem;
+        text-align: center;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .form-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .form-icon i {
+        font-size: 2rem;
+        color: white;
+    }
+    
+    .form-body {
+        padding: 2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #fafbfc;
+    }
+    
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        background: white;
+    }
+    
+    .form-select {
+        border: 2px solid #e9ecef;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #fafbfc;
+    }
+    
+    .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        background: white;
+    }
+    
+    .btn-submit {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        color: white;
+        padding: 0.875rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    
+    .btn-cancel {
+        background: white;
+        border: 2px solid #e9ecef;
+        color: #6c757d;
+        padding: 0.875rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-cancel:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+    }
+    
+    .sleep-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .sleep-card {
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        border: 2px solid #e9ecef;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .sleep-card:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.1);
+    }
+    
+    .sleep-icon {
+        font-size: 2rem;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+    
+    .sleep-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .sleep-input {
+        border: none;
+        background: white;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        text-align: center;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #667eea;
+        width: 100%;
+    }
+    
+    .sleep-input:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.25);
+    }
+    
+    .quality-section {
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        border: 2px solid #e9ecef;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .quality-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .quality-option {
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .quality-option:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+    }
+    
+    .quality-option.selected {
+        border-color: #667eea;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+    }
+    
+    .quality-option input[type="radio"] {
+        display: none;
+    }
+    
+    .notes-section {
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        border: 2px solid #e9ecef;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .notes-textarea {
+        border: none;
+        background: white;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        width: 100%;
+        min-height: 100px;
+        resize: vertical;
+        font-family: inherit;
+    }
+    
+    .notes-textarea:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.25);
+    }
+    
+    .error-message {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+    
+    .success-message {
+        color: #28a745;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+    
+    @media (max-width: 768px) {
+        .sleep-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .quality-options {
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .form-body {
+            padding: 1.5rem;
+        }
+        
+        .form-header {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Tracker Form Hero -->
+<section class="tracker-form-hero">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="bi bi-moon me-3"></i>
+                    {% if object %}Редактировать запись{% else %}Добавить запись{% endif %}
+                </h1>
+                <p class="lead mb-0">
+                    Отслеживайте сон вашего ребенка
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-card">
+                <div class="form-header">
+                    <div class="form-icon">
+                        <i class="bi bi-moon"></i>
+                    </div>
+                    <h2 class="fw-bold mb-2">Сон</h2>
+                    <p class="text-muted mb-0">Запишите информацию о сне</p>
+                </div>
+                
+                <div class="form-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Выбор ребенка -->
+                        <div class="form-group">
+                            <label class="form-label" for="{{ form.child.id_for_label }}">
+                                <i class="bi bi-person me-2"></i>{{ form.child.label }}
+                            </label>
+                            {{ form.child }}
+                            {% if form.child.errors %}
+                                <div class="error-message">
+                                    {% for error in form.child.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Дата и продолжительность -->
+                        <div class="sleep-grid">
+                            <div class="sleep-card">
+                                <div class="sleep-icon">
+                                    <i class="bi bi-calendar"></i>
+                                </div>
+                                <div class="sleep-label">Дата</div>
+                                <input type="date" 
+                                       name="{{ form.date.name }}" 
+                                       value="{{ form.date.value|default:'' }}"
+                                       class="sleep-input">
+                                {% if form.date.errors %}
+                                    <div class="error-message">
+                                        {% for error in form.date.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="sleep-card">
+                                <div class="sleep-icon">
+                                    <i class="bi bi-clock"></i>
+                                </div>
+                                <div class="sleep-label">Часов сна</div>
+                                <input type="number" 
+                                       name="{{ form.hours_slept.name }}" 
+                                       value="{{ form.hours_slept.value|default:'' }}"
+                                       class="sleep-input" 
+                                       placeholder="0"
+                                       step="0.5"
+                                       min="0"
+                                       max="24">
+                                {% if form.hours_slept.errors %}
+                                    <div class="error-message">
+                                        {% for error in form.hours_slept.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Качество сна -->
+                        <div class="quality-section">
+                            <label class="form-label">
+                                <i class="bi bi-star me-2"></i>Качество сна
+                            </label>
+                            <div class="quality-options">
+                                <label class="quality-option">
+                                    <input type="radio" name="{{ form.sleep_quality.name }}" value="excellent" 
+                                           {% if form.sleep_quality.value == 'excellent' %}checked{% endif %}>
+                                    <div class="sleep-icon">
+                                        <i class="bi bi-emoji-smile"></i>
+                                    </div>
+                                    <div class="sleep-label">Отлично</div>
+                                </label>
+                                
+                                <label class="quality-option">
+                                    <input type="radio" name="{{ form.sleep_quality.name }}" value="good" 
+                                           {% if form.sleep_quality.value == 'good' %}checked{% endif %}>
+                                    <div class="sleep-icon">
+                                        <i class="bi bi-emoji-neutral"></i>
+                                    </div>
+                                    <div class="sleep-label">Хорошо</div>
+                                </label>
+                                
+                                <label class="quality-option">
+                                    <input type="radio" name="{{ form.sleep_quality.name }}" value="fair" 
+                                           {% if form.sleep_quality.value == 'fair' %}checked{% endif %}>
+                                    <div class="sleep-icon">
+                                        <i class="bi bi-emoji-frown"></i>
+                                    </div>
+                                    <div class="sleep-label">Удовлетворительно</div>
+                                </label>
+                                
+                                <label class="quality-option">
+                                    <input type="radio" name="{{ form.sleep_quality.name }}" value="poor" 
+                                           {% if form.sleep_quality.value == 'poor' %}checked{% endif %}>
+                                    <div class="sleep-icon">
+                                        <i class="bi bi-emoji-angry"></i>
+                                    </div>
+                                    <div class="sleep-label">Плохо</div>
+                                </label>
+                            </div>
+                            {% if form.sleep_quality.errors %}
+                                <div class="error-message">
+                                    {% for error in form.sleep_quality.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Заметки -->
+                        <div class="notes-section">
+                            <label class="form-label" for="{{ form.notes.id_for_label }}">
+                                <i class="bi bi-sticky me-2"></i>{{ form.notes.label }}
+                            </label>
+                            <textarea name="{{ form.notes.name }}" 
+                                      class="notes-textarea" 
+                                      placeholder="Дополнительные заметки о сне ребенка...">{{ form.notes.value|default:'' }}</textarea>
+                            {% if form.notes.errors %}
+                                <div class="error-message">
+                                    {% for error in form.notes.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Кнопки -->
+                        <div class="d-flex gap-3 mt-4">
+                            <button type="submit" class="btn btn-submit flex-fill">
+                                <i class="bi bi-check-circle me-2"></i>
+                                {% if object %}Сохранить изменения{% else %}Добавить запись{% endif %}
+                            </button>
+                            <a href="{% url 'tracker:sleep_list' %}" class="btn btn-cancel">
+                                <i class="bi bi-arrow-left me-2"></i>Отмена
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Обработка выбора качества сна
+document.addEventListener('DOMContentLoaded', function() {
+    const qualityOptions = document.querySelectorAll('.quality-option');
+    
+    qualityOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // Убираем выделение с всех опций
+            qualityOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            // Выделяем выбранную опцию
+            this.classList.add('selected');
+            
+            // Устанавливаем значение radio button
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+            }
+        });
+        
+        // Проверяем, есть ли уже выбранная опция
+        const radio = option.querySelector('input[type="radio"]');
+        if (radio && radio.checked) {
+            option.classList.add('selected');
+        }
+    });
+});
+</script>
+{% endblock %}
+

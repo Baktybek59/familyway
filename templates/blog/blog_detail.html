@@ -1,0 +1,607 @@
+{% extends 'base.html' %}
+{% load support_tags %}
+{% load i18n %}
+
+{% block title %}{{ post.title }} - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .article-hero {
+        background: linear-gradient(135deg, #ff6b9d, #4ecdc4);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 2rem 2rem;
+    }
+    
+    .article-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .article-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #2c3e50;
+        padding: 2rem;
+    }
+    
+    .article-content p {
+        margin-bottom: 1.5rem;
+    }
+    
+    .article-content h2, .article-content h3, .article-content h4 {
+        color: #ff6b9d;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+    
+    .article-content ul, .article-content ol {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+    }
+    
+    .article-content li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .article-meta {
+        background: #f8f9fa;
+        padding: 1.5rem 2rem;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .category-badge {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .category-mom {
+        background: linear-gradient(45deg, #ff6b9d, #ff8fab);
+        color: white;
+    }
+    
+    .category-dad {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+    }
+    
+    .category-general {
+        background: linear-gradient(45deg, #ffe66d, #ffd93d);
+        color: #2c3e50;
+    }
+    
+    .sidebar-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+    }
+    
+    .back-btn {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+    
+    .category-link {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        margin: 0.25rem;
+        background: #f8f9fa;
+        color: #6c757d;
+        text-decoration: none;
+        border-radius: 2rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+    
+    .category-link:hover {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .reading-time {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Comments Section */
+    .comments-section {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .comment-item {
+        background: #f8f9fa;
+        border-radius: 0.75rem;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #007bff;
+    }
+    
+    .comment-author {
+        font-weight: 600;
+        color: #007bff;
+        margin-bottom: 0.5rem;
+    }
+    
+    .comment-date {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+    
+    .comment-actions {
+        margin-top: 0.5rem;
+    }
+    
+    .comment-author-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    
+    .comment-avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .comment-avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    .support-badge {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        margin-left: 0.5rem;
+    }
+    
+    .support-badge i {
+        font-size: 0.6rem;
+    }
+    
+    .btn-modern {
+        border-radius: 0.75rem;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    /* Like and Dislike Buttons */
+    .like-btn, .dislike-btn {
+        border: none;
+        background: none;
+        color: #6c757d;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .like-btn:hover {
+        transform: scale(1.1);
+        color: #dc3545;
+        background: rgba(220, 53, 69, 0.1);
+    }
+    
+    .dislike-btn:hover {
+        transform: scale(1.1);
+        color: #6c757d;
+        background: rgba(108, 117, 125, 0.1);
+    }
+    
+    .like-btn.liked {
+        color: #dc3545;
+        background: rgba(220, 53, 69, 0.1);
+    }
+    
+    .dislike-btn.disliked {
+        color: #6c757d;
+        background: rgba(108, 117, 125, 0.1);
+    }
+    
+    .like-btn:disabled, .dislike-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .like-btn:disabled:hover, .dislike-btn:disabled:hover {
+        transform: none;
+        background: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Article Hero -->
+<section class="article-hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="category-badge category-{{ post.category }} me-3">
+                        {% if post.category == 'mom' %}
+                            <i class="bi bi-heart me-1"></i>{% trans "Для мам" %}
+                        {% elif post.category == 'dad' %}
+                            <i class="bi bi-person-badge me-1"></i>{% trans "Для пап" %}
+                        {% else %}
+                            <i class="bi bi-people me-1"></i>{% trans "Общие" %}
+                        {% endif %}
+                    </span>
+                    <span class="badge bg-light text-dark">
+                        <i class="bi bi-globe me-1"></i>{{ post.get_language_display }}
+                    </span>
+                </div>
+                
+                <h1 class="display-5 fw-bold mb-3">{{ post.title }}</h1>
+                
+                <div class="d-flex align-items-center text-white-50">
+                    <i class="bi bi-calendar3 me-2"></i>
+                    <span class="me-4">{{ post.created_at|date:"d.m.Y" }}</span>
+                    <i class="bi bi-clock me-2"></i>
+                    <span class="reading-time">
+                        <i class="bi bi-eye me-1"></i>{{ post.views }} {% trans "просмотров" %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Article -->
+            <article class="card article-card">
+                <div class="article-content">
+                    {{ post.content|safe }}
+                </div>
+                
+                <!-- Article Footer -->
+                <div class="article-meta">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center text-muted">
+                            <i class="bi bi-clock me-2"></i>
+                            <span>{% trans "Обновлено" %}: {{ post.updated_at|date:"d.m.Y H:i" }}</span>
+                        </div>
+                        <a href="{% url 'blog:blog_list' %}" class="back-btn">
+                            <i class="bi bi-arrow-left me-2"></i>{% trans "Назад к блогу" %}
+                        </a>
+                    </div>
+                    
+                    <!-- Лайки и дизлайки -->
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        {% if user.is_authenticated %}
+                        <button class="like-btn {% if is_liked %}liked{% endif %}" 
+                                onclick="toggleLike({{ post.id }})" 
+                                id="like-btn-{{ post.id }}"
+                                title="{% if is_liked %}{% trans 'Убрать лайк' %}{% else %}{% trans 'Поставить лайк' %}{% endif %}">
+                            <i class="bi bi-heart{% if is_liked %}-fill{% endif %}"></i>
+                            <span id="likes-count-{{ post.id }}">{{ likes_count }}</span>
+                        </button>
+                        <button class="dislike-btn {% if is_disliked %}disliked{% endif %}" 
+                                onclick="toggleDislike({{ post.id }})" 
+                                id="dislike-btn-{{ post.id }}"
+                                title="{% if is_disliked %}{% trans 'Убрать дизлайк' %}{% else %}{% trans 'Поставить дизлайк' %}{% endif %}">
+                            <i class="bi bi-heartbreak{% if is_disliked %}-fill{% endif %}"></i>
+                            <span id="dislikes-count-{{ post.id }}">{{ dislikes_count }}</span>
+                        </button>
+                        {% else %}
+                        <button class="like-btn" disabled title="{% trans 'Войдите в систему, чтобы поставить лайк' %}">
+                            <i class="bi bi-heart"></i>
+                            <span>{{ likes_count }}</span>
+                        </button>
+                        <button class="dislike-btn" disabled title="{% trans 'Войдите в систему, чтобы поставить дизлайк' %}">
+                            <i class="bi bi-heartbreak"></i>
+                            <span>{{ dislikes_count }}</span>
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+        </div>
+        
+        <div class="col-lg-4">
+            <!-- Quick Actions -->
+            <div class="card sidebar-card">
+                <div class="card-body">
+                    <h5 class="fw-bold text-dark mb-3">
+                        <i class="bi bi-lightning me-2"></i>{% trans "Быстрые действия" %}
+                    </h5>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'consultant:consultant_list' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-stethoscope me-2"></i>{% trans "Консультация врача" %}
+                        </a>
+                        <a href="{% url 'tracker:dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-graph-up me-2"></i>{% trans "Мой трекер" %}
+                        </a>
+                        <a href="{% url 'blog:blog_list' %}" class="btn btn-outline-info">
+                            <i class="bi bi-journal-text me-2"></i>{% trans "Все статьи" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Categories -->
+            <div class="card sidebar-card">
+                <div class="card-body">
+                    <h5 class="fw-bold text-dark mb-3">
+                        <i class="bi bi-tags me-2"></i>{% trans "Категории" %}
+                    </h5>
+                    <div class="d-flex flex-wrap">
+                        <a href="{% url 'blog:blog_list' %}?category=mom" class="category-link">
+                            <i class="bi bi-heart me-1"></i>{% trans "Для мам" %}
+                        </a>
+                        <a href="{% url 'blog:blog_list' %}?category=dad" class="category-link">
+                            <i class="bi bi-person-badge me-1"></i>{% trans "Для пап" %}
+                        </a>
+                        <a href="{% url 'blog:blog_list' %}?category=general" class="category-link">
+                            <i class="bi bi-people me-1"></i>{% trans "Общие" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Help -->
+            <div class="card sidebar-card">
+                <div class="card-body">
+                    <h5 class="fw-bold text-dark mb-3">
+                        <i class="bi bi-question-circle me-2"></i>{% trans "Нужна помощь?" %}
+                    </h5>
+                    <p class="text-muted small mb-3">
+                        {% trans "Если у вас есть вопросы по статье или нужна персональная консультация" %}
+                    </p>
+                    <a href="{% url 'consultant:consultant_list' %}" class="btn btn-primary w-100">
+                        <i class="bi bi-chat-dots me-2"></i>{% trans "Задать вопрос врачу" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Комментарии -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="comments-section">
+                <h4 class="mb-4">
+                    <i class="bi bi-chat-dots me-2"></i>{% trans "Комментарии" %} ({{ comments.count }})
+                </h4>
+                
+                <!-- Форма добавления комментария -->
+                {% if user.is_authenticated %}
+                <form method="post" class="mb-4">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ comment_form.content }}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-modern">
+                        <i class="bi bi-send me-1"></i>{% trans "Добавить комментарий" %}
+                    </button>
+                </form>
+                {% else %}
+                <div class="auth-required">
+                    <i class="bi bi-lock-fill me-2"></i>
+                    <strong>{% trans "Для добавления комментария необходимо войти в систему." %}</strong>
+                    <div class="mt-2">
+                        <a href="{% url 'accounts:login' %}" class="btn btn-warning btn-modern me-2">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>{% trans "Войти" %}
+                        </a>
+                        <a href="{% url 'accounts:register' %}" class="btn btn-outline-primary btn-modern">
+                            <i class="bi bi-person-plus me-1"></i>{% trans "Регистрация" %}
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Список комментариев -->
+                {% if comments %}
+                    {% for comment in comments %}
+                    <div class="comment-item" id="comment-{{ comment.id }}">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="comment-author-avatar me-3">
+                                {% if comment.author.parent_profile and comment.author.parent_profile.photo %}
+                                    <img src="{{ comment.author.parent_profile.photo.url }}" alt="Фото профиля" class="comment-avatar-img">
+                                {% else %}
+                                    <div class="comment-avatar-placeholder">
+                                        {{ comment.author.username|first|upper }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="comment-author">
+                                <i class="bi bi-person-circle me-1"></i>{{ comment.author.get_full_name }}
+                                {% if comment.author|is_support_staff %}
+                                <span class="support-badge">
+                                    <i class="bi bi-headset"></i>Техподдержка
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="comment-content mb-2">
+                            {{ comment.content|linebreaks }}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="comment-date">
+                                <i class="bi bi-clock me-1"></i>{{ comment.created_at|date:"d.m.Y H:i" }}
+                            </div>
+                            {% if user.is_authenticated and user == comment.author %}
+                            <div class="comment-actions">
+                                <button class="btn btn-outline-danger btn-sm" 
+                                        onclick="deleteComment({{ comment.id }})">
+                                    <i class="bi bi-trash me-1"></i>{% trans "Удалить" %}
+                                </button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="text-center text-muted py-4">
+                    <i class="bi bi-chat-dots" style="font-size: 3rem;"></i>
+                    <p class="mt-3">{% trans "Пока нет комментариев. Будьте первым!" %}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleLike(postId) {
+    fetch(`/blog/${postId}/like/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const likeBtn = document.getElementById(`like-btn-${postId}`);
+        const dislikeBtn = document.getElementById(`dislike-btn-${postId}`);
+        const likesCount = document.getElementById(`likes-count-${postId}`);
+        const dislikesCount = document.getElementById(`dislikes-count-${postId}`);
+        
+        // Обновляем лайк
+        if (data.liked) {
+            likeBtn.classList.add('liked');
+            likeBtn.innerHTML = `<i class="bi bi-heart-fill"></i><span>${data.likes_count}</span>`;
+        } else {
+            likeBtn.classList.remove('liked');
+            likeBtn.innerHTML = `<i class="bi bi-heart"></i><span>${data.likes_count}</span>`;
+        }
+        
+        // Обновляем дизлайк
+        if (data.disliked) {
+            dislikeBtn.classList.add('disliked');
+            dislikeBtn.innerHTML = `<i class="bi bi-heartbreak-fill"></i><span>${data.dislikes_count}</span>`;
+        } else {
+            dislikeBtn.classList.remove('disliked');
+            dislikeBtn.innerHTML = `<i class="bi bi-heartbreak"></i><span>${data.dislikes_count}</span>`;
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+}
+
+function toggleDislike(postId) {
+    fetch(`/blog/${postId}/dislike/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const likeBtn = document.getElementById(`like-btn-${postId}`);
+        const dislikeBtn = document.getElementById(`dislike-btn-${postId}`);
+        const likesCount = document.getElementById(`likes-count-${postId}`);
+        const dislikesCount = document.getElementById(`dislikes-count-${postId}`);
+        
+        // Обновляем лайк
+        if (data.liked) {
+            likeBtn.classList.add('liked');
+            likeBtn.innerHTML = `<i class="bi bi-heart-fill"></i><span>${data.likes_count}</span>`;
+        } else {
+            likeBtn.classList.remove('liked');
+            likeBtn.innerHTML = `<i class="bi bi-heart"></i><span>${data.likes_count}</span>`;
+        }
+        
+        // Обновляем дизлайк
+        if (data.disliked) {
+            dislikeBtn.classList.add('disliked');
+            dislikeBtn.innerHTML = `<i class="bi bi-heartbreak-fill"></i><span>${data.dislikes_count}</span>`;
+        } else {
+            dislikeBtn.classList.remove('disliked');
+            dislikeBtn.innerHTML = `<i class="bi bi-heartbreak"></i><span>${data.dislikes_count}</span>`;
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+}
+
+function deleteComment(commentId) {
+    if (confirm('{% trans "Вы уверены, что хотите удалить этот комментарий?" %}')) {
+        fetch(`/blog/comments/${commentId}/delete/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`comment-${commentId}`).remove();
+                // Обновляем счетчик комментариев
+                location.reload();
+            } else {
+                alert('{% trans "Ошибка при удалении комментария" %}');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+        });
+    }
+}
+</script>
+{% endblock %}
+

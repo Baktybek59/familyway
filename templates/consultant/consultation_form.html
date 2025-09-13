@@ -1,0 +1,527 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block title %}{% trans "Новая консультация" %} - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+.doctor-info-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.doctor-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    object-fit: cover;
+}
+
+.doctor-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.doctor-specialization {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 0.25rem;
+}
+
+.doctor-facility {
+    font-size: 0.95rem;
+    opacity: 0.8;
+    margin-bottom: 1rem;
+}
+
+.doctor-stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.rating-stars {
+    color: #ffc107;
+    font-size: 1.1rem;
+}
+
+.form-section {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.form-control, .form-select {
+    border-radius: 0.75rem;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-outline-secondary {
+    border-radius: 0.75rem;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.file-upload-area {
+    position: relative;
+    border: 2px dashed #e9ecef;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.file-upload-area:hover {
+    border-color: #667eea;
+    background: #f0f2ff;
+}
+
+.file-upload-area input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-upload-info {
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+.file-upload-info i {
+    font-size: 1.5rem;
+    color: #667eea;
+}
+
+.file-upload-area.dragover {
+    border-color: #667eea;
+    background: #f0f2ff;
+    transform: scale(1.02);
+}
+
+.file-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 0.5rem;
+    border: 1px solid #e9ecef;
+}
+
+.file-preview-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+}
+
+.file-preview-item:last-child {
+    margin-bottom: 0;
+}
+
+.file-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #667eea;
+    color: white;
+    border-radius: 0.5rem;
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.file-info {
+    flex: 1;
+}
+
+.file-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.file-size {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.file-remove {
+    color: #dc3545;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
+}
+
+.file-remove:hover {
+    background: #dc3545;
+    color: white;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="fw-bold text-primary">
+                        <i class="bi bi-chat-dots"></i> {% trans "Новая консультация" %}
+                    </h1>
+                    <p class="text-muted">{% trans "Опишите вашу проблему и получите профессиональную консультацию" %}</p>
+                </div>
+            </div>
+            
+            <!-- Doctor Info -->
+            {% if doctor %}
+            <div class="doctor-info-card">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        {% if doctor.photo %}
+                        <img src="{{ doctor.photo.url }}" alt="{{ doctor.full_name }}" class="doctor-avatar">
+                        {% else %}
+                        <div class="doctor-avatar d-flex align-items-center justify-content-center bg-white text-primary" style="font-size: 2rem;">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col">
+                        <h3 class="doctor-name">{{ doctor.full_name }}</h3>
+                        <p class="doctor-specialization">
+                            <i class="bi bi-stethoscope me-2"></i>{{ doctor.specialization }}
+                        </p>
+                        <p class="doctor-facility">
+                            <i class="bi bi-building me-2"></i>{{ doctor.facility.name }}
+                        </p>
+                    </div>
+                    <div class="col-auto">
+                        <div class="doctor-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">{{ doctor.experience_years }}</span>
+                                <span class="stat-label">{% trans "лет опыта" %}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">{{ doctor.rating|floatformat:1 }}</span>
+                                <span class="stat-label">{% trans "рейтинг" %}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">{{ doctor.reviews_count }}</span>
+                                <span class="stat-label">{% trans "отзывов" %}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="rating-stars">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= doctor.rating %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% else %}
+                                        <i class="bi bi-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% if doctor.consultant.consultation_fee > 0 %}
+                            <span class="badge bg-light text-dark px-3 py-2">
+                                <i class="bi bi-currency-dollar me-1"></i>{{ doctor.consultant.consultation_fee }}₽ {% trans "за консультацию" %}
+                            </span>
+                            {% else %}
+                            <span class="badge bg-light text-dark px-3 py-2">
+                                <i class="bi bi-gift me-1"></i>{% trans "Бесплатная консультация" %}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Form -->
+            <div class="form-section">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Hidden doctor field -->
+                    {{ form.doctor.as_hidden }}
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <h5 class="section-title">
+                                <i class="bi bi-chat-text me-2"></i>{% trans "Описание проблемы" %}
+                            </h5>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label fw-semibold">{% trans "Тема консультации" %}</label>
+                            {{ form.title }}
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label fw-semibold">{% trans "Подробное описание" %}</label>
+                            {{ form.description }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.urgency.id_for_label }}" class="form-label fw-semibold">{% trans "Уровень срочности" %}</label>
+                            {{ form.urgency }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.child_age_months.id_for_label }}" class="form-label fw-semibold">{% trans "Возраст ребенка (месяцы)" %}</label>
+                            {{ form.child_age_months }}
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5 class="section-title">
+                                <i class="bi bi-heart-pulse me-2"></i>{% trans "Дополнительная информация" %}
+                            </h5>
+                            <p class="text-muted small mb-3">{% trans "Эта информация поможет врачу лучше понять ситуацию" %}</p>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="{{ form.child_symptoms.id_for_label }}" class="form-label fw-semibold">{% trans "Симптомы ребенка" %}</label>
+                            {{ form.child_symptoms }}
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="{{ form.medical_history.id_for_label }}" class="form-label fw-semibold">{% trans "Медицинская история" %}</label>
+                            {{ form.medical_history }}
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5 class="section-title">
+                                <i class="bi bi-paperclip me-2"></i>{% trans "Документы и анализы" %}
+                            </h5>
+                            <p class="text-muted small mb-3">{% trans "Прикрепите фото анализов, справки или другие документы (JPG, PNG, PDF, DOC, DOCX)" %}</p>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="{{ form.attachments.id_for_label }}" class="form-label fw-semibold">{% trans "Файлы" %}</label>
+                            <div class="file-upload-area">
+                                {{ form.attachments }}
+                                <div class="file-upload-info">
+                                    <i class="bi bi-cloud-upload me-2"></i>
+                                    <span>{% trans "Перетащите файлы сюда или нажмите для выбора" %}</span>
+                                    <small class="d-block text-muted mt-1">{% trans "Максимальный размер: 10MB" %}</small>
+                                </div>
+                            </div>
+                            {% if form.attachments.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.attachments.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between">
+                                <a href="{% url 'consultant:consultation_list' %}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-2"></i>{% trans "Отмена" %}
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-send me-2"></i>{% trans "Отправить консультацию" %}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Help -->
+            <div class="form-section">
+                <h6 class="fw-bold text-info mb-3">
+                    <i class="bi bi-info-circle me-2"></i>{% trans "Советы по написанию консультации" %}
+                </h6>
+                <ul class="mb-0 small text-muted">
+                    <li>{% trans "Опишите проблему максимально подробно" %}</li>
+                    <li>{% trans "Укажите возраст ребенка и основные симптомы" %}</li>
+                    <li>{% trans "Добавьте информацию о предыдущих заболеваниях" %}</li>
+                    <li>{% trans "Выберите подходящий уровень срочности" %}</li>
+                    <li>{% trans "Врач ответит в течение 24 часов" %}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.querySelector('input[type="file"]');
+    const fileUploadArea = document.querySelector('.file-upload-area');
+    
+    if (fileInput && fileUploadArea) {
+        // Create file preview container
+        const filePreview = document.createElement('div');
+        filePreview.className = 'file-preview';
+        fileUploadArea.parentNode.insertBefore(filePreview, fileUploadArea.nextSibling);
+        
+        // Drag & Drop functionality
+        fileUploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            fileUploadArea.classList.add('dragover');
+        });
+        
+        fileUploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            fileUploadArea.classList.remove('dragover');
+        });
+        
+        fileUploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            fileUploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+        
+        // File input change
+        fileInput.addEventListener('change', function(e) {
+            handleFiles(e.target.files);
+        });
+        
+        function handleFiles(files) {
+            // Clear previous previews
+            filePreview.innerHTML = '';
+            
+            // Process each file
+            Array.from(files).forEach(file => {
+                if (validateFile(file)) {
+                    addFilePreview(file);
+                }
+            });
+        }
+        
+        function validateFile(file) {
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            
+            if (!allowedTypes.includes(file.type)) {
+                alert('{% trans "Неподдерживаемый тип файла" %}: ' + file.name);
+                return false;
+            }
+            
+            if (file.size > maxSize) {
+                alert('{% trans "Файл слишком большой" %}: ' + file.name + ' ({% trans "максимум 10MB" %})');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function addFilePreview(file) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-preview-item';
+            
+            const fileIcon = getFileIcon(file.type);
+            const fileSize = formatFileSize(file.size);
+            
+            fileItem.innerHTML = `
+                <div class="file-icon">
+                    <i class="${fileIcon}"></i>
+                </div>
+                <div class="file-info">
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-size">${fileSize}</div>
+                </div>
+                <div class="file-remove" onclick="removeFile(this)">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+            `;
+            
+            filePreview.appendChild(fileItem);
+        }
+        
+        function getFileIcon(fileType) {
+            if (fileType.startsWith('image/')) {
+                return 'bi bi-image';
+            } else if (fileType === 'application/pdf') {
+                return 'bi bi-file-pdf';
+            } else if (fileType.includes('word')) {
+                return 'bi bi-file-word';
+            } else {
+                return 'bi bi-file';
+            }
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        window.removeFile = function(element) {
+            element.parentElement.remove();
+        };
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ consultation.title }} - familyway +{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Consultation Header -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">{{ consultation.title }}</h4>
+                        <div>
+                            {% if consultation.status == 'pending' %}
+                            <span class="badge bg-warning">
+                                <i class="bi bi-clock"></i> Ожидает ответа
+                            </span>
+                            {% elif consultation.status == 'in_progress' %}
+                            <span class="badge bg-info">
+                                <i class="bi bi-chat"></i> В процессе
+                            </span>
+                            {% elif consultation.status == 'completed' %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle"></i> Завершена
+                            </span>
+                            {% elif consultation.status == 'cancelled' %}
+                            <span class="badge bg-danger">
+                                <i class="bi bi-x-circle"></i> Отменена
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <strong><i class="bi bi-person"></i> Консультант:</strong> 
+                                {{ consultation.consultant.full_name }}
+                            </p>
+                            <p class="mb-2">
+                                <strong><i class="bi bi-briefcase"></i> Специализация:</strong> 
+                                {{ consultation.consultant.get_specialization_display }}
+                            </p>
+                            <p class="mb-2">
+                                <strong><i class="bi bi-calendar"></i> Создана:</strong> 
+                                {{ consultation.created_at|date:"d.m.Y H:i" }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <strong><i class="bi bi-exclamation-triangle"></i> Срочность:</strong>
+                                {% if consultation.urgency == 'urgent' %}
+                                <span class="badge bg-danger">Срочно</span>
+                                {% elif consultation.urgency == 'high' %}
+                                <span class="badge bg-warning">Высокая</span>
+                                {% elif consultation.urgency == 'medium' %}
+                                <span class="badge bg-info">Средняя</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Низкая</span>
+                                {% endif %}
+                            </p>
+                            {% if consultation.child_age_months %}
+                            <p class="mb-2">
+                                <strong><i class="bi bi-baby"></i> Возраст ребенка:</strong> 
+                                {{ consultation.child_age_months }} мес.
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Problem Description -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-chat-text"></i> Описание проблемы
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ consultation.description|linebreaks }}</p>
+                    
+                    {% if consultation.child_symptoms %}
+                    <h6 class="fw-bold text-secondary mt-3">Симптомы:</h6>
+                    <p>{{ consultation.child_symptoms|linebreaks }}</p>
+                    {% endif %}
+                    
+                    {% if consultation.medical_history %}
+                    <h6 class="fw-bold text-secondary mt-3">Медицинская история:</h6>
+                    <p>{{ consultation.medical_history|linebreaks }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Messages -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-chat-dots"></i> Переписка
+                    </h5>
+                </div>
+                <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                    {% for message in messages %}
+                    <div class="mb-3">
+                        <div class="d-flex {% if message.sender == request.user %}justify-content-end{% else %}justify-content-start{% endif %}">
+                            <div class="{% if message.sender == request.user %}bg-primary text-white{% else %}bg-light{% endif %} rounded p-3" style="max-width: 70%;">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <strong class="small">
+                                        {% if message.sender == request.user %}
+                                        Вы
+                                        {% else %}
+                                        {{ message.sender.get_full_name|default:message.sender.username }}
+                                        {% endif %}
+                                    </strong>
+                                    <small class="{% if message.sender == request.user %}text-white-50{% else %}text-muted{% endif %}">
+                                        {{ message.created_at|date:"d.m H:i" }}
+                                    </small>
+                                </div>
+                                <p class="mb-2">{{ message.content|linebreaks }}</p>
+                                
+                                {% if message.attachments %}
+                                <div class="mt-2">
+                                    <a href="{{ message.attachments.url }}" class="btn btn-sm btn-outline-{% if message.sender == request.user %}light{% else %}primary{% endif %}" target="_blank">
+                                        <i class="bi bi-paperclip"></i> {{ message.attachments.name|slice:"20:" }}
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted text-center py-3">Переписка пока пуста</p>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Send Message Form -->
+            {% if consultation.status == 'in_progress' or consultation.status == 'pending' %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-send"></i> Отправить сообщение
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'consultant:send_message' consultation.pk %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ message_form|crispy }}
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-send"></i> Отправить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Consultant Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person-badge"></i> Консультант
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <i class="bi bi-person-circle text-primary" style="font-size: 4rem;"></i>
+                    <h6 class="mt-2">{{ consultation.consultant.full_name }}</h6>
+                    <p class="text-muted">{{ consultation.consultant.get_specialization_display }}</p>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-center align-items-center mb-2">
+                            <span class="text-warning">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= consultation.consultant.rating %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% else %}
+                                        <i class="bi bi-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="ms-2 text-muted">({{ consultation.consultant.rating|floatformat:1 }})</span>
+                        </div>
+                        <small class="text-muted">{{ consultation.consultant.total_consultations }} консультаций</small>
+                    </div>
+                    
+                    <a href="{% url 'consultant:consultant_detail' consultation.consultant.pk %}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-eye"></i> Профиль
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-gear"></i> Действия
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'consultant:consultation_list' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> К списку
+                        </a>
+                        
+                        {% if consultation.status == 'in_progress' %}
+                        <a href="{% url 'consultant:mark_completed' consultation.pk %}" class="btn btn-success">
+                            <i class="bi bi-check-circle"></i> Завершить
+                        </a>
+                        {% endif %}
+                        
+                        {% if consultation.status == 'completed' and not existing_review %}
+                        <a href="{% url 'consultant:add_review' consultation.pk %}" class="btn btn-warning">
+                            <i class="bi bi-star"></i> Оценить
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Review -->
+            {% if existing_review %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-star"></i> Ваш отзыв
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <div class="mb-2">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= existing_review.rating %}
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                {% else %}
+                                    <i class="bi bi-star text-muted"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% if existing_review.comment %}
+                        <p class="small text-muted">{{ existing_review.comment }}</p>
+                        {% endif %}
+                        <small class="text-muted">{{ existing_review.created_at|date:"d.m.Y" }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

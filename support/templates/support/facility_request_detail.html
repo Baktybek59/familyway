@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block title %}Заявка учреждения #{{ facility_request.id }} - Техподдержка{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="bi bi-building me-2"></i>{{ facility_request.facility_name }}
+                        </h4>
+                        <span class="badge bg-warning fs-6">Ожидает рассмотрения</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6>Основная информация</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Тип учреждения:</strong></td>
+                                    <td>{{ facility_request.facility_type.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Адрес:</strong></td>
+                                    <td>{{ facility_request.address }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Контактное лицо:</strong></td>
+                                    <td>{{ facility_request.contact_person }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Телефон:</strong></td>
+                                    <td>{{ facility_request.phone }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email:</strong></td>
+                                    <td>{{ facility_request.email }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Данные для входа</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Логин:</strong></td>
+                                    <td><code>{{ facility_request.username }}</code></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Статус:</strong></td>
+                                    <td>
+                                        {% if facility_request.status == 'pending' %}
+                                            <span class="badge bg-warning">Ожидает рассмотрения</span>
+                                        {% elif facility_request.status == 'approved' %}
+                                            <span class="badge bg-success">Одобрена</span>
+                                        {% elif facility_request.status == 'rejected' %}
+                                            <span class="badge bg-danger">Отклонена</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Подана:</strong></td>
+                                    <td>{{ facility_request.created_at|date:"d.m.Y H:i" }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    {% if facility_request.description %}
+                    <div class="mb-4">
+                        <h6>Описание</h6>
+                        <div class="bg-light p-3 rounded">
+                            {{ facility_request.description|linebreaks }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if facility_request.documents %}
+                    <div class="mb-4">
+                        <h6>Документы</h6>
+                        <div class="d-flex gap-2">
+                            <a href="{{ facility_request.documents.url }}" class="btn btn-outline-primary" target="_blank">
+                                <i class="bi bi-file-earmark-pdf me-1"></i>Скачать документы
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="bi bi-gear me-2"></i>Действия
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" name="action" value="approve" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i>Одобрить заявку
+                            </button>
+                            <button type="submit" name="action" value="reject" class="btn btn-danger">
+                                <i class="bi bi-x-circle me-1"></i>Отклонить заявку
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'support:facility_requests' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Назад к списку
+                        </a>
+                        <a href="{% url 'support:dashboard' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-house me-1"></i>Дашборд
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Информация
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">
+                        После одобрения заявки учреждение получит уведомление на email 
+                        и сможет войти в систему используя указанные логин и пароль.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

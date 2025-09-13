@@ -1,0 +1,562 @@
+{% extends 'base.html' %}
+{% load support_tags %}
+
+{% block title %}Форум{% endblock %}
+
+{% block extra_css %}
+<style>
+    .category-card {
+        border-radius: 1rem;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+    
+    .category-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        text-align: center;
+    }
+    
+    .category-body {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .category-footer {
+        background: #f8f9fa;
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .stats-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #007bff;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        color: #6c757d;
+        font-weight: 500;
+    }
+    
+    .recent-topics {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .topic-item {
+        padding: 1rem;
+        border-bottom: 1px solid #e9ecef;
+        transition: background-color 0.3s ease;
+    }
+    
+    .topic-item:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .topic-item:last-child {
+        border-bottom: none;
+    }
+    
+    .topic-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.5rem;
+        margin-left: 0.5rem;
+    }
+    
+    .badge-pinned {
+        background: #ffc107;
+        color: #000;
+    }
+    
+    .badge-locked {
+        background: #dc3545;
+        color: #fff;
+    }
+    
+    .badge-announcement {
+        background: #17a2b8;
+        color: #fff;
+    }
+    
+    .badge-closed {
+        background: #6c757d;
+        color: #fff;
+    }
+    
+    .reputation-badge {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.5rem;
+        margin-left: 0.5rem;
+    }
+    
+    .tags-container {
+        margin-top: 0.5rem;
+    }
+    
+    .tag {
+        display: inline-block;
+        background: #e9ecef;
+        color: #495057;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        margin-right: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .btn-modern {
+        border-radius: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .page-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 1rem;
+        padding: 3rem 2rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .header-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .stat-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #f0f0f0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+    
+    .stat-icon.online {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    
+    .stat-content {
+        flex: 1;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        display: block;
+        line-height: 1;
+    }
+    
+    .stat-label {
+        color: #6c757d;
+        font-weight: 500;
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+    }
+    
+    .category-card-modern {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        border: 1px solid #f0f0f0;
+    }
+    
+    .category-card-modern:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .category-header-modern {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .category-header-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain2" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain2)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .category-header-modern .content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .category-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.9;
+    }
+    
+    .category-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .category-description {
+        opacity: 0.9;
+        font-size: 0.9rem;
+    }
+    
+    .category-stats {
+        background: #f8f9fa;
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-around;
+        text-align: center;
+    }
+    
+    .category-stat {
+        flex: 1;
+    }
+    
+    .category-stat-number {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #2c3e50;
+        display: block;
+    }
+    
+    .category-stat-label {
+        font-size: 0.75rem;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .support-badge {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .support-badge i {
+        font-size: 0.7rem;
+    }
+    
+    .author-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    
+    .author-avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .author-avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.7rem;
+    }
+    
+    .auth-required {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffffff 100%);
+        border: 2px solid #ffc107;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        text-align: center;
+        margin: 2rem 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Современный заголовок с градиентом -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="display-4 fw-bold text-white mb-3">
+                <i class="bi bi-chat-dots me-3"></i>Форум сообщества
+            </h1>
+            <p class="lead text-white-50 mb-4">
+                Общайтесь, делитесь опытом и находите ответы на важные вопросы воспитания детей
+            </p>
+            <div class="d-flex gap-3">
+                <a href="{% url 'forum:topic_create' %}" class="btn btn-light btn-lg px-4">
+                    <i class="bi bi-plus-circle me-2"></i>Создать тему
+                </a>
+                <a href="{% url 'forum:search' %}" class="btn btn-outline-light btn-lg px-4">
+                    <i class="bi bi-search me-2"></i>Поиск
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Статистика форума с иконками -->
+    <div class="stats-section">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-chat-square-text"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-number">{{ total_topics }}</span>
+                        <div class="stat-label">Тем обсуждения</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-chat-dots"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-number">{{ total_posts }}</span>
+                        <div class="stat-label">Сообщений</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-number">{{ total_users }}</span>
+                        <div class="stat-label">Участников</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon online">
+                        <i class="bi bi-circle-fill"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-number">{{ online_users }}</span>
+                        <div class="stat-label">Онлайн сейчас</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Недавние темы -->
+    {% if recent_topics %}
+    <div class="recent-topics">
+        <h5 class="mb-4">
+            <i class="bi bi-clock me-2"></i>Недавние темы
+        </h5>
+        {% for topic in recent_topics %}
+        <div class="topic-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-1">
+                        <a href="{% url 'forum:topic_detail' topic.id %}" class="text-decoration-none">
+                            {{ topic.title }}
+                        </a>
+                    </h6>
+                    <div class="d-flex align-items-center">
+                        <div class="author-avatar me-2">
+                            {% if topic.author.parent_profile and topic.author.parent_profile.photo %}
+                                <img src="{{ topic.author.parent_profile.photo.url }}" alt="Фото профиля" class="author-avatar-img">
+                            {% else %}
+                                <div class="author-avatar-placeholder">
+                                    {{ topic.author.username|first|upper }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">
+                            <i class="bi bi-person me-1"></i>{{ topic.author.get_full_name }}
+                            {% if topic.author|is_support_staff %}
+                            <span class="support-badge">
+                                <i class="bi bi-headset"></i>Техподдержка
+                            </span>
+                            {% endif %}
+                            •
+                            <i class="bi bi-calendar me-1"></i>{{ topic.created_at|date:"d.m.Y H:i" }}
+                        </small>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <small class="text-muted">
+                        <i class="bi bi-chat-dots me-1"></i>{{ topic.posts.count }} сообщений
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Категории с современным дизайном -->
+    <div class="row g-4">
+        {% for category in categories %}
+        <div class="col-lg-4 col-md-6">
+            <div class="category-card-modern">
+                <div class="category-header-modern">
+                    <div class="content">
+                        <div class="category-icon">
+                            <i class="{{ category.icon|default:'bi bi-chat-square' }}"></i>
+                        </div>
+                        <h5 class="category-title">{{ category.name }}</h5>
+                        <p class="category-description">{{ category.description|truncatewords:15 }}</p>
+                    </div>
+                </div>
+                
+                <div class="category-stats">
+                    <div class="category-stat">
+                        <span class="category-stat-number">{{ category.topics_count }}</span>
+                        <div class="category-stat-label">Тем</div>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-number">{{ category.posts_count }}</span>
+                        <div class="category-stat-label">Сообщений</div>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-number">{{ category.subscribers.count }}</span>
+                        <div class="category-stat-label">Подписчиков</div>
+                    </div>
+                </div>
+                
+                <div class="p-3">
+                    <a href="{% url 'forum:category_detail' category.id %}" class="btn btn-primary btn-modern w-100">
+                        <i class="bi bi-arrow-right me-2"></i>Перейти в категорию
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Призыв к действию для неавторизованных -->
+    {% if not user.is_authenticated %}
+    <div class="auth-required">
+        <i class="bi bi-lock-fill me-2" style="font-size: 3rem;"></i>
+        <h4 class="mb-3">Присоединяйтесь к обсуждениям!</h4>
+        <p class="mb-4">Войдите в систему, чтобы создавать темы, отвечать на сообщения и общаться с другими родителями</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'accounts:login' %}" class="btn btn-warning btn-modern">
+                <i class="bi bi-box-arrow-in-right me-1"></i>Войти
+            </a>
+            <a href="{% url 'accounts:register' %}" class="btn btn-outline-primary btn-modern">
+                <i class="bi bi-person-plus me-1"></i>Регистрация
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <!-- Кнопка создания темы для авторизованных -->
+    <div class="text-center mt-4">
+        <a href="{% url 'forum:topic_create' %}" class="btn btn-success btn-modern">
+            <i class="bi bi-plus-circle me-1"></i>Создать новую тему
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

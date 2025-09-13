@@ -1,0 +1,439 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Управление семьей - familyway +{% endblock %}
+
+{% block extra_head %}
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .family-hero {
+        background: linear-gradient(135deg, #ff6b9d, #4ecdc4);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .family-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .family-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .child-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .child-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .child-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0 auto 1rem;
+    }
+    
+    .child-avatar.male {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+    }
+    
+    .child-avatar.female {
+        background: linear-gradient(45deg, #ff6b9d, #ff8fab);
+    }
+    
+    .stats-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #ff6b9d;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        color: #6c757d;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+    
+    .btn-add-child {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .btn-add-child:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+    
+    .btn-edit {
+        background: #4ecdc4;
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.9rem;
+    }
+    
+    .btn-edit:hover {
+        background: #44a08d;
+        color: white;
+        transform: translateY(-1px);
+    }
+    
+    .btn-delete {
+        background: #dc3545;
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.9rem;
+    }
+    
+    .btn-delete:hover {
+        background: #c82333;
+        color: white;
+        transform: translateY(-1px);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #6c757d;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 1rem;
+    }
+    
+    .parent-card {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #ff6b9d;
+    }
+    
+    .parent-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-right: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Family Hero -->
+<section class="family-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="bi bi-people me-3"></i>Управление семьей
+                </h1>
+                <p class="lead mb-4">
+                    Управляйте информацией о ваших детях и семейных данных
+                </p>
+                <div class="d-flex align-items-center">
+                    <span class="badge bg-light text-dark me-3 px-3 py-2">
+                        <i class="bi bi-house me-2"></i>{{ family.name }}
+                    </span>
+                    <span class="badge bg-light text-dark me-3 px-3 py-2">
+                        <i class="bi bi-key me-2"></i>{{ profile.family_code }}
+                    </span>
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-person me-2"></i>{{ parents.count }} родитель(ей)
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-4 text-end">
+                <a href="{% url 'accounts:add_child' %}" class="btn-add-child" style="z-index: 9999; position: relative; pointer-events: auto; cursor: pointer;" onclick="console.log('Add child button clicked!'); return true;">
+                    <i class="bi bi-plus-circle me-2"></i>Добавить ребёнка
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Messages -->
+    {% if messages %}
+    <div class="row mb-3">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="bi bi-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Statistics -->
+            <div class="stats-card">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="stat-number">{{ children.count }}</div>
+                        <div class="stat-label">Детей в семье</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-number">{{ parents.count }}</div>
+                        <div class="stat-label">Родителей</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-number">{{ children.count|add:parents.count }}</div>
+                        <div class="stat-label">Всего членов семьи</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Children List -->
+            <div class="family-card">
+                <div class="card-header bg-light">
+                    <h4 class="fw-bold mb-0">
+                        <i class="bi bi-heart me-2"></i>Дети в семье
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    {% if children %}
+                        <div class="row">
+                            {% for child in children %}
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="child-card">
+                                    <div class="card-body text-center">
+                                        <div class="child-avatar {% if child.gender == 'male' %}male{% elif child.gender == 'female' %}female{% endif %}">
+                                            {{ child.name|first|upper }}
+                                        </div>
+                                        <h5 class="fw-bold mb-2">{{ child.name }}</h5>
+                                        <p class="text-muted mb-2">
+                                            {% if child.gender %}
+                                                {{ child.get_gender_display }}
+                                            {% else %}
+                                                Пол не указан
+                                            {% endif %}
+                                        </p>
+                                        <p class="text-muted mb-3">
+                                            <i class="bi bi-calendar me-1"></i>
+                                            {{ child.birth_date|date:"d.m.Y" }}
+                                        </p>
+                                        <div class="mb-3">
+                                            <span class="badge bg-primary">
+                                                {{ child.age_months }} месяцев
+                                            </span>
+                                        </div>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <a href="{% url 'accounts:edit_child' child.id %}" class="btn-edit">
+                                                <i class="bi bi-pencil me-1"></i>Редактировать
+                                            </a>
+                                            <a href="{% url 'accounts:delete_child' child.id %}" class="btn-delete" onclick="return confirm('Вы уверены, что хотите удалить {{ child.name }}?')">
+                                                <i class="bi bi-trash me-1"></i>Удалить
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="bi bi-heart"></i>
+                            <h5 class="fw-bold mb-3">Пока нет детей в семье</h5>
+                            <p class="mb-4">Добавьте первого ребёнка, чтобы начать отслеживать его развитие</p>
+                            <p class="text-muted">Используйте кнопку "Добавить ребёнка" в верхней части страницы</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Family Info -->
+            <div class="family-card">
+                <div class="card-header bg-light">
+                    <h5 class="fw-bold mb-0">
+                        <i class="bi bi-house me-2"></i>Информация о семье
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <strong>Название семьи:</strong>
+                        <p class="mb-0">{{ family.name }}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Код семьи:</strong>
+                        <p class="mb-0">
+                            <span class="badge bg-primary">{{ profile.family_code }}</span>
+                        </p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Создана:</strong>
+                        <p class="mb-0">{{ family.created_at|date:"d.m.Y" }}</p>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'accounts:family_connect' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-people me-2"></i>Управление семьей
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parents List -->
+            <div class="family-card">
+                <div class="card-header bg-light">
+                    <h5 class="fw-bold mb-0">
+                        <i class="bi bi-person me-2"></i>Родители в семье
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    {% for parent in parents %}
+                    <div class="parent-card">
+                        <div class="d-flex align-items-center">
+                            <div class="parent-avatar">
+                                {{ parent.user.username|first|upper }}
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">{{ parent.user.username }}</h6>
+                                <span class="badge bg-{% if parent.role == 'mom' %}danger{% else %}primary{% endif %}">
+                                    {{ parent.get_role_display }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="family-card">
+                <div class="card-header bg-light">
+                    <h5 class="fw-bold mb-0">
+                        <i class="bi bi-lightning me-2"></i>Быстрые действия
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Назад к профилю
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Family management page loaded');
+    
+    // Добавляем обработчик для кнопки добавления детей
+    const addChildButton = document.querySelector('a[href*="add-child"]');
+    if (addChildButton) {
+        console.log('Found add child button:', addChildButton);
+        console.log('Button href:', addChildButton.href);
+        
+        addChildButton.addEventListener('click', function(e) {
+            console.log('Add child button clicked!');
+            console.log('Button href:', this.href);
+            
+            // Проверяем, что ссылка ведет на правильный URL
+            if (this.href.includes('/accounts/family/add-child/')) {
+                console.log('URL is correct, proceeding...');
+            } else {
+                console.error('URL is incorrect:', this.href);
+                e.preventDefault();
+            }
+        });
+    } else {
+        console.log('Add child button not found');
+    }
+    
+    // Добавляем глобальный обработчик кликов
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('a[href*="add-child"]')) {
+            console.log('Global click handler: Add child button clicked');
+        }
+    });
+});
+</script>
+{% endblock %}

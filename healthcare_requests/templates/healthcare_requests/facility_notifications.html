@@ -1,0 +1,451 @@
+{% extends 'base.html' %}
+
+{% block title %}Уведомления - {{ facility_request.facility_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.content-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.content-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.notification-item:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.notification-item.unread {
+    background: #e3f2fd;
+    border-left: 4px solid #2196f3;
+}
+
+.notification-icon {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    margin-top: 0.25rem;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.notification-message {
+    color: #495057;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.notification-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.notification-time {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.notification-type {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.type-request_approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.type-request_rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.type-new_consultation {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.type-new_review {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.type-system {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.notification-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #adb5bd;
+}
+
+.filter-section {
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-row {
+    display: flex;
+    gap: 1rem;
+    align-items: end;
+}
+
+.filter-group {
+    flex: 1;
+}
+
+.filter-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    background: white;
+}
+
+.btn-filter {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-filter:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.page-link {
+    color: #667eea;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem 0.75rem;
+    margin: 0 0.25rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.page-link:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.page-item.active .page-link {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.mark-all-read {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.mark-all-read:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .notification-item {
+        flex-direction: column;
+    }
+    
+    .notification-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .notification-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .filter-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .notification-actions {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="page-title">
+                    <i class="bi bi-bell me-3"></i>Уведомления
+                </h1>
+                <p class="page-subtitle">
+                    {{ facility_request.facility_name }} • Получайте уведомления о новых консультациях и отзывах
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'healthcare_requests:facility_dashboard' %}" class="btn btn-light">
+                    <i class="bi bi-arrow-left me-2"></i>Назад к дашборду
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Filters -->
+    <div class="filter-section">
+        <form method="get" class="filter-row">
+            <div class="filter-group">
+                <label class="filter-label">Тип уведомления</label>
+                <select name="type" class="filter-select">
+                    <option value="">Все типы</option>
+                    <option value="request_approved" {% if type_filter == 'request_approved' %}selected{% endif %}>Заявка одобрена</option>
+                    <option value="request_rejected" {% if type_filter == 'request_rejected' %}selected{% endif %}>Заявка отклонена</option>
+                    <option value="new_consultation" {% if type_filter == 'new_consultation' %}selected{% endif %}>Новая консультация</option>
+                    <option value="new_review" {% if type_filter == 'new_review' %}selected{% endif %}>Новый отзыв</option>
+                    <option value="system" {% if type_filter == 'system' %}selected{% endif %}>Системные</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Статус</label>
+                <select name="status" class="filter-select">
+                    <option value="">Все статусы</option>
+                    <option value="unread">Непрочитанные</option>
+                    <option value="read">Прочитанные</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <button type="submit" class="btn btn-filter">
+                    <i class="bi bi-funnel me-2"></i>Фильтровать
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="content-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="content-title mb-0">
+                <i class="bi bi-bell me-2"></i>Уведомления ({{ page_obj.paginator.count }})
+            </h5>
+            <button class="mark-all-read" onclick="markAllAsRead()">
+                <i class="bi bi-check-all me-2"></i>Отметить все как прочитанные
+            </button>
+        </div>
+        
+        {% if page_obj %}
+            {% for notification in page_obj %}
+            <div class="notification-item {% if not notification.is_read %}unread{% endif %}">
+                <div class="notification-icon">
+                    {% if notification.notification_type == 'request_approved' %}
+                        <i class="bi bi-check-circle text-success"></i>
+                    {% elif notification.notification_type == 'request_rejected' %}
+                        <i class="bi bi-x-circle text-danger"></i>
+                    {% elif notification.notification_type == 'new_consultation' %}
+                        <i class="bi bi-chat-dots text-primary"></i>
+                    {% elif notification.notification_type == 'new_review' %}
+                        <i class="bi bi-star text-warning"></i>
+                    {% else %}
+                        <i class="bi bi-info-circle text-info"></i>
+                    {% endif %}
+                </div>
+                
+                <div class="notification-content">
+                    <div class="notification-title">{{ notification.title }}</div>
+                    <div class="notification-message">{{ notification.message }}</div>
+                    
+                    <div class="notification-meta">
+                        <div class="notification-time">
+                            <i class="bi bi-clock me-1"></i>
+                            {{ notification.created_at|timesince }} назад
+                        </div>
+                        <div class="notification-type type-{{ notification.notification_type }}">
+                            {{ notification.get_notification_type_display }}
+                        </div>
+                    </div>
+                    
+                    <div class="notification-actions">
+                        {% if not notification.is_read %}
+                        <button class="btn btn-outline-success btn-sm" onclick="markAsRead({{ notification.id }})">
+                            <i class="bi bi-check me-1"></i>Отметить как прочитанное
+                        </button>
+                        {% endif %}
+                        <button class="btn btn-outline-danger btn-sm" onclick="deleteNotification({{ notification.id }})">
+                            <i class="bi bi-trash me-1"></i>Удалить
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="page-link">&laquo; Первая</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Предыдущая</a>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="page-link active">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="page-link">Следующая</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">Последняя &raquo;</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <i class="bi bi-bell-slash"></i>
+                <h5>Уведомления не найдены</h5>
+                <p>У вас пока нет уведомлений.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function markAsRead(notificationId) {
+    fetch(`/healthcare-requests/notifications/${notificationId}/read/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            location.reload();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function markAllAsRead() {
+    // Здесь можно добавить функцию для отметки всех уведомлений как прочитанных
+    alert('Функция будет добавлена в следующей версии');
+}
+
+function deleteNotification(notificationId) {
+    if (confirm('Вы уверены, что хотите удалить это уведомление?')) {
+        // Здесь можно добавить функцию для удаления уведомления
+        alert('Функция будет добавлена в следующей версии');
+    }
+}
+</script>
+{% endblock %}
+
+
+
+

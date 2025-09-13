@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Врачи" %} - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .doctor-hero {
+        background: linear-gradient(135deg, #17a2b8, #138496);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .doctor-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .doctor-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        border: 1px solid #f1f3f4;
+        transition: all 0.3s ease;
+        min-height: 140px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .doctor-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .doctor-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #17a2b8, #138496);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        flex-shrink: 0;
+        object-fit: cover;
+    }
+    
+    .rating-stars {
+        color: #ffc107;
+        margin-right: 0.5rem;
+    }
+    
+    .facility-filter {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        border: 1px solid #f1f3f4;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #6c757d;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    /* Дополнительные стили для карточек */
+    .col-lg-6, .col-xl-4 {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .doctor-card a {
+        height: 100%;
+        display: block;
+    }
+    
+    .doctor-card .d-flex {
+        height: 100%;
+    }
+    
+    .doctor-card .flex-grow-1 {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Doctor Hero -->
+<section class="doctor-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="bi bi-person-badge me-3"></i>{% trans "Врачи" %}
+                </h1>
+                <p class="lead mb-0">
+                    {% trans "Найдите лучших врачей в медицинских учреждениях" %}
+                </p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'healthcare:index' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-arrow-left me-2"></i>{% trans "Все учреждения" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Facility Filter -->
+    <div class="facility-filter">
+        <h5 class="fw-bold mb-3">
+            <i class="bi bi-building me-2"></i>{% trans "Фильтр по учреждениям" %}
+        </h5>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <select class="form-select" id="facilityFilter">
+                    <option value="">{% trans "Все учреждения" %}</option>
+                    {% for facility in facilities %}
+                    <option value="{{ facility.id }}">{{ facility.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Doctors List -->
+    {% if doctors %}
+        <div class="row">
+            {% for doctor in doctors %}
+            <div class="col-lg-6 col-xl-4">
+                <a href="{% url 'healthcare:doctor_detail' doctor.pk %}" class="text-decoration-none">
+                    <div class="doctor-card">
+                        <div class="d-flex align-items-start">
+                            {% if doctor.photo %}
+                            <img src="{{ doctor.photo.url }}" alt="{{ doctor.full_name }}" class="doctor-avatar">
+                            {% else %}
+                            <div class="doctor-avatar">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            {% endif %}
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="fw-bold mb-2 text-dark">{{ doctor.full_name }}</h5>
+                                <p class="text-muted mb-2 fw-medium">{{ doctor.specialization }}</p>
+                                <p class="text-muted mb-3 small">
+                                    <i class="bi bi-building me-1"></i>{{ doctor.facility.name }}
+                                </p>
+                                <div class="d-flex align-items-center mt-auto">
+                                    <div class="rating-stars">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= doctor.rating %}
+                                                <i class="bi bi-star-fill"></i>
+                                            {% else %}
+                                                <i class="bi bi-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <span class="text-muted small ms-2">{{ doctor.rating|floatformat:1 }} ({{ doctor.reviews_count }})</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; {% trans "Первая" %}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{% trans "Предыдущая" %}</a>
+                        </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">
+                                {% trans "Страница" %} {{ page_obj.number }} {% trans "из" %} {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans "Следующая" %}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{% trans "Последняя" %} &raquo;</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-person-badge"></i>
+                    <h4>{% trans "Нет врачей" %}</h4>
+                    <p class="mb-4">{% trans "Пока не добавлено ни одного врача" %}</p>
+                    <a href="{% url 'healthcare:doctor_add' %}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i>{% trans "Добавить врача" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const facilityFilter = document.getElementById('facilityFilter');
+    
+    if (facilityFilter) {
+        facilityFilter.addEventListener('change', function() {
+            const facilityId = this.value;
+            const currentUrl = new URL(window.location);
+            
+            if (facilityId) {
+                currentUrl.searchParams.set('facility', facilityId);
+            } else {
+                currentUrl.searchParams.delete('facility');
+            }
+            
+            window.location.href = currentUrl.toString();
+        });
+    }
+});
+</script>
+{% endblock %}
+

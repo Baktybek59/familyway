@@ -1,0 +1,383 @@
+{% extends 'base.html' %}
+
+{% block title %}Модерация отзывов - Техподдержка{% endblock %}
+
+{% block extra_css %}
+<style>
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    position: relative;
+    z-index: 1;
+}
+
+.review-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.review-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.review-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.review-badge {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 1.5rem;
+    font-weight: 600;
+}
+
+.badge-approved {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.badge-pending {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.badge-rating {
+    background: #cce7ff;
+    color: #004085;
+    border: 1px solid #b3d7ff;
+}
+
+.badge-category {
+    background: #e2e3e5;
+    color: #383d41;
+    border: 1px solid #d6d8db;
+}
+
+.review-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+}
+
+.meta-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.meta-icon.author {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.meta-icon.target {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.meta-icon.rating {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    color: white;
+}
+
+.meta-icon.date {
+    background: linear-gradient(135deg, #fd7e14 0%, #e55a00 100%);
+    color: white;
+}
+
+.meta-content {
+    flex: 1;
+}
+
+.meta-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.meta-value {
+    font-size: 0.9rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+.star {
+    font-size: 1rem;
+}
+
+.star.filled {
+    color: #ffc107;
+}
+
+.star.empty {
+    color: #e9ecef;
+}
+
+.review-content {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #667eea;
+}
+
+.review-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="page-title">
+                    <i class="bi bi-star me-3"></i>Модерация отзывов
+                </h1>
+                <p class="page-subtitle">
+                    Управление отзывами о врачах и учреждениях
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'support:dashboard' %}" class="btn btn-light">
+                    <i class="bi bi-arrow-left me-2"></i>Назад к дашборду
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    {% if reviews %}
+        <div class="row">
+            {% for review in reviews %}
+            <div class="col-lg-6 mb-4">
+                <div class="review-card">
+                    <div class="review-header">
+                        <h3 class="review-title">{{ review.target_name|truncatewords:8 }}</h3>
+                        <div class="review-badges">
+                            {% if review.is_approved %}
+                            <span class="review-badge badge-approved">
+                                <i class="bi bi-check-circle me-1"></i>Одобрен
+                            </span>
+                            {% else %}
+                            <span class="review-badge badge-pending">
+                                <i class="bi bi-clock me-1"></i>На модерации
+                            </span>
+                            {% endif %}
+                            <span class="review-badge badge-rating">
+                                <i class="bi bi-star me-1"></i>{{ review.rating }}★
+                            </span>
+                            <span class="review-badge badge-category">
+                                <i class="bi bi-tag me-1"></i>{{ review.target_category }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="review-meta">
+                        <div class="meta-item">
+                            <div class="meta-icon author">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <div class="meta-content">
+                                <div class="meta-label">Автор</div>
+                                <div class="meta-value">{{ review.user.get_full_name }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="meta-item">
+                            <div class="meta-icon target">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <div class="meta-content">
+                                <div class="meta-label">Объект</div>
+                                <div class="meta-value">{{ review.target_name }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="meta-item">
+                            <div class="meta-icon rating">
+                                <i class="bi bi-star"></i>
+                            </div>
+                            <div class="meta-content">
+                                <div class="meta-label">Рейтинг</div>
+                                <div class="meta-value">
+                                    <div class="rating-stars">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}
+                                                <i class="bi bi-star-fill star filled"></i>
+                                            {% else %}
+                                                <i class="bi bi-star star empty"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <small class="text-muted">({{ review.rating }}/5)</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="meta-item">
+                            <div class="meta-icon date">
+                                <i class="bi bi-calendar"></i>
+                            </div>
+                            <div class="meta-content">
+                                <div class="meta-label">Создан</div>
+                                <div class="meta-value">{{ review.created_at|date:"d.m.Y H:i" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if review.comment %}
+                    <div class="review-content">
+                        {{ review.comment|truncatewords:30|linebreaks }}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="review-actions">
+                        <a href="{% url 'support:edit_review' review.id %}" class="btn btn-warning">
+                            <i class="bi bi-pencil-square me-2"></i>Редактировать
+                        </a>
+                        <a href="{% url 'support:delete_review' review.id %}" class="btn btn-danger" 
+                           onclick="return confirm('Вы уверены, что хотите удалить этот отзыв?')">
+                            <i class="bi bi-trash me-2"></i>Удалить
+                        </a>
+                        <div class="text-muted small align-self-center">
+                            ID: {{ review.id }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">Первая</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                </li>
+                {% endif %}
+                
+                <li class="page-item active">
+                    <span class="page-link">{{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+                </li>
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-star"></i>
+            <h4>Нет отзывов для модерации</h4>
+            <p>Все отзывы обработаны</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

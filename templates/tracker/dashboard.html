@@ -1,0 +1,430 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Трекер" %} - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tracker-hero {
+        background: linear-gradient(135deg, #ff6b9d, #4ecdc4);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tracker-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .child-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        border: 1px solid #f1f3f4;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .child-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .child-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 2;
+    }
+    
+    .child-avatar.male {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+    }
+    
+    .child-avatar.female {
+        background: linear-gradient(45deg, #ff6b9d, #ff8fab);
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 0.75rem;
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stat-item:hover {
+        background: #e9ecef;
+        transform: translateY(-2px);
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #ff6b9d;
+        margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #6c757d;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    .btn-add-child {
+        background: linear-gradient(45deg, #ff6b9d, #4ecdc4);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .btn-add-child:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+    
+    .quick-actions {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        border: 1px solid #f1f3f4;
+    }
+    
+    .action-btn {
+        background: white;
+        border: 2px solid #f1f3f4;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+    
+    .action-btn:hover {
+        border-color: #ff6b9d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 107, 157, 0.1);
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .action-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: #ff6b9d;
+    }
+    
+    .action-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+    
+    .action-desc {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    
+    .btn-management {
+        position: relative;
+        z-index: 10;
+        pointer-events: auto;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
+    
+    .btn-management:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 1);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-management:active {
+        transform: translateY(0);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Messages -->
+{% if messages %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="bi bi-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Tracker Hero -->
+<section class="tracker-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="bi bi-graph-up me-3"></i>{% trans "Трекер развития" %}
+                </h1>
+                <p class="lead mb-4">
+                    {% trans "Отслеживайте развитие ваших детей и ведите подробную статистику" %}
+                </p>
+                {% if family %}
+                <div class="d-flex align-items-center">
+                    <span class="badge bg-light text-dark me-3">
+                        <i class="bi bi-people me-1"></i>
+                        {% trans "Семья" %}: {{ family.name }}
+                    </span>
+                    <span class="badge bg-light text-dark">
+                        <i class="bi bi-key me-1"></i>
+                        {% trans "Код" %}: {{ request.user.parent_profile.family_code }}
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4 text-end">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'accounts:family_management' %}" class="btn btn-outline-light btn-lg btn-management">
+                        <i class="bi bi-people me-2"></i>{% trans "Управление детьми" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h4 class="fw-bold mb-4">
+            <i class="bi bi-lightning me-2"></i>{% trans "Быстрые действия" %}
+        </h4>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <a href="{% url 'tracker:growth_create' %}" class="action-btn">
+                    <div class="action-icon">
+                        <i class="bi bi-arrow-up-circle"></i>
+                    </div>
+                    <div class="action-title">{% trans "Рост/Вес" %}</div>
+                    <div class="action-desc">{% trans "Записать измерения" %}</div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="{% url 'tracker:sleep_create' %}" class="action-btn">
+                    <div class="action-icon">
+                        <i class="bi bi-moon"></i>
+                    </div>
+                    <div class="action-title">{% trans "Сон" %}</div>
+                    <div class="action-desc">{% trans "Записать сон" %}</div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="{% url 'tracker:feeding_create' %}" class="action-btn">
+                    <div class="action-icon">
+                        <i class="bi bi-cup-hot"></i>
+                    </div>
+                    <div class="action-title">{% trans "Кормление" %}</div>
+                    <div class="action-desc">{% trans "Записать кормление" %}</div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="{% url 'tracker:cry_create' %}" class="action-btn">
+                    <div class="action-icon">
+                        <i class="bi bi-emoji-frown"></i>
+                    </div>
+                    <div class="action-title">{% trans "Плач" %}</div>
+                    <div class="action-desc">{% trans "Записать плач" %}</div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="row g-3 mt-2">
+            <div class="col-md-3">
+                <a href="{% url 'tracker:vaccination_create' %}" class="action-btn">
+                    <div class="action-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <div class="action-title">{% trans "Прививки" %}</div>
+                    <div class="action-desc">{% trans "Записать прививку" %}</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Children List -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="fw-bold mb-4">
+                <i class="bi bi-heart me-2"></i>{% trans "Мои дети" %}
+            </h3>
+        </div>
+    </div>
+
+    {% if children %}
+        <div class="row">
+            {% for child in children %}
+            <div class="col-lg-6 col-xl-4">
+                <a href="{% url 'accounts:child_detail' child.id %}" class="text-decoration-none">
+                    <div class="child-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="child-avatar {% if child.gender == 'male' %}male{% else %}female{% endif %} me-3">
+                                <div class="d-flex align-items-center justify-content-center h-100 text-white" style="font-size: 2rem;">
+                                    <i class="bi bi-{% if child.gender == 'male' %}gender-male{% else %}gender-female{% endif %}"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="fw-bold mb-1">{{ child.name }}</h5>
+                                <p class="text-muted mb-0">
+                                    {{ child.get_gender_display }} • {{ child.age_years }} лет, {{ child.age_months }} месяцев
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-number">{{ child.growth_records.count }}</div>
+                                <div class="stat-label">{% trans "Рост" %}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">{{ child.sleep_records.count }}</div>
+                                <div class="stat-label">{% trans "Сон" %}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">{{ child.cry_records.count }}</div>
+                                <div class="stat-label">{% trans "Плач" %}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">{{ child.feeding_records.count }}</div>
+                                <div class="stat-label">{% trans "Кормление" %}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">{{ child.vaccination_records.count }}</div>
+                                <div class="stat-label">{% trans "Прививки" %}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <span class="badge bg-primary">
+                                <i class="bi bi-eye me-1"></i>{% trans "Подробнее" %}
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-heart"></i>
+                    <h4>{% trans "Пока нет детей" %}</h4>
+                    <p class="mb-4">{% trans "Добавьте первого ребёнка, чтобы начать отслеживать его развитие" %}</p>
+                    <a href="{% url 'accounts:family_management' %}" class="btn-add-child">
+                        <i class="bi bi-plus-circle me-2"></i>{% trans "Добавить ребёнка" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+// Проверка кликабельности кнопки управления детьми
+document.addEventListener('DOMContentLoaded', function() {
+    const managementBtn = document.querySelector('.btn-management');
+    
+    if (managementBtn) {
+        console.log('Кнопка управления детьми найдена:', managementBtn);
+        
+        // Добавляем обработчик клика для отладки
+        managementBtn.addEventListener('click', function(e) {
+            console.log('Кнопка управления детьми нажата');
+            // Убеждаемся, что ссылка работает
+            if (this.href) {
+                console.log('Переход по ссылке:', this.href);
+            } else {
+                console.error('Ссылка не найдена');
+                e.preventDefault();
+            }
+        });
+        
+        // Проверяем стили кнопки
+        const styles = window.getComputedStyle(managementBtn);
+        console.log('Стили кнопки:');
+        console.log('- pointer-events:', styles.pointerEvents);
+        console.log('- z-index:', styles.zIndex);
+        console.log('- position:', styles.position);
+        console.log('- display:', styles.display);
+        console.log('- visibility:', styles.visibility);
+        
+        // Проверяем, не перекрывается ли кнопка другими элементами
+        const rect = managementBtn.getBoundingClientRect();
+        const elementAtPoint = document.elementFromPoint(rect.left + rect.width/2, rect.top + rect.height/2);
+        
+        if (elementAtPoint === managementBtn) {
+            console.log('✅ Кнопка не перекрывается другими элементами');
+        } else {
+            console.log('❌ Кнопка перекрывается элементом:', elementAtPoint);
+        }
+    } else {
+        console.error('Кнопка управления детьми не найдена');
+    }
+});
+</script>
+{% endblock %}

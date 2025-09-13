@@ -1,0 +1,626 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Медицинские учреждения" %} - familyway +{% endblock %}
+
+{% block extra_css %}
+<style>
+    .healthcare-hero {
+        background: linear-gradient(135deg, #17a2b8, #138496);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 2rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .healthcare-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .category-card {
+        background: linear-gradient(145deg, 
+            rgba(255, 255, 255, 0.9) 0%, 
+            rgba(248, 250, 252, 0.8) 50%, 
+            rgba(226, 232, 240, 0.7) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 1.5rem;
+        padding: 2rem 1.5rem;
+        box-shadow: 
+            0 20px 40px rgba(0, 0, 0, 0.1),
+            0 8px 16px rgba(0, 0, 0, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+        margin-bottom: 0;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        animation: fadeInUp 0.8s ease forwards;
+    }
+    
+    .category-card:nth-child(1) { animation-delay: 0.1s; }
+    .category-card:nth-child(2) { animation-delay: 0.2s; }
+    .category-card:nth-child(3) { animation-delay: 0.3s; }
+    .category-card:nth-child(4) { animation-delay: 0.4s; }
+    .category-card:nth-child(5) { animation-delay: 0.5s; }
+    .category-card:nth-child(6) { animation-delay: 0.6s; }
+    .category-card:nth-child(7) { animation-delay: 0.7s; }
+    .category-card:nth-child(8) { animation-delay: 0.8s; }
+    
+    /* Fallback for when animation doesn't work */
+    .category-card {
+        opacity: 1 !important;
+        transform: translateY(0) scale(1) !important;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    .category-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(from 0deg, transparent, rgba(102, 126, 234, 0.1), transparent, rgba(118, 75, 162, 0.1), transparent);
+        opacity: 0;
+        transition: all 0.6s ease;
+        animation: rotate 4s linear infinite;
+    }
+    
+    .category-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        border-radius: 1.5rem;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-20px) scale(1.08);
+        box-shadow: 
+            0 30px 60px rgba(0, 0, 0, 0.2),
+            0 15px 30px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.95),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        color: inherit;
+        border-color: rgba(102, 126, 234, 0.5);
+        background: linear-gradient(145deg, 
+            rgba(255, 255, 255, 0.95) 0%, 
+            rgba(248, 250, 252, 0.9) 50%, 
+            rgba(226, 232, 240, 0.8) 100%);
+    }
+    
+    .category-card:hover::before {
+        opacity: 1;
+    }
+    
+    .category-card:hover::after {
+        opacity: 1;
+    }
+    
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    .category-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        flex-shrink: 0;
+        position: relative;
+        box-shadow: 
+            0 8px 25px rgba(0, 0, 0, 0.15),
+            0 4px 10px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        background: linear-gradient(145deg, 
+            var(--icon-color, #667eea) 0%, 
+            var(--icon-color-dark, #764ba2) 50%,
+            var(--icon-color, #667eea) 100%);
+        z-index: 2;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .category-icon i {
+        font-size: 2.2rem;
+        line-height: 1;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        transition: all 0.3s ease;
+    }
+    
+    .category-icon::before {
+        content: '';
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        bottom: -4px;
+        background: linear-gradient(145deg, 
+            rgba(255, 255, 255, 0.6) 0%, 
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0.1) 100%);
+        border-radius: 2.2rem;
+        z-index: -1;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .category-icon::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 120%;
+        height: 120%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .category-card:hover .category-icon {
+        transform: scale(1.15) rotate(10deg);
+        box-shadow: 
+            0 15px 35px rgba(0, 0, 0, 0.25),
+            0 8px 15px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        animation: float 3s ease-in-out infinite;
+        background: linear-gradient(145deg, 
+            var(--icon-color, #667eea) 0%, 
+            var(--icon-color-dark, #764ba2) 30%,
+            var(--icon-color, #667eea) 70%,
+            var(--icon-color-dark, #764ba2) 100%);
+        text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    }
+    
+    .category-card:hover .category-icon i {
+        transform: scale(1.1);
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+        text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+    }
+    
+    .category-card:hover .category-icon::after {
+        opacity: 1;
+    }
+    
+    @keyframes float {
+        0%, 100% { 
+            transform: scale(1.15) rotate(10deg) translateY(0px);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.25),
+                0 8px 15px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        }
+        50% { 
+            transform: scale(1.15) rotate(10deg) translateY(-5px);
+            box-shadow: 
+                0 20px 45px rgba(0, 0, 0, 0.3),
+                0 12px 25px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+        }
+    }
+    
+    .category-content {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .category-name {
+        font-weight: 800;
+        margin-bottom: 0.75rem;
+        font-size: 1.3rem;
+        background: linear-gradient(135deg, #1a202c, #2d3748);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        text-align: center;
+        line-height: 1.2;
+    }
+    
+    .category-card:hover .category-name {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        transform: translateY(-2px);
+    }
+    
+    .category-count {
+        color: #64748b;
+        font-size: 1rem;
+        margin: 0;
+        font-weight: 600;
+        opacity: 0.9;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        background: linear-gradient(135deg, #64748b, #475569);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        background-color: rgba(102, 126, 234, 0.1);
+        border: 1px solid rgba(102, 126, 234, 0.2);
+    }
+    
+    .category-card:hover .category-count {
+        color: #667eea;
+        opacity: 1;
+        transform: translateY(-3px) scale(1.05);
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-color: rgba(102, 126, 234, 0.15);
+        border-color: rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .category-card {
+            padding: 1.5rem 1rem;
+        }
+        
+        .category-icon {
+            width: 70px;
+            height: 70px;
+            font-size: 2rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .category-name {
+            font-size: 1.2rem;
+        }
+        
+        .category-count {
+            font-size: 0.9rem;
+            padding: 0.4rem 0.8rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .category-card {
+            padding: 1.25rem 0.75rem;
+        }
+        
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .category-name {
+            font-size: 1.1rem;
+        }
+        
+        .category-count {
+            font-size: 0.85rem;
+            padding: 0.35rem 0.7rem;
+        }
+    }
+    
+    .facility-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        border: 1px solid #f1f3f4;
+        transition: all 0.3s ease;
+    }
+    
+    .facility-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .facility-rating {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .rating-stars {
+        color: #ffc107;
+        margin-right: 0.5rem;
+    }
+    
+    .rating-text {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .facility-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .info-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+    }
+    
+    .info-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #17a2b8;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .info-content {
+        flex: 1;
+    }
+    
+    .info-label {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+    
+    .info-value {
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #6c757d;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Healthcare Hero -->
+<section class="healthcare-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="bi bi-hospital me-3"></i>{% trans "Медицинские учреждения" %}
+                </h1>
+                <p class="lead mb-4">
+                    {% trans "Найдите лучшие клиники, аптеки и больницы в вашем городе" %}
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Categories -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="text-center mb-4">
+                <h3 class="fw-bold mb-2" style="
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    font-size: 1.8rem;
+                ">
+                    <i class="bi bi-grid-3x3-gap me-2"></i>{% trans "Категории" %}
+                </h3>
+                <p class="text-muted mb-0" style="font-size: 1rem;">
+                    {% trans "Выберите тип медицинского учреждения" %}
+                </p>
+                <div class="mt-2">
+                    <div style="
+                        width: 40px;
+                        height: 3px;
+                        background: linear-gradient(135deg, #667eea, #764ba2);
+                        border-radius: 2px;
+                        margin: 0 auto;
+                    "></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-4 justify-content-center">
+        {% for category in categories %}
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+            <a href="{% url 'healthcare:category' category.slug %}" class="text-decoration-none">
+                <div class="category-card" style="--icon-color: {{ category.color }}; --icon-color-dark: {{ category.color }}dd;">
+                    <div class="category-icon">
+                        <i class="bi bi-{{ category.icon }}"></i>
+                    </div>
+                    <div class="category-content">
+                        <div class="category-name">{{ category.name }}</div>
+                        <div class="category-count">{{ category.facilities.count }} {% trans "учреждений" %}</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Facilities -->
+    <div class="row mb-4 mt-5">
+        <div class="col-12">
+            <h3 class="fw-bold mb-4">
+                <i class="bi bi-building me-2"></i>{% trans "Все учреждения" %}
+            </h3>
+        </div>
+    </div>
+    
+    {% if facilities %}
+        <div class="row">
+            {% for facility in facilities %}
+            <div class="col-lg-6 col-xl-4">
+                <div class="facility-card">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="fw-bold mb-1">{{ facility.name }}</h5>
+                            <p class="text-muted mb-2">{{ facility.category.name }}</p>
+                        </div>
+                        <div class="text-end">
+                            <div class="facility-rating">
+                                <div class="rating-stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= facility.rating %}
+                                            <i class="bi bi-star-fill"></i>
+                                        {% else %}
+                                            <i class="bi bi-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="rating-text">
+                                    {{ facility.rating|floatformat:1 }} ({{ facility.reviews_count }})
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-muted mb-3">{{ facility.description|truncatewords:20 }}</p>
+                    
+                    <div class="facility-info">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-geo-alt"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">{% trans "Адрес" %}</div>
+                                <div class="info-value">{{ facility.address|truncatewords:5 }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="bi bi-telephone"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">{% trans "Телефон" %}</div>
+                                <div class="info-value">{{ facility.phone }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <a href="{% url 'healthcare:facility_detail' facility.pk %}" class="btn btn-outline-primary">
+                            <i class="bi bi-eye me-2"></i>{% trans "Подробнее" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; {% trans "Первая" %}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{% trans "Предыдущая" %}</a>
+                        </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">
+                                {% trans "Страница" %} {{ page_obj.number }} {% trans "из" %} {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans "Следующая" %}</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{% trans "Последняя" %} &raquo;</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-hospital"></i>
+                    <h4>{% trans "Нет медицинских учреждений" %}</h4>
+                    <p class="mb-4">{% trans "Пока не добавлено ни одного медицинского учреждения" %}</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

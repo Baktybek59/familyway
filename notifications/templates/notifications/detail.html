@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ notification.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .notification-detail-card {
+        border-radius: 1rem;
+        border: none;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .notification-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border: none;
+    }
+    
+    .notification-content {
+        padding: 2rem;
+    }
+    
+    .info-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .message-section {
+        background: white;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .badge-modern {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .btn-modern {
+        border-radius: 0.75rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .meta-info {
+        font-size: 0.9rem;
+        color: #6c757d;
+        background: #f8f9fa;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .extra-data {
+        background: #f8f9fa;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.85rem;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card notification-detail-card">
+                <div class="notification-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">
+                            <i class="bi bi-bell me-2"></i>{{ notification.title }}
+                        </h3>
+                        <div class="d-flex gap-2">
+                            <span class="badge badge-modern bg-{% if 'consultation' in notification.notification_type %}primary{% elif 'forum' in notification.notification_type %}info{% elif 'review' in notification.notification_type %}success{% elif 'blog' in notification.notification_type %}warning{% elif 'system' in notification.notification_type %}danger{% else %}secondary{% endif %}">
+                                {{ notification.get_notification_type_display }}
+                            </span>
+                            {% if notification.priority != 'normal' %}
+                            <span class="badge badge-modern bg-{% if notification.priority == 'high' %}danger{% elif notification.priority == 'urgent' %}warning{% else %}secondary{% endif %}">
+                                {{ notification.get_priority_display }}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="notification-content">
+                    <!-- Информация об уведомлении -->
+                    <div class="info-section">
+                        <h5 class="mb-3">
+                            <i class="bi bi-info-circle me-2"></i>Информация об уведомлении
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="meta-info">
+                                    <strong>Тип:</strong> {{ notification.get_notification_type_display }}
+                                </div>
+                                <div class="meta-info">
+                                    <strong>Приоритет:</strong> {{ notification.get_priority_display }}
+                                </div>
+                                <div class="meta-info">
+                                    <strong>Статус:</strong> 
+                                    {% if notification.is_read %}
+                                        <span class="text-success">Прочитано</span>
+                                    {% else %}
+                                        <span class="text-warning">Непрочитано</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="meta-info">
+                                    <strong>Создано:</strong> {{ notification.created_at|date:"d.m.Y H:i" }}
+                                </div>
+                                {% if notification.read_at %}
+                                <div class="meta-info">
+                                    <strong>Прочитано:</strong> {{ notification.read_at|date:"d.m.Y H:i" }}
+                                </div>
+                                {% endif %}
+                                {% if notification.sender %}
+                                <div class="meta-info">
+                                    <strong>Отправитель:</strong> {{ notification.sender.get_full_name }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Сообщение -->
+                    <div class="message-section">
+                        <h5 class="mb-3">
+                            <i class="bi bi-chat-text me-2"></i>Сообщение
+                        </h5>
+                        <div class="message-content">
+                            {{ notification.message|linebreaks }}
+                        </div>
+                    </div>
+                    
+                    <!-- Связанный объект -->
+                    {% if notification.related_object_id %}
+                    <div class="info-section">
+                        <h5 class="mb-3">
+                            <i class="bi bi-link me-2"></i>Связанный объект
+                        </h5>
+                        <div class="meta-info">
+                            <strong>Тип:</strong> {{ notification.related_object_type|default:"Не указан" }}
+                        </div>
+                        <div class="meta-info">
+                            <strong>ID:</strong> {{ notification.related_object_id }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Дополнительные данные -->
+                    {% if notification.extra_data %}
+                    <div class="info-section">
+                        <h5 class="mb-3">
+                            <i class="bi bi-code-square me-2"></i>Дополнительные данные
+                        </h5>
+                        <div class="extra-data">
+                            {{ notification.extra_data|pprint }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Действия -->
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'notifications:list' %}" class="btn btn-secondary btn-modern">
+                            <i class="bi bi-arrow-left me-2"></i>Назад к списку
+                        </a>
+                        <div class="d-flex gap-2">
+                            {% if not notification.is_read %}
+                            <button class="btn btn-success btn-modern" onclick="markAsRead({{ notification.id }})">
+                                <i class="bi bi-check me-2"></i>Отметить как прочитанное
+                            </button>
+                            {% endif %}
+                            <a href="{% url 'notifications:settings' %}" class="btn btn-outline-primary btn-modern">
+                                <i class="bi bi-gear me-2"></i>Настройки
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function markAsRead(notificationId) {
+    fetch(`/notifications/${notificationId}/mark-read/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            location.reload();
+        }
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,412 @@
+{% extends 'base.html' %}
+
+{% block title %}Аналитика - {{ writer.full_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 0 0 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.content-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    border: 1px solid #f1f3f4;
+}
+
+.content-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.stats-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid #f1f3f4;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.stats-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.stats-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.stats-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.article-item {
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.article-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-color: #667eea;
+}
+
+.article-title {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.article-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.chart-container {
+    background: #f8f9fa;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.chart-placeholder {
+    height: 200px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.analytics-section {
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.analytics-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.analytics-item:last-child {
+    border-bottom: none;
+}
+
+.analytics-label {
+    color: #495057;
+    font-weight: 500;
+}
+
+.analytics-value {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #adb5bd;
+}
+
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+    
+    .stats-card {
+        margin-bottom: 1rem;
+    }
+    
+    .article-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .analytics-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<section class="dashboard-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="dashboard-title">
+                    <i class="bi bi-graph-up me-3"></i>Аналитика
+                </h1>
+                <p class="dashboard-subtitle">
+                    Статистика ваших статей и читателей
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'accounts:writer_dashboard' %}" class="btn btn-light">
+                    <i class="bi bi-arrow-left me-2"></i>Назад к дашборду
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Overall Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-primary">
+                    <i class="bi bi-file-text"></i>
+                </div>
+                <div class="stats-number">{{ article_stats|length }}</div>
+                <div class="stats-label">Статей</div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-success">
+                    <i class="bi bi-eye"></i>
+                </div>
+                <div class="stats-number">{{ writer.total_views }}</div>
+                <div class="stats-label">Просмотров</div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-warning">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <div class="stats-number">{{ writer.total_read_time }}</div>
+                <div class="stats-label">Минут чтения</div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon text-info">
+                    <i class="bi bi-star"></i>
+                </div>
+                <div class="stats-number">{{ writer.average_rating|floatformat:1 }}</div>
+                <div class="stats-label">Средний рейтинг</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Article Statistics -->
+    <div class="row">
+        <div class="col-md-8">
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-bar-chart me-2"></i>Статистика по статьям
+                </h5>
+                
+                {% if article_stats %}
+                    {% for stats in article_stats %}
+                        <div class="article-item">
+                            <div class="article-title">{{ stats.article.title }}</div>
+                            <div class="article-stats">
+                                <span><i class="bi bi-eye me-1"></i>{{ stats.views }} просмотров</span>
+                                <span><i class="bi bi-clock me-1"></i>{{ stats.read_time }} мин чтения</span>
+                                <span><i class="bi bi-people me-1"></i>{{ stats.readers_count }} читателей</span>
+                                <span><i class="bi bi-percent me-1"></i>{{ stats.avg_progress|floatformat:1 }}% завершения</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-graph-up"></i>
+                        <h6>Нет данных</h6>
+                        <p>У вас пока нет опубликованных статей для анализа.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <!-- Reader Demographics -->
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-people me-2"></i>Демография читателей
+                </h5>
+                
+                <div class="analytics-section">
+                    <div class="section-title">По полу</div>
+                    {% for stat in gender_stats %}
+                        <div class="analytics-item">
+                            <div class="analytics-label">
+                                {% if stat.user_gender == 'male' %}Мужчины
+                                {% elif stat.user_gender == 'female' %}Женщины
+                                {% else %}Другой
+                                {% endif %}
+                            </div>
+                            <div class="analytics-value">{{ stat.count }}</div>
+                        </div>
+                    {% empty %}
+                        <div class="text-muted">Нет данных</div>
+                    {% endfor %}
+                </div>
+                
+                <div class="analytics-section">
+                    <div class="section-title">По городам</div>
+                    {% for stat in city_stats %}
+                        <div class="analytics-item">
+                            <div class="analytics-label">{{ stat.user_city|default:"Не указан" }}</div>
+                            <div class="analytics-value">{{ stat.count }}</div>
+                        </div>
+                    {% empty %}
+                        <div class="text-muted">Нет данных</div>
+                    {% endfor %}
+                </div>
+                
+                <div class="analytics-section">
+                    <div class="section-title">По устройствам</div>
+                    {% for stat in device_stats %}
+                        <div class="analytics-item">
+                            <div class="analytics-label">
+                                {% if stat.device_type == 'desktop' %}Десктоп
+                                {% elif stat.device_type == 'mobile' %}Мобильный
+                                {% elif stat.device_type == 'tablet' %}Планшет
+                                {% else %}{{ stat.device_type }}
+                                {% endif %}
+                            </div>
+                            <div class="analytics-value">{{ stat.count }}</div>
+                        </div>
+                    {% empty %}
+                        <div class="text-muted">Нет данных</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Age Distribution -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-person me-2"></i>Распределение по возрасту
+                </h5>
+                
+                {% if age_stats %}
+                    {% for stat in age_stats %}
+                        <div class="analytics-item">
+                            <div class="analytics-label">
+                                {% if stat.user_age %}
+                                    {{ stat.user_age }} лет
+                                {% else %}
+                                    Возраст не указан
+                                {% endif %}
+                            </div>
+                            <div class="analytics-value">{{ stat.count }} читателей</div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-person"></i>
+                        <h6>Нет данных о возрасте</h6>
+                        <p>Читатели не указали свой возраст.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="content-card">
+                <h5 class="content-title">
+                    <i class="bi bi-graph-up me-2"></i>График просмотров
+                </h5>
+                
+                <div class="chart-container">
+                    <div class="chart-placeholder">
+                        <i class="bi bi-bar-chart me-2"></i>
+                        График просмотров по времени
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
