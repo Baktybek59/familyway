@@ -11,6 +11,8 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+# Set environment for production
+os.environ.setdefault('ENVIRONMENT', 'production')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'baybyway.settings')
 
 application = get_wsgi_application()
