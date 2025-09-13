@@ -42,8 +42,8 @@ msgstr "Профиль"
 msgid "Настройки"
 msgstr "Настройки"
 
-msgid "familyway +"
-msgstr "familyway +"
+msgid "FamilyWay +"
+msgstr "FamilyWay +"
 
 msgid "Платформа для семей с детьми"
 msgstr "Платформа для семей с детьми"

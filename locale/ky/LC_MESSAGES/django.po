@@ -2718,7 +2718,7 @@ msgid "Вы вышли из системы"
 msgstr ""
 
 #: templates/accounts/logout.html:13
-msgid "Спасибо за использование familyway +!"
+msgid "Спасибо за использование FamilyWay +!"
 msgstr ""
 
 #: templates/accounts/logout.html:16
@@ -3477,7 +3477,7 @@ msgid "Пока не добавлено ни одного медицинског
 msgstr ""
 
 #: templates/home.html:4
-msgid "familyway + - Главная"
+msgid "FamilyWay + - Главная"
 msgstr ""
 
 #: templates/home.html:16

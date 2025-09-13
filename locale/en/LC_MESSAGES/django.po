@@ -1,14 +1,14 @@
-# English translations for familyway + project
-# Copyright (C) 2025 familyway + Project
-# This file is distributed under the same license as the familyway + package.
+# English translations for FamilyWay + project
+# Copyright (C) 2025 FamilyWay + Project
+# This file is distributed under the same license as the FamilyWay + package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: familyway + 1.0\n"
+"Project-Id-Version: FamilyWay + 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-08 13:07+0600\n"
 "PO-Revision-Date: 2025-09-08 13:07+0600\n"
-"Last-Translator: familyway + Team\n"
+"Last-Translator: FamilyWay + Team\n"
 "Language-Team: English\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -2716,7 +2716,7 @@ msgid "Вы вышли из системы"
 msgstr ""
 
 #: templates/accounts/logout.html:13
-msgid "Спасибо за использование familyway +!"
+msgid "Спасибо за использование FamilyWay +!"
 msgstr ""
 
 #: templates/accounts/logout.html:16
@@ -3475,8 +3475,8 @@ msgid "Пока не добавлено ни одного медицинског
 msgstr ""
 
 #: templates/home.html:4
-msgid "familyway + - Главная"
-msgstr "familyway + - Home"
+msgid "FamilyWay + - Главная"
+msgstr "FamilyWay + - Home"
 
 #: templates/home.html:16
 msgid ""

@@ -1,7 +1,7 @@
-# Развертывание familyway + на продакшн сервере
+# Развертывание FamilyWay + на продакшн сервере
 
 ## Описание
-familyway + - это платформа для семей с детьми, включающая трекер развития, форум, блог и консультации специалистов.
+FamilyWay + - это платформа для семей с детьми, включающая трекер развития, форум, блог и консультации специалистов.
 
 ## Домен
 - **Основной домен**: familyway.plus
@@ -118,6 +118,14 @@ sudo systemctl restart nginx
 
 ### 6. Настройка SSL (Let's Encrypt)
 
+#### Автоматическая настройка (рекомендуется):
+```bash
+# Запускаем автоматический скрипт настройки SSL
+sudo chmod +x setup_ssl.sh
+sudo ./setup_ssl.sh
+```
+
+#### Ручная настройка:
 ```bash
 # Устанавливаем Certbot
 sudo apt install -y certbot python3-certbot-nginx
@@ -127,6 +135,13 @@ sudo certbot --nginx -d familyway.plus -d www.familyway.plus
 
 # Проверяем автообновление
 sudo certbot renew --dry-run
+```
+
+#### Проверка безопасности HTTPS:
+```bash
+# Запускаем проверку безопасности
+chmod +x check_https_security.sh
+./check_https_security.sh
 ```
 
 ## Обновление
